@@ -14,7 +14,7 @@ class VipLevel(enum.Enum):
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Long, primary_key=True, index=True, autoincrement=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     email = Column(String, unique=True, index=True, nullable=True)
     phone = Column(String, unique=True, index=True, nullable=True)
     wechat_openid = Column(String, unique=True, index=True)
