@@ -16,7 +16,7 @@ class PitchTest(Base):
     __tablename__ = "pitch_tests"
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
+    user_id = Column(Integer, index=True)
     type = Column(Enum(PitchType))
     
     # 测试内容
@@ -28,14 +28,14 @@ class PitchTest(Base):
     created_at = Column(DateTime, server_default=func.now())
     
     # 关系
-    user = relationship("User", back_populates="pitch_tests")
+    #user = relationship("User", back_populates="pitch_tests")
 
 
 class PracticeSession(Base):
     __tablename__ = "practice_sessions"
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
+    user_id = Column(Integer, index=True)
     type = Column(Enum(PitchType))
     
     # 练习数据
@@ -46,4 +46,4 @@ class PracticeSession(Base):
     created_at = Column(DateTime, server_default=func.now())
     
     # 关系
-    user = relationship("User", back_populates="practice_sessions") 
+    # user = relationship("User", back_populates="practice_sessions")

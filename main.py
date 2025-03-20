@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.api.v1 import auth, pitch
 from app.db.base import Base, engine
+from app.middleware.logging import LoggingMiddleware
 
 # 创建数据库表
 Base.metadata.create_all(bind=engine)
@@ -21,6 +22,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.add_middleware(LoggingMiddleware)
 # 注册路由
 app.include_router(auth.router, prefix=settings.API_V1_STR)
 app.include_router(pitch.router, prefix=settings.API_V1_STR)

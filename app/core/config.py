@@ -25,8 +25,8 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8  # 8 days
     
     # 微信小程序配置
-    WECHAT_APP_ID: Optional[str] = None
-    WECHAT_APP_SECRET: Optional[str] = None
+    WECHAT_APP_ID: Optional[str] = "wx19a50120a8380422"
+    WECHAT_APP_SECRET: Optional[str] = "c129f82d2b3c42cac5bbf442ae128bd8"
     
     # 音频处理配置
     AUDIO_UPLOAD_DIR: str = "uploads/audio"

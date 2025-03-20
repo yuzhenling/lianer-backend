@@ -15,9 +15,10 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    email = Column(String, unique=True, index=True, nullable=True)
-    phone = Column(String, unique=True, index=True, nullable=True)
-    wechat_openid = Column(String, unique=True, index=True)
+    email = Column(String, unique=False, index=True, nullable=True)
+    phone = Column(String, unique=False, index=True, nullable=True)
+    wechat_openid = Column(String, unique=True, index=True, nullable=True)
+    unionid = Column(String, unique=True, index=False, nullable=True)
     hashed_password = Column(String, nullable=True)
     is_active = Column(Boolean, default=True)
     
@@ -26,8 +27,8 @@ class User(Base):
     vip_expire_date = Column(DateTime, nullable=True)
     
     # 用户统计
-    total_practice_time = Column(Integer, default=0)  # 总练习时长（分钟）
-    pitch_test_count = Column(Integer, default=0)     # 音高测试次数
+    total_practice_time = Column(Integer, default=0, nullable=True)  # 总练习时长（分钟）
+    pitch_test_count = Column(Integer, default=0, nullable=True )     # 音高测试次数
     
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
