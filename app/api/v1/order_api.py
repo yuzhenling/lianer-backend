@@ -1,0 +1,150 @@
+from fastapi import APIRouter, Depends, HTTPException, status, Request
+from sqlalchemy.orm import Session
+from typing import Optional
+from pydantic import BaseModel
+from datetime import datetime
+
+from app.services.order_service import OrderService
+from app.models.user import User, VipLevel
+from app.models.order import VipOrders
+from app.api.v1.auth_api import get_current_user, get_db
+from app.core.i18n import i18n, get_language
+from app.core.logger import logger
+
+router = APIRouter()
+order_service = OrderService()
+
+
+class OrderCreate(BaseModel):
+    vip_level: VipLevel
+
+
+class OrderResponse(BaseModel):
+    id: int
+    user_id: int
+    vip_id: int
+    is_paid: bool
+    paid_date: Optional[datetime]
+    paid_amount: float
+    created_at: datetime
+
+    class Config:
+        orm_mode = True
+
+
+class WeChatPaymentResponse(BaseModel):
+    prepay_id: str
+    timeStamp: str
+    nonceStr: str
+    package: str
+    signType: str
+    paySign: str
+
+
+@router.post("/orders/vip", response_model=OrderResponse)
+async def create_vip_order(
+    request: Request,
+    order_data: OrderCreate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """创建VIP订单"""
+    lang = get_language(request)
+    
+    # 检查VIP等级是否有效
+    if order_data.vip_level == VipLevel.FREE:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=i18n.get_text("INVALID_VIP_LEVEL", lang)
+        )
+    
+    # 创建订单
+    order = await order_service.create_vip_order(
+        db=db,
+        user=current_user,
+        vip_level=order_data.vip_level
+    )
+    
+    if not order:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=i18n.get_text("ORDER_CREATE_FAILED", lang)
+        )
+    
+    return order
+
+
+@router.post("/orders/{order_id}/pay", response_model=WeChatPaymentResponse)
+async def create_payment(
+    request: Request,
+    order_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """创建支付订单"""
+    lang = get_language(request)
+    
+    # 检查订单是否存在且属于当前用户
+    order = db.query(VipOrders).filter(
+        VipOrders.id == order_id,
+        VipOrders.user_id == current_user.id
+    ).first()
+    
+    if not order:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=i18n.get_text("ORDER_NOT_FOUND", lang)
+        )
+    
+    if order.is_paid:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=i18n.get_text("ORDER_ALREADY_PAID", lang)
+        )
+    
+    # 创建微信支付订单
+    payment_data = await order_service.create_wechat_payment(order)
+    if not payment_data:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=i18n.get_text("PAYMENT_CREATE_FAILED", lang)
+        )
+    
+    return payment_data
+
+
+@router.post("/orders/wechat-notify")
+async def wechat_payment_notify(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    """处理微信支付回调通知"""
+    try:
+        # 解析微信支付回调数据
+        # TODO: 实现微信支付回调数据验证
+        # notification_data = await request.json()
+        # 开发测试时模拟支付成功
+        notification_data = {
+            "out_trade_no": "123",  # 订单ID
+            "trade_state": "SUCCESS"
+        }
+        
+        order_id = int(notification_data["out_trade_no"])
+        payment_success = notification_data["trade_state"] == "SUCCESS"
+        
+        # 处理支付结果
+        success = await order_service.handle_payment_notification(
+            db=db,
+            order_id=order_id,
+            payment_success=payment_success
+        )
+        
+        if success:
+            # 返回成功通知
+            return {"code": "SUCCESS", "message": "OK"}
+        else:
+            return {"code": "FAIL", "message": "处理失败"}
+            
+    except Exception as e:
+        logger.error(f"Failed to process payment notification: {str(e)}", exc_info=True)
+        return {"code": "FAIL", "message": "处理失败"}

@@ -6,6 +6,7 @@ import secrets
 class Settings(BaseSettings):
     PROJECT_NAME: str = "声之宝典"
     API_V1_STR: str = "/api/v1"
+    API_HOST: str = "https://api.shengyibaodian.com"  # API域名
     
     # PostgreSQL数据库配置
     POSTGRES_SERVER: str = "localhost"
@@ -25,8 +26,15 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8  # 8 days
     
     # 微信小程序配置
-    WECHAT_APP_ID: Optional[str] = "wx19a50120a8380422"
-    WECHAT_APP_SECRET: Optional[str] = "c129f82d2b3c42cac5bbf442ae128bd8"
+    WECHAT_APP_ID: str = "wx19a50120a8380422"
+    WECHAT_APP_SECRET: str = "c129f82d2b3c42cac5bbf442ae128bd8"
+    
+    # 微信支付配置
+    WECHAT_MCH_ID: str = "1234567890"  # 商户号
+    WECHAT_PAY_SERIAL_NO: str = ""  # 商户证书序列号
+    WECHAT_PAY_KEY: str = ""  # API v3密钥
+    WECHAT_PAY_CERT_PATH: str = "cert/apiclient_cert.pem"  # 商户证书路径
+    WECHAT_PAY_KEY_PATH: str = "cert/apiclient_key.pem"  # 商户私钥路径
     
     # 音频处理配置
     AUDIO_UPLOAD_DIR: str = "uploads/audio"

@@ -97,7 +97,6 @@ async def wechat_login(
             user = User(
                 wechat_openid=wechat_data["openid"],
                 unionid=wechat_data.get("unionid"),
-                vip_level=VipLevel.FREE,
             )
             db.add(user)
             db.commit()

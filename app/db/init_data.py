@@ -13,9 +13,10 @@ def init_vip_levels(db: Session):
 
         # VIP等级描述
         vip_descriptions = {
-            VipLevel.FREE: "普通会员: 旋律听写, 节奏练习, 节奏听写",
-            VipLevel.HALF_YEAR: "半年VIP会员: 包含普通会员所有功能, 音高测试无限次数, 专业教师指导",
-            VipLevel.ONE_YEAR: "一年VIP会员: 包含半年会员所有功能, 独家教学视频, 优先技术支持"
+            VipLevel.FREE: "普通用户: *****************",
+            VipLevel.NORMAL: "普通会员: 旋律听写, 节奏练习, 节奏听写",
+            VipLevel.HALF_YEAR: "半年VIP会员: ***********",
+            VipLevel.ONE_YEAR: "一年VIP会员: ************"
         }
 
         # 插入VIP等级数据

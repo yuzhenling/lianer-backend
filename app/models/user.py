@@ -1,13 +1,9 @@
 from sqlalchemy import Boolean, Column, Integer, String, DateTime, Enum
 from sqlalchemy.sql import func
 from app.db.base import Base
-import enum
 
 
-class VipLevel(enum.Enum):
-    FREE = "free"
-    HALF_YEAR = "half_year"
-    ONE_YEAR = "one_year"
+
 
 
 class User(Base):
@@ -32,12 +28,6 @@ class User(Base):
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
 
-
-class Vip(Base):
-    __tablename__ = "vip"
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    vip_level = Column(Enum(VipLevel), default=VipLevel.FREE)
-    vip_describe = Column(String, nullable=True)
 
 
 

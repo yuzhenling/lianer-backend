@@ -8,6 +8,8 @@ class VipOrders(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     user_id = Column(Integer, index=True)
     vip_id = Column(Integer, index=True)
+    price = Column(Double, index=True)
+    discount = Column(Double, index=True)
 
     is_paid = Column(Boolean, default=False, nullable=True)
     paid_date = Column(DateTime, nullable=True)
