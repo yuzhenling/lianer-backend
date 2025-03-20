@@ -1,31 +1,71 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.core.config import settings
-from app.api.v1 import auth, pitch
-from app.db.base import Base, engine
-from app.middleware.logging import LoggingMiddleware
+from contextlib import asynccontextmanager
 
-# 创建数据库表
+from app.core.config import settings
+from app.middleware.logging import LoggingMiddleware
+from app.api.v1 import auth_api, pitch_api
+from app.db.init_data import init_vip_levels
+from app.db.base import SessionLocal, Base, engine
+from app.core.logger import logger
+
+# 导入所有模型以确保它们被注册到Base.metadata
+from app.models import user, pitch, order
+
 Base.metadata.create_all(bind=engine)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    应用程序生命周期管理
+    在应用启动时执行初始化，在应用关闭时执行清理
+    """
+    # 启动时执行
+    try:
+        # 创建所有表
+        logger.info("Creating database tables...")
+        Base.metadata.create_all(bind=engine)
+        
+        # 初始化数据库数据
+        db = SessionLocal()
+        try:
+            logger.info("Initializing database data...")
+            init_vip_levels(db)
+        finally:
+            db.close()
+    except Exception as e:
+        logger.error("Failed to initialize application", exc_info=True)
+        raise e
+
+    yield
+
+    # 关闭时执行
+    logger.info("Shutting down application...")
+
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
-    openapi_url=f"{settings.API_V1_STR}/openapi.json"
+    openapi_url=f"{settings.API_V1_STR}/openapi.json",
+    lifespan=lifespan
 )
 
-# 配置CORS
+# 添加CORS中间件
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # 在生产环境中应该设置具体的域名
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# 添加日志中间件
 app.add_middleware(LoggingMiddleware)
+
 # 注册路由
-app.include_router(auth.router, prefix=settings.API_V1_STR)
-app.include_router(pitch.router, prefix=settings.API_V1_STR)
+app.include_router(auth_api.router, prefix=settings.API_V1_STR)
+app.include_router(pitch_api.router, prefix=settings.API_V1_STR)
+
+
 
 @app.get("/")
 async def root():

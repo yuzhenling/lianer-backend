@@ -11,7 +11,7 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 # 导入项目配置和模型
 from app.core.config import settings
 from app.db.base import Base
-from app.models import user, pitch  # 导入所有模型
+from app.models import user, pitch, order  # 导入所有模型
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

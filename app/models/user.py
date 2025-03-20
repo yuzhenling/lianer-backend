@@ -8,7 +8,6 @@ class VipLevel(enum.Enum):
     FREE = "free"
     HALF_YEAR = "half_year"
     ONE_YEAR = "one_year"
-    TWO_YEAR = "two_year"
 
 
 class User(Base):
@@ -21,9 +20,9 @@ class User(Base):
     unionid = Column(String, unique=True, index=False, nullable=True)
     hashed_password = Column(String, nullable=True)
     is_active = Column(Boolean, default=True)
-    
-    # VIP信息
-    vip_level = Column(Enum(VipLevel), default=VipLevel.FREE)
+
+    is_vip = Column(Boolean, default=False)
+    vip_start_date = Column(DateTime, nullable=True)
     vip_expire_date = Column(DateTime, nullable=True)
     
     # 用户统计
@@ -32,3 +31,16 @@ class User(Base):
     
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+
+
+class Vip(Base):
+    __tablename__ = "vip"
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    vip_level = Column(Enum(VipLevel), default=VipLevel.FREE)
+    vip_describe = Column(String, nullable=True)
+
+
+
+
+
+

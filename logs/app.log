@@ -14,3 +14,6 @@
 {"timestamp": "2025-03-20T07:46:00.388813", "level": "INFO", "message": "Request completed", "module": "logging", "function": "dispatch", "line": 38, "request_id": "4d438702-2ce1-4e71-815a-db27948ab500", "path": "/api/v1/auth/wechat-login", "method": "POST"}
 {"timestamp": "2025-03-20T07:47:39.846296", "level": "INFO", "message": "Request started", "module": "logging", "function": "dispatch", "line": 21, "request_id": "008fba3e-36c7-4e6c-942a-f05fccf4dc14", "ip": "127.0.0.1", "path": "/api/v1/auth/wechat-login", "method": "POST"}
 {"timestamp": "2025-03-20T07:47:39.872962", "level": "INFO", "message": "Request completed", "module": "logging", "function": "dispatch", "line": 38, "request_id": "008fba3e-36c7-4e6c-942a-f05fccf4dc14", "path": "/api/v1/auth/wechat-login", "method": "POST"}
+{"timestamp": "2025-03-20T11:43:47.753122", "level": "INFO", "message": "Creating database tables...", "module": "main", "function": "lifespan", "line": 26}
+{"timestamp": "2025-03-20T11:43:47.755742", "level": "INFO", "message": "Initializing database data...", "module": "main", "function": "lifespan", "line": 32}
+{"timestamp": "2025-03-20T11:43:47.760070", "level": "INFO", "message": "Successfully initialized VIP levels", "module": "init_data", "function": "init_vip_levels", "line": 35}

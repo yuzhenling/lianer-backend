@@ -9,7 +9,7 @@ from app.services.audio_processing import AudioProcessor
 from app.models.pitch import PitchTest, PitchType, PracticeSession
 from app.models.user import User
 from app.core.config import settings
-from app.api.v1.auth import get_current_user, get_db
+from app.api.v1.auth_api import get_current_user, get_db
 
 router = APIRouter()
 audio_processor = AudioProcessor()

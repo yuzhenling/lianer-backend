@@ -8,7 +8,7 @@ from pydantic import BaseModel
 
 from app.core import logger
 from app.core.config import settings
-from app.services.auth import AuthService
+from app.services.auth_service import AuthService
 from app.db.base import SessionLocal
 from app.models.user import User, VipLevel
 from app.core.i18n import i18n, get_language
