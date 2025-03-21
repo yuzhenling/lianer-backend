@@ -4,11 +4,12 @@ import json
 import requests
 from sqlalchemy.orm import Session
 
-from app.models.order import VipOrders
+from app.models.order import VipOrder
 from app.models.vip import VipLevel, Vip
 from app.models.user import User
 from app.core.config import settings
 from app.core.logger import logger
+from app.services.vip_service import vip_service
 
 
 class OrderService:
@@ -16,25 +17,27 @@ class OrderService:
     async def create_vip_order(
         self, 
         db: Session, 
-        user: User, 
-        vip_level: VipLevel
-    ) -> Optional[VipOrders]:
+        user: User,
+        vip_order: VipOrder
+    ) -> Optional[VipOrder]:
         """创建VIP订单"""
         try:
             # 获取VIP信息
-            vip = db.query(Vip).filter(Vip.vip_level == vip_level).first()
-            if not vip:
-                logger.error(f"VIP level {vip_level} not found")
+            is_contain = vip_service.contains_vip(vip_order.vip_id)
+            if not is_contain:
+                logger.error(f"VIP {vip_order.vip_id} not found")
                 return None
 
             # 创建订单
-            order = VipOrders(
+            order = VipOrder(
                 user_id=user.id,
-                vip_id=vip_level,
-                paid_amount=self.vip_prices[vip_level],
-                is_paid=False,
+                vip_id=vip_order.vip_id,
+                is_paid=vip_order.is_paid,
+                paid_amount=vip_order.paid_amount,
+                is_return=vip_order.is_return,
+                return_amount=vip_order.return_amount,
+                return_date=vip_order.return_date,
             )
-            
             db.add(order)
             db.commit()
             db.refresh(order)
@@ -46,7 +49,7 @@ class OrderService:
             db.rollback()
             return None
 
-    async def create_wechat_payment(self, order: VipOrders) -> Optional[dict]:
+    async def create_wechat_payment(self, order: VipOrder) -> Optional[dict]:
         """创建微信支付订单"""
         try:
             # 调用微信支付统一下单API
@@ -94,7 +97,7 @@ class OrderService:
     ) -> bool:
         """处理支付回调通知"""
         try:
-            order = db.query(VipOrders).filter(VipOrders.id == order_id).first()
+            order = db.query(VipOrder).filter(VipOrder.id == order_id).first()
             if not order:
                 logger.error(f"Order {order_id} not found")
                 return False

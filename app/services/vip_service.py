@@ -61,9 +61,20 @@ class VipService:
                 self.load_vip_cache(db)
             finally:
                 db.close()
-
-
         return list(self._vip_cache.values())
+
+    def contains_vip(self, vip_ip: int) -> bool:
+        if not self._vip_cache:
+            db = SessionLocal()
+            try:
+                logger.info("Initializing database data during get_all_vips...")
+                self.load_vip_cache(db)
+            finally:
+                db.close()
+
+        if self._vip_cache[vip_ip]:
+            return True
+        return False
 
     async def create_vip(self, db: Session, vip_level: VipLevel, vip_describe: str, vip_price: float, vip_discount: float) -> Optional[Vip]:
         """创建新的VIP等级"""

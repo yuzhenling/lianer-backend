@@ -7,7 +7,7 @@ from datetime import datetime
 from app.models.vip import VipLevel
 from app.services.order_service import OrderService
 from app.models.user import User
-from app.models.order import VipOrders
+from app.models.order import VipOrder
 from app.api.v1.auth_api import get_current_user, get_db
 from app.core.i18n import i18n, get_language
 from app.core.logger import logger
@@ -17,6 +17,12 @@ order_service = OrderService()
 
 class OrderCreate(BaseModel):
     vip_id: int
+    is_paid: bool
+    paid_date: Optional[datetime]
+    paid_amount: Optional[float]
+    is_return: Optional[bool]
+    return_date: Optional[datetime]
+    return_amount: Optional[float]
 
 class OrderResponse(BaseModel):
     id: int
@@ -24,11 +30,17 @@ class OrderResponse(BaseModel):
     vip_id: int
     is_paid: bool
     paid_date: Optional[datetime]
-    paid_amount: float
+    paid_amount: Optional[float]
+    is_return: Optional[bool]
+    return_date: Optional[datetime]
+    return_amount: Optional[float]
     created_at: datetime
+    updated_at: datetime
 
-    class Config:
-        orm_mode = True
+    model_config = {
+        "from_attributes": True,
+        "arbitrary_types_allowed": True
+    }
 
 
 class WeChatPaymentResponse(BaseModel):
@@ -56,12 +68,14 @@ async def create_vip_order(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=i18n.get_text("INVALID_VIP_LEVEL", lang)
         )
+
+    vip_order = VipOrder(**order_data.model_dump())
     
     # 创建订单
     order = await order_service.create_vip_order(
         db=db,
         user=current_user,
-        vip_level=order_data.vip_level
+        vip_order=vip_order
     )
     
     if not order:
@@ -84,9 +98,9 @@ async def create_payment(
     lang = get_language(request)
     
     # 检查订单是否存在且属于当前用户
-    order = db.query(VipOrders).filter(
-        VipOrders.id == order_id,
-        VipOrders.user_id == current_user.id
+    order = db.query(VipOrder).filter(
+        VipOrder.id == order_id,
+        VipOrder.user_id == current_user.id
     ).first()
     
     if not order:

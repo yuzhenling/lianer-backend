@@ -305,3 +305,4 @@
 {"timestamp": "2025-03-21T08:06:25.687423", "level": "INFO", "message": "Request completed", "module": "logging", "function": "dispatch", "line": 38, "request_id": "10852c98-1fcd-475f-9586-f85f98d3d1c7", "path": "/api/v1/auth/wechat-login", "method": "POST"}
 {"timestamp": "2025-03-21T08:06:27.905168", "level": "INFO", "message": "Request started", "module": "logging", "function": "dispatch", "line": 21, "request_id": "5b3d80fb-28ab-4dcc-a222-cbae1e57525d", "ip": "127.0.0.1", "path": "/api/v1/vips", "method": "GET"}
 {"timestamp": "2025-03-21T08:06:36.366950", "level": "INFO", "message": "Request completed", "module": "logging", "function": "dispatch", "line": 38, "request_id": "5b3d80fb-28ab-4dcc-a222-cbae1e57525d", "path": "/api/v1/vips", "method": "GET"}
+{"timestamp": "2025-03-21T08:47:15.359390", "level": "INFO", "message": "Shutting down application...", "module": "main", "function": "lifespan", "line": 47}
