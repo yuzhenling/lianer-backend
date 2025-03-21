@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+import traceback
+
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
 from typing import Optional
@@ -11,29 +15,30 @@ from app.models.order import VipOrder
 from app.api.v1.auth_api import get_current_user, get_db
 from app.core.i18n import i18n, get_language
 from app.core.logger import logger
+from app.services.vip_service import vip_service
 
 router = APIRouter()
 order_service = OrderService()
 
 class OrderCreate(BaseModel):
     vip_id: int
-    is_paid: bool
-    paid_date: Optional[datetime]
-    paid_amount: Optional[float]
-    is_return: Optional[bool]
-    return_date: Optional[datetime]
-    return_amount: Optional[float]
+    is_paid: Optional[bool] = None
+    paid_date: Optional[datetime] = None
+    paid_amount: Optional[float] = None
+    is_return: Optional[bool] = None
+    return_date: Optional[datetime] = None
+    return_amount: Optional[float] = None
 
 class OrderResponse(BaseModel):
     id: int
     user_id: int
     vip_id: int
-    is_paid: bool
-    paid_date: Optional[datetime]
-    paid_amount: Optional[float]
-    is_return: Optional[bool]
-    return_date: Optional[datetime]
-    return_amount: Optional[float]
+    is_paid: bool | None
+    paid_date: datetime | None
+    paid_amount: float | None
+    is_return: bool | None
+    return_date: datetime | None
+    return_amount: float | None
     created_at: datetime
     updated_at: datetime
 
@@ -61,30 +66,40 @@ async def create_vip_order(
 ):
     """创建VIP订单"""
     lang = get_language(request)
-    
-    # 检查VIP等级是否有效
-    if order_data.vip_level == VipLevel.FREE:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=i18n.get_text("INVALID_VIP_LEVEL", lang)
+    try:
+        # 检查VIP等级是否有效
+        is_contain = vip_service.contains_vip(order_data.vip_id)
+        if not is_contain:
+            logger.error(f"VIP {order_data.vip_id} not found")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=i18n.get_text("INVALID_VIP_LEVEL", lang)
+            )
+
+        vip_order = VipOrder(**order_data.model_dump())
+
+        # 创建订单
+        order = await order_service.create_vip_order(
+            db=db,
+            user=current_user,
+            vip_order=vip_order
         )
 
-    vip_order = VipOrder(**order_data.model_dump())
-    
-    # 创建订单
-    order = await order_service.create_vip_order(
-        db=db,
-        user=current_user,
-        vip_order=vip_order
-    )
-    
-    if not order:
+        if not order:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=i18n.get_text("ORDER_CREATE_FAILED", lang)
+            )
+
+        return order
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error in create_vip_order for user {current_user.id}: {str(e)}\nTraceback: {traceback.format_exc()}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=i18n.get_text("ORDER_CREATE_FAILED", lang)
+            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
-    
-    return order
 
 
 @router.post("/orders/{order_id}/pay", response_model=WeChatPaymentResponse)
@@ -94,36 +109,46 @@ async def create_payment(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    """创建支付订单"""
+    """支付订单"""
     lang = get_language(request)
-    
-    # 检查订单是否存在且属于当前用户
-    order = db.query(VipOrder).filter(
-        VipOrder.id == order_id,
-        VipOrder.user_id == current_user.id
-    ).first()
-    
-    if not order:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=i18n.get_text("ORDER_NOT_FOUND", lang)
-        )
-    
-    if order.is_paid:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=i18n.get_text("ORDER_ALREADY_PAID", lang)
-        )
-    
-    # 创建微信支付订单
-    payment_data = await order_service.create_wechat_payment(order)
-    if not payment_data:
+    try:
+        lang = get_language(request)
+
+        # 检查订单是否存在且属于当前用户
+        order = db.query(VipOrder).filter(
+            VipOrder.id == order_id,
+            VipOrder.user_id == current_user.id
+        ).first()
+
+        if not order:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=i18n.get_text("ORDER_NOT_FOUND", lang)
+            )
+
+        if order.is_paid:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=i18n.get_text("ORDER_ALREADY_PAID", lang)
+            )
+
+        # 创建微信支付订单
+        payment_data = await order_service.create_wechat_payment(order)
+        if not payment_data:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=i18n.get_text("PAYMENT_CREATE_FAILED", lang)
+            )
+
+        return payment_data
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error in pay_order for order {order_id}: {str(e)}\nTraceback: {traceback.format_exc()}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=i18n.get_text("PAYMENT_CREATE_FAILED", lang)
+            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
-    
-    return payment_data
 
 
 @router.post("/orders/wechat-notify")

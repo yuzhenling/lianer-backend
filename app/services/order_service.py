@@ -9,7 +9,6 @@ from app.models.vip import VipLevel, Vip
 from app.models.user import User
 from app.core.config import settings
 from app.core.logger import logger
-from app.services.vip_service import vip_service
 
 
 class OrderService:
@@ -22,11 +21,6 @@ class OrderService:
     ) -> Optional[VipOrder]:
         """创建VIP订单"""
         try:
-            # 获取VIP信息
-            is_contain = vip_service.contains_vip(vip_order.vip_id)
-            if not is_contain:
-                logger.error(f"VIP {vip_order.vip_id} not found")
-                return None
 
             # 创建订单
             order = VipOrder(

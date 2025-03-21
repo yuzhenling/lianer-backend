@@ -1,3 +1,5 @@
+import traceback
+
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy import Enum
 from sqlalchemy.orm import Session
@@ -6,6 +8,7 @@ from pydantic import BaseModel, Field
 from datetime import datetime
 
 from app.api.v1.auth_api import get_current_user, get_db
+from app.core.logger import logger
 from app.models.vip import VipLevel
 from app.services.vip_service import vip_service
 from app.models.user import User
@@ -13,7 +16,6 @@ from app.models.user import User
 from app.core.i18n import i18n, get_language
 
 router = APIRouter()
-
 
 class VipBase(BaseModel):
     level: VipLevel
@@ -57,12 +59,20 @@ async def get_all_vips(
     request: Request,
     current_user: User = Depends(get_current_user)
 ):
-    """获取所有VIP等级信息"""
-    # return vip_service.get_all_vips()
-    vips = vip_service.get_all_vips()
-    if not vips:
-        return []
-    return [VipResponse.model_validate(vip) for vip in vips]
+    lang = get_language(request)
+    try:
+        """获取所有VIP等级信息"""
+        # return vip_service.get_all_vips()
+        vips = vip_service.get_all_vips()
+        if not vips:
+            return []
+        return [VipResponse.model_validate(vip) for vip in vips]
+    except Exception as e:
+        logger.error(f"Error in get_all_vips: {str(e)}\nTraceback: {traceback.format_exc()}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
+        )
 
 @router.get("/vips/{vip_id}", response_model=VipResponse)
 async def get_vip_by_id(
@@ -72,15 +82,22 @@ async def get_vip_by_id(
 ):
     """通过ID获取VIP等级信息"""
     lang = get_language(request)
-    vip = vip_service.get_vip_by_id(vip_id)
-    
-    if not vip:
+    try:
+        vip = vip_service.get_vip_by_id(vip_id)
+        if not vip:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=i18n.get_text("VIP_NOT_FOUND", lang)
+            )
+        return vip
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error in get_vip_by_id for id {vip_id}: {str(e)}\nTraceback: {traceback.format_exc()}")
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=i18n.get_text("VIP_NOT_FOUND", lang)
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
-    
-    return vip
 
 
 @router.post("/vips", response_model=VipResponse)
@@ -92,29 +109,37 @@ async def create_vip(
 ):
     """创建新的VIP等级"""
     lang = get_language(request)
-    
-    # 检查权限（这里假设只有管理员可以创建VIP等级）
-    if not current_user.is_super_admin:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail=i18n.get_text("PERMISSION_DENIED", lang)
+    try:
+        # 检查权限（这里假设只有管理员可以创建VIP等级）
+        if not current_user.is_super_admin:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=i18n.get_text("PERMISSION_DENIED", lang)
+            )
+
+        vip = await vip_service.create_vip(
+            db=db,
+            vip_level=vip_data.level,
+            vip_describe=vip_data.describe,
+            vip_price=vip_data.price,
+            vip_discount=vip_data.discount
         )
-    
-    vip = await vip_service.create_vip(
-        db=db,
-        vip_level=vip_data.level,
-        vip_describe=vip_data.describe,
-        vip_price=vip_data.price,
-        vip_discount=vip_data.discount
-    )
-    
-    if not vip:
+
+        if not vip:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=i18n.get_text("VIP_CREATE_FAILED", lang)
+            )
+
+        return vip
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error in create_vip: {str(e)}\nTraceback: {traceback.format_exc()}")
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=i18n.get_text("VIP_CREATE_FAILED", lang)
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
-    
-    return vip
 
 
 @router.put("/vips/{vip_id}", response_model=VipResponse)
@@ -127,39 +152,44 @@ async def update_vip(
 ):
     """更新VIP等级信息"""
     lang = get_language(request)
-    
-    # 检查权限
-    if not current_user.is_admin:
+    try:
+        if not current_user.is_super_admin:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=i18n.get_text("PERMISSION_DENIED", lang)
+            )
+
+        vip = vip_service.get_vip_by_id(vip_id)
+        if not vip:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=i18n.get_text("VIP_NOT_FOUND", lang)
+            )
+
+        update_data = {}
+        if vip_data.describe is not None:
+            update_data["describe"] = vip_data.describe
+        if vip_data.price is not None:
+            update_data["price"] = vip_data.price
+        if vip_data.discount is not None:
+            update_data["discount"] = vip_data.discount
+
+        updated_vip = await vip_service.update_vip(db, vip_id, **update_data)
+        if not updated_vip:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=i18n.get_text("VIP_UPDATE_FAILED", lang)
+            )
+
+        return updated_vip
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error in update_vip for id {vip_id}: {str(e)}\nTraceback: {traceback.format_exc()}")
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail=i18n.get_text("PERMISSION_DENIED", lang)
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
-    
-    # 获取现有VIP信息
-    vip = vip_service.get_vip_by_id(vip_id)
-    if not vip:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=i18n.get_text("VIP_NOT_FOUND", lang)
-        )
-    
-    # 更新VIP信息
-    update_data = {}
-    if vip_data.describe is not None:
-        update_data["describe"] = vip_data.describe
-    if vip_data.price is not None:
-        update_data["price"] = vip_data.price
-    if vip_data.discount is not None:
-        update_data["discount"] = vip_data.discount
-    
-    updated_vip = await vip_service.update_vip(db, vip_id, **update_data)
-    if not updated_vip:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=i18n.get_text("VIP_UPDATE_FAILED", lang)
-        )
-    
-    return updated_vip
 
 
 @router.delete("/vips/{vip_id}")
@@ -171,28 +201,33 @@ async def delete_vip(
 ):
     """删除VIP等级"""
     lang = get_language(request)
-    
-    # 检查权限
-    if not current_user.is_admin:
+    try:
+        if not current_user.is_admin:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=i18n.get_text("PERMISSION_DENIED", lang)
+            )
+
+        vip = vip_service.get_vip_by_id(vip_id)
+        if not vip:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=i18n.get_text("VIP_NOT_FOUND", lang)
+            )
+
+        success = await vip_service.delete_vip(db, vip_id)
+        if not success:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=i18n.get_text("VIP_DELETE_FAILED", lang)
+            )
+
+        return {"message": i18n.get_text("VIP_DELETE_SUCCESS", lang)}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error in delete_vip for id {vip_id}: {str(e)}\nTraceback: {traceback.format_exc()}")
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail=i18n.get_text("PERMISSION_DENIED", lang)
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
-    
-    # 检查是否存在
-    vip = vip_service.get_vip_by_id(vip_id)
-    if not vip:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=i18n.get_text("VIP_NOT_FOUND", lang)
-        )
-    
-    # 删除VIP
-    success = await vip_service.delete_vip(db, vip_id)
-    if not success:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=i18n.get_text("VIP_DELETE_FAILED", lang)
-        )
-    
-    return {"message": i18n.get_text("VIP_DELETE_SUCCESS", lang)}
