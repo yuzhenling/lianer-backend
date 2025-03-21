@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 
 from app.core.config import settings
 from app.middleware.logging import LoggingMiddleware
-from app.api.v1 import auth_api, pitch_api, order_api
+from app.api.v1 import auth_api, pitch_api, order_api, vip_api
 from app.db.init_data import init_vip_levels
 from app.db.base import SessionLocal, Base, engine
 from app.core.logger import logger
@@ -67,6 +67,7 @@ app.add_middleware(LoggingMiddleware)
 
 # 注册路由
 app.include_router(auth_api.router, prefix=settings.API_V1_STR)
+app.include_router(vip_api.router, prefix=settings.API_V1_STR)
 app.include_router(pitch_api.router, prefix=settings.API_V1_STR)
 app.include_router(order_api.router, prefix=settings.API_V1_STR)
 

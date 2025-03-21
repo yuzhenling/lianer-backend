@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
-from app.models.user import Vip, VipLevel
+
 from app.core.logger import logger
+from app.models.vip import Vip, VipLevel
+
 
 def init_vip_levels(db: Session):
     """初始化VIP等级数据"""
@@ -37,10 +39,10 @@ def init_vip_levels(db: Session):
         for level in VipLevel:
             try:
                 vip = Vip(
-                    vip_level=level,
-                    vip_describe=vip_descriptions[level],  # 使用直接访问而不是get方法
-                    vip_price=vip_price[level],
-                    vip_discount=vip_discount[level],
+                    level=level,
+                    describe=vip_descriptions[level],
+                    price=vip_price[level],
+                    discount=vip_discount[level],
                 )
                 db.add(vip)
                 db.flush()  # 立即刷新以检查是否有问题

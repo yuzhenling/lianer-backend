@@ -6,6 +6,7 @@ import requests
 from app.core.config import settings
 from sqlalchemy.orm import Session
 
+from app.db.base import SessionLocal
 from app.models.vip import Vip, VipLevel
 from app.core.logger import logger
 
@@ -36,8 +37,8 @@ class VipService:
             # 更新缓存
             for vip in vips:
                 self._vip_cache[vip.id] = vip
-                self._vip_level_cache[vip.vip_level] = vip
-                
+                self._vip_level_cache[vip.level] = vip
+
             logger.info(f"Successfully loaded {len(vips)} VIP levels into cache")
         except Exception as e:
             logger.error("Failed to load VIP cache", exc_info=True)
@@ -53,6 +54,15 @@ class VipService:
 
     def get_all_vips(self) -> List[Vip]:
         """获取所有VIP信息（从缓存）"""
+        if not self._vip_cache:
+            db = SessionLocal()
+            try:
+                logger.info("Initializing database data during get_all_vips...")
+                self.load_vip_cache(db)
+            finally:
+                db.close()
+
+
         return list(self._vip_cache.values())
 
     async def create_vip(self, db: Session, vip_level: VipLevel, vip_describe: str, vip_price: float, vip_discount: float) -> Optional[Vip]:
@@ -62,6 +72,7 @@ class VipService:
             if vip_level in self._vip_level_cache:
                 logger.error(f"VIP level {vip_level} already exists")
                 return None
+
 
             # 创建新VIP
             vip = Vip(
@@ -76,7 +87,7 @@ class VipService:
 
             # 更新缓存
             self._vip_cache[vip.id] = vip
-            self._vip_level_cache[vip.vip_level] = vip
+            self._vip_level_cache[vip_level] = vip
 
             logger.info(f"Successfully created VIP level: {vip_level}")
             return vip
@@ -130,7 +141,7 @@ class VipService:
 
             # 从缓存中删除
             self._vip_cache.pop(vip.id, None)
-            self._vip_level_cache.pop(vip.vip_level, None)
+            self._vip_level_cache.pop(vip.level, None)
 
             logger.info(f"Successfully deleted VIP id: {vip_id}")
             return True
@@ -148,6 +159,15 @@ class VipService:
         except Exception:
             return False
 
+    def getDaysByLevel(self, vip_level: VipLevel) -> int:
+        if vip_level == VipLevel.FREE:
+            return 0
+        if vip_level == VipLevel.NORMAL:
+            return 0
+        if vip_level == VipLevel.HALF_YEAR:
+            return 183
+        if vip_level == VipLevel.ONE_YEAR:
+            return 365
 
 # 创建全局VIP服务实例
 vip_service = VipService()

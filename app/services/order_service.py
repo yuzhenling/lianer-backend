@@ -30,9 +30,9 @@ class OrderService:
             # 创建订单
             order = VipOrders(
                 user_id=user.id,
-                vip_id=vip_level
+                vip_id=vip_level,
                 paid_amount=self.vip_prices[vip_level],
-                is_paid=False
+                is_paid=False,
             )
             
             db.add(order)
