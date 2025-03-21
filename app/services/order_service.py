@@ -5,25 +5,13 @@ import requests
 from sqlalchemy.orm import Session
 
 from app.models.order import VipOrders
-from app.models.user import User, Vip, VipLevel
+from app.models.vip import VipLevel, Vip
+from app.models.user import User
 from app.core.config import settings
 from app.core.logger import logger
 
 
 class OrderService:
-    def __init__(self):
-        # VIP价格配置（单位：分）
-        self.vip_prices = {
-            VipLevel.FREE: 0,
-            VipLevel.HALF_YEAR: 9900,  # 99元
-            VipLevel.ONE_YEAR: 16900,  # 169元
-        }
-        
-        # VIP时长配置（单位：天）
-        self.vip_durations = {
-            VipLevel.HALF_YEAR: 180,  # 半年
-            VipLevel.ONE_YEAR: 365,  # 一年
-        }
 
     async def create_vip_order(
         self, 
@@ -42,7 +30,7 @@ class OrderService:
             # 创建订单
             order = VipOrders(
                 user_id=user.id,
-                vip_id=vip_level.
+                vip_id=vip_level
                 paid_amount=self.vip_prices[vip_level],
                 is_paid=False
             )

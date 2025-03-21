@@ -16,14 +16,10 @@ class Vip(Base):
     level = Column(Enum(VipLevel), default=VipLevel.FREE)
     describe = Column(String, nullable=True)
 
-
-
-class Product(Base):
-    __tablename__ = "product"
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    vip_id = Column(Integer, index=True)
-    price = Column(Double, index=True)
-    discount = Column(Double, index=True)
+    price = Column(Double, index=True, default=0)
+    discount = Column(Double, index=True, default=0)
 
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+
+

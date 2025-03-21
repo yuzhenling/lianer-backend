@@ -4,8 +4,9 @@ from typing import Optional
 from pydantic import BaseModel
 from datetime import datetime
 
+from app.models.vip import VipLevel
 from app.services.order_service import OrderService
-from app.models.user import User, VipLevel
+from app.models.user import User
 from app.models.order import VipOrders
 from app.api.v1.auth_api import get_current_user, get_db
 from app.core.i18n import i18n, get_language
@@ -14,10 +15,8 @@ from app.core.logger import logger
 router = APIRouter()
 order_service = OrderService()
 
-
 class OrderCreate(BaseModel):
-    vip_level: VipLevel
-
+    vip_id: int
 
 class OrderResponse(BaseModel):
     id: int

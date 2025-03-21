@@ -11,6 +11,7 @@ from app.core.logger import logger
 
 # 导入所有模型以确保它们被注册到Base.metadata
 from app.models import user, pitch, order
+from app.services.vip_service import vip_service
 
 Base.metadata.create_all(bind=engine)
 
@@ -31,6 +32,9 @@ async def lifespan(app: FastAPI):
         try:
             logger.info("Initializing database data...")
             init_vip_levels(db)
+
+            logger.info("Loading VIP cache...")
+            await vip_service.load_vip_cache(db)
         finally:
             db.close()
     except Exception as e:
