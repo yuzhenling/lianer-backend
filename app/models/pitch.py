@@ -1,10 +1,9 @@
-from sqlalchemy import Column, Integer, String, DateTime, Float, ForeignKey, Enum
-from sqlalchemy.sql import func
-from sqlalchemy.orm import relationship
-from app.db.base import Base
 import enum
-from enum import Enum
-from typing import Dict, List, Optional
+
+from sqlalchemy import Column, Integer, String, DateTime, Float, Enum
+from sqlalchemy.sql import func
+from app.db.base import Base
+from typing import Dict, List
 from pydantic import BaseModel
 
 
@@ -20,7 +19,7 @@ class PitchTest(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, index=True)
-    type = Column(Enum(PitchType))
+    type = Column(Enum(PitchType), default=PitchType.SINGLE_NOTE)
     
     # 测试内容
     target_note = Column(String)      # 目标音高（如 "C4", "G4-B4-D5"）
@@ -30,8 +29,6 @@ class PitchTest(Base):
     
     created_at = Column(DateTime, server_default=func.now())
     
-    # 关系
-    #user = relationship("User", back_populates="pitch_tests")
 
 
 class PracticeSession(Base):
@@ -52,7 +49,7 @@ class PracticeSession(Base):
     # user = relationship("User", back_populates="practice_sessions")
 
 # 音名枚举（A0到C8，覆盖钢琴88个键）
-class PitchName(str, Enum):
+class PitchName(str, enum.Enum):
     # 低音区（A0-B0）
     A0 = "A0"
     AS0 = "A#0"
@@ -160,7 +157,7 @@ class PitchName(str, Enum):
     C8 = "C8"
 
 # 音程枚举
-class Interval(str, Enum):
+class Interval(str, enum.Enum):
     # 单音程
     MINOR_SECOND = "minor_second"  # 小二度
     MAJOR_SECOND = "major_second"  # 大二度
@@ -190,7 +187,7 @@ class Interval(str, Enum):
     PERFECT_FIFTEENTH = "perfect_fifteenth" # 纯十五度
 
 # 和弦类型枚举
-class ChordType(str, Enum):
+class ChordType(str, enum.Enum):
     MAJOR = "major"               # 大三和弦
     MINOR = "minor"               # 小三和弦
     DIMINISHED = "diminished"     # 减三和弦
