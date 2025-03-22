@@ -3,6 +3,9 @@ from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from app.db.base import Base
 import enum
+from enum import Enum
+from typing import Dict, List, Optional
+from pydantic import BaseModel
 
 
 class PitchType(enum.Enum):
@@ -47,3 +50,481 @@ class PracticeSession(Base):
     
     # 关系
     # user = relationship("User", back_populates="practice_sessions")
+
+# 音名枚举（A0到C8，覆盖钢琴88个键）
+class PitchName(str, Enum):
+    # 低音区（A0-B0）
+    A0 = "A0"
+    AS0 = "A#0"
+    B0 = "B0"
+    
+    # 第一八度
+    C1 = "C1"
+    CS1 = "C#1"
+    D1 = "D1"
+    DS1 = "D#1"
+    E1 = "E1"
+    F1 = "F1"
+    FS1 = "F#1"
+    G1 = "G1"
+    GS1 = "G#1"
+    A1 = "A1"
+    AS1 = "A#1"
+    B1 = "B1"
+    
+    # 第二八度
+    C2 = "C2"
+    CS2 = "C#2"
+    D2 = "D2"
+    DS2 = "D#2"
+    E2 = "E2"
+    F2 = "F2"
+    FS2 = "F#2"
+    G2 = "G2"
+    GS2 = "G#2"
+    A2 = "A2"
+    AS2 = "A#2"
+    B2 = "B2"
+    
+    # 第三八度
+    C3 = "C3"
+    CS3 = "C#3"
+    D3 = "D3"
+    DS3 = "D#3"
+    E3 = "E3"
+    F3 = "F3"
+    FS3 = "F#3"
+    G3 = "G3"
+    GS3 = "G#3"
+    A3 = "A3"
+    AS3 = "A#3"
+    B3 = "B3"
+    
+    # 第四八度（包含中央C）
+    C4 = "C4"
+    CS4 = "C#4"
+    D4 = "D4"
+    DS4 = "D#4"
+    E4 = "E4"
+    F4 = "F4"
+    FS4 = "F#4"
+    G4 = "G4"
+    GS4 = "G#4"
+    A4 = "A4"  # 标准音A4=440Hz
+    AS4 = "A#4"
+    B4 = "B4"
+    
+    # 第五八度
+    C5 = "C5"
+    CS5 = "C#5"
+    D5 = "D5"
+    DS5 = "D#5"
+    E5 = "E5"
+    F5 = "F5"
+    FS5 = "F#5"
+    G5 = "G5"
+    GS5 = "G#5"
+    A5 = "A5"
+    AS5 = "A#5"
+    B5 = "B5"
+    
+    # 第六八度
+    C6 = "C6"
+    CS6 = "C#6"
+    D6 = "D6"
+    DS6 = "D#6"
+    E6 = "E6"
+    F6 = "F6"
+    FS6 = "F#6"
+    G6 = "G6"
+    GS6 = "G#6"
+    A6 = "A6"
+    AS6 = "A#6"
+    B6 = "B6"
+    
+    # 第七八度
+    C7 = "C7"
+    CS7 = "C#7"
+    D7 = "D7"
+    DS7 = "D#7"
+    E7 = "E7"
+    F7 = "F7"
+    FS7 = "F#7"
+    G7 = "G7"
+    GS7 = "G#7"
+    A7 = "A7"
+    AS7 = "A#7"
+    B7 = "B7"
+    
+    # 高音区（C8）
+    C8 = "C8"
+
+# 音程枚举
+class Interval(str, Enum):
+    # 单音程
+    MINOR_SECOND = "minor_second"  # 小二度
+    MAJOR_SECOND = "major_second"  # 大二度
+    MINOR_THIRD = "minor_third"    # 小三度
+    MAJOR_THIRD = "major_third"    # 大三度
+    PERFECT_FOURTH = "perfect_fourth"  # 纯四度
+    TRITONE = "tritone"           # 增四度/减五度
+    PERFECT_FIFTH = "perfect_fifth"   # 纯五度
+    MINOR_SIXTH = "minor_sixth"    # 小六度
+    MAJOR_SIXTH = "major_sixth"    # 大六度
+    MINOR_SEVENTH = "minor_seventh"  # 小七度
+    MAJOR_SEVENTH = "major_seventh"  # 大七度
+    PERFECT_OCTAVE = "perfect_octave" # 纯八度
+    
+    # 复音程
+    MINOR_NINTH = "minor_ninth"     # 小九度
+    MAJOR_NINTH = "major_ninth"     # 大九度
+    MINOR_TENTH = "minor_tenth"     # 小十度
+    MAJOR_TENTH = "major_tenth"     # 大十度
+    PERFECT_ELEVENTH = "perfect_eleventh"  # 纯十一度
+    AUGMENTED_ELEVENTH = "augmented_eleventh"  # 增十一度
+    PERFECT_TWELFTH = "perfect_twelfth"    # 纯十二度
+    MINOR_THIRTEENTH = "minor_thirteenth"   # 小十三度
+    MAJOR_THIRTEENTH = "major_thirteenth"   # 大十三度
+    MINOR_FOURTEENTH = "minor_fourteenth"   # 小十四度
+    MAJOR_FOURTEENTH = "major_fourteenth"   # 大十四度
+    PERFECT_FIFTEENTH = "perfect_fifteenth" # 纯十五度
+
+# 和弦类型枚举
+class ChordType(str, Enum):
+    MAJOR = "major"               # 大三和弦
+    MINOR = "minor"               # 小三和弦
+    DIMINISHED = "diminished"     # 减三和弦
+    AUGMENTED = "augmented"       # 增三和弦
+    MAJOR_SEVENTH = "major_seventh"  # 大七和弦
+    MINOR_SEVENTH = "minor_seventh"  # 小七和弦
+    DOMINANT_SEVENTH = "dominant_seventh"  # 属七和弦
+    HALF_DIMINISHED = "half_diminished"   # 半减七和弦
+    DIMINISHED_SEVENTH = "diminished_seventh"  # 减减七和弦
+    MAJOR_NINTH = "major_ninth"   # 大九和弦
+    MINOR_NINTH = "minor_ninth"   # 小九和弦
+    DOMINANT_NINTH = "dominant_ninth"  # 属九和弦
+
+# 音高模型
+class Pitch(BaseModel):
+    name: PitchName
+    file_path: str
+    frequency: float  # 频率（Hz）
+
+# 音组模型
+class PitchGroup(BaseModel):
+    name: str
+    pitches: List[PitchName]
+    description: str
+
+# 音程模型
+class IntervalModel(BaseModel):
+    name: Interval
+    semitones: int
+    description: str
+    example: List[PitchName]  # 示例音程
+
+# 和弦模型
+class Chord(BaseModel):
+    root: PitchName
+    type: ChordType
+    notes: List[PitchName]
+    description: str
+
+# 全局常量定义
+PITCH_FILE_MAPPING: Dict[PitchName, str] = {
+    # 这里将在API中动态填充
+}
+
+# 预定义的音组列表
+PITCH_GROUPS = [
+    PitchGroup(
+        name="Middle C Group",
+        pitches=[PitchName.B3, PitchName.C4, PitchName.D4],
+        description="以中央C为中心的音组"
+    ),
+    PitchGroup(
+        name="A4 Standard Group",
+        pitches=[PitchName.G4, PitchName.A4, PitchName.B4],
+        description="以标准音A4(440Hz)为中心的音组"
+    ),
+    PitchGroup(
+        name="Basic Scale Group C4",
+        pitches=[PitchName.C4, PitchName.D4, PitchName.E4, PitchName.F4, PitchName.G4, PitchName.A4, PitchName.B4],
+        description="C4大调音阶"
+    ),
+    PitchGroup(
+        name="Basic Scale Group C5",
+        pitches=[PitchName.C5, PitchName.D5, PitchName.E5, PitchName.F5, PitchName.G5, PitchName.A5, PitchName.B5],
+        description="C5大调音阶"
+    ),
+    PitchGroup(
+        name="Bass Group",
+        pitches=[PitchName.C2, PitchName.D2, PitchName.E2, PitchName.F2, PitchName.G2],
+        description="低音区音组"
+    ),
+    PitchGroup(
+        name="Treble Group",
+        pitches=[PitchName.C6, PitchName.D6, PitchName.E6, PitchName.F6, PitchName.G6],
+        description="高音区音组"
+    )
+]
+
+# 预定义的音程列表
+INTERVALS = [
+    # 单音程
+    IntervalModel(
+        name=Interval.MINOR_SECOND,
+        semitones=1,
+        description="小二度",
+        example=[PitchName.C4, PitchName.CS4]
+    ),
+    IntervalModel(
+        name=Interval.MAJOR_SECOND,
+        semitones=2,
+        description="大二度",
+        example=[PitchName.C4, PitchName.D4]
+    ),
+    IntervalModel(
+        name=Interval.MINOR_THIRD,
+        semitones=3,
+        description="小三度",
+        example=[PitchName.C4, PitchName.DS4]
+    ),
+    IntervalModel(
+        name=Interval.MAJOR_THIRD,
+        semitones=4,
+        description="大三度",
+        example=[PitchName.C4, PitchName.E4]
+    ),
+    IntervalModel(
+        name=Interval.PERFECT_FOURTH,
+        semitones=5,
+        description="纯四度",
+        example=[PitchName.C4, PitchName.F4]
+    ),
+    IntervalModel(
+        name=Interval.TRITONE,
+        semitones=6,
+        description="增四度/减五度",
+        example=[PitchName.C4, PitchName.FS4]
+    ),
+    IntervalModel(
+        name=Interval.PERFECT_FIFTH,
+        semitones=7,
+        description="纯五度",
+        example=[PitchName.C4, PitchName.G4]
+    ),
+    IntervalModel(
+        name=Interval.MINOR_SIXTH,
+        semitones=8,
+        description="小六度",
+        example=[PitchName.C4, PitchName.GS4]
+    ),
+    IntervalModel(
+        name=Interval.MAJOR_SIXTH,
+        semitones=9,
+        description="大六度",
+        example=[PitchName.C4, PitchName.A4]
+    ),
+    IntervalModel(
+        name=Interval.MINOR_SEVENTH,
+        semitones=10,
+        description="小七度",
+        example=[PitchName.C4, PitchName.AS4]
+    ),
+    IntervalModel(
+        name=Interval.MAJOR_SEVENTH,
+        semitones=11,
+        description="大七度",
+        example=[PitchName.C4, PitchName.B4]
+    ),
+    IntervalModel(
+        name=Interval.PERFECT_OCTAVE,
+        semitones=12,
+        description="纯八度",
+        example=[PitchName.C4, PitchName.C5]
+    ),
+    
+    # 复音程
+    IntervalModel(
+        name=Interval.MINOR_NINTH,
+        semitones=13,
+        description="小九度",
+        example=[PitchName.C4, PitchName.CS5]
+    ),
+    IntervalModel(
+        name=Interval.MAJOR_NINTH,
+        semitones=14,
+        description="大九度",
+        example=[PitchName.C4, PitchName.D5]
+    ),
+    IntervalModel(
+        name=Interval.MINOR_TENTH,
+        semitones=15,
+        description="小十度",
+        example=[PitchName.C4, PitchName.DS5]
+    ),
+    IntervalModel(
+        name=Interval.MAJOR_TENTH,
+        semitones=16,
+        description="大十度",
+        example=[PitchName.C4, PitchName.E5]
+    ),
+    IntervalModel(
+        name=Interval.PERFECT_ELEVENTH,
+        semitones=17,
+        description="纯十一度",
+        example=[PitchName.C4, PitchName.F5]
+    ),
+    IntervalModel(
+        name=Interval.AUGMENTED_ELEVENTH,
+        semitones=18,
+        description="增十一度/减十二度",
+        example=[PitchName.C4, PitchName.FS5]
+    ),
+    IntervalModel(
+        name=Interval.PERFECT_TWELFTH,
+        semitones=19,
+        description="纯十二度",
+        example=[PitchName.C4, PitchName.G5]
+    ),
+    IntervalModel(
+        name=Interval.MINOR_THIRTEENTH,
+        semitones=20,
+        description="小十三度",
+        example=[PitchName.C4, PitchName.GS5]
+    ),
+    IntervalModel(
+        name=Interval.MAJOR_THIRTEENTH,
+        semitones=21,
+        description="大十三度",
+        example=[PitchName.C4, PitchName.A5]
+    ),
+    IntervalModel(
+        name=Interval.MINOR_FOURTEENTH,
+        semitones=22,
+        description="小十四度",
+        example=[PitchName.C4, PitchName.AS5]
+    ),
+    IntervalModel(
+        name=Interval.MAJOR_FOURTEENTH,
+        semitones=23,
+        description="大十四度",
+        example=[PitchName.C4, PitchName.B5]
+    ),
+    IntervalModel(
+        name=Interval.PERFECT_FIFTEENTH,
+        semitones=24,
+        description="纯十五度",
+        example=[PitchName.C4, PitchName.C6]
+    )
+]
+
+# 预定义的和弦列表
+CHORDS = [
+    # C大调的三和弦
+    Chord(
+        root=PitchName.C4,
+        type=ChordType.MAJOR,
+        notes=[PitchName.C4, PitchName.E4, PitchName.G4],
+        description="C大三和弦"
+    ),
+    Chord(
+        root=PitchName.C4,
+        type=ChordType.MINOR,
+        notes=[PitchName.C4, PitchName.DS4, PitchName.G4],
+        description="C小三和弦"
+    ),
+    Chord(
+        root=PitchName.C4,
+        type=ChordType.DIMINISHED,
+        notes=[PitchName.C4, PitchName.DS4, PitchName.FS4],
+        description="C减三和弦"
+    ),
+    Chord(
+        root=PitchName.C4,
+        type=ChordType.AUGMENTED,
+        notes=[PitchName.C4, PitchName.E4, PitchName.GS4],
+        description="C增三和弦"
+    ),
+    
+    # C大调的七和弦
+    Chord(
+        root=PitchName.C4,
+        type=ChordType.MAJOR_SEVENTH,
+        notes=[PitchName.C4, PitchName.E4, PitchName.G4, PitchName.B4],
+        description="C大七和弦"
+    ),
+    Chord(
+        root=PitchName.C4,
+        type=ChordType.MINOR_SEVENTH,
+        notes=[PitchName.C4, PitchName.DS4, PitchName.G4, PitchName.AS4],
+        description="C小七和弦"
+    ),
+    Chord(
+        root=PitchName.C4,
+        type=ChordType.DOMINANT_SEVENTH,
+        notes=[PitchName.C4, PitchName.E4, PitchName.G4, PitchName.AS4],
+        description="C属七和弦"
+    ),
+    Chord(
+        root=PitchName.C4,
+        type=ChordType.HALF_DIMINISHED,
+        notes=[PitchName.C4, PitchName.DS4, PitchName.FS4, PitchName.AS4],
+        description="C半减七和弦"
+    ),
+    Chord(
+        root=PitchName.C4,
+        type=ChordType.DIMINISHED_SEVENTH,
+        notes=[PitchName.C4, PitchName.DS4, PitchName.FS4, PitchName.A4],
+        description="C减减七和弦"
+    ),
+    
+    # C大调的九和弦
+    Chord(
+        root=PitchName.C4,
+        type=ChordType.MAJOR_NINTH,
+        notes=[PitchName.C4, PitchName.E4, PitchName.G4, PitchName.B4, PitchName.D5],
+        description="C大九和弦"
+    ),
+    Chord(
+        root=PitchName.C4,
+        type=ChordType.MINOR_NINTH,
+        notes=[PitchName.C4, PitchName.DS4, PitchName.G4, PitchName.AS4, PitchName.D5],
+        description="C小九和弦"
+    ),
+    Chord(
+        root=PitchName.C4,
+        type=ChordType.DOMINANT_NINTH,
+        notes=[PitchName.C4, PitchName.E4, PitchName.G4, PitchName.AS4, PitchName.D5],
+        description="C属九和弦"
+    ),
+    
+    # G大调的主要和弦
+    Chord(
+        root=PitchName.G4,
+        type=ChordType.MAJOR,
+        notes=[PitchName.G4, PitchName.B4, PitchName.D5],
+        description="G大三和弦"
+    ),
+    Chord(
+        root=PitchName.G4,
+        type=ChordType.DOMINANT_SEVENTH,
+        notes=[PitchName.G4, PitchName.B4, PitchName.D5, PitchName.F5],
+        description="G属七和弦"
+    ),
+    
+    # F大调的主要和弦
+    Chord(
+        root=PitchName.F4,
+        type=ChordType.MAJOR,
+        notes=[PitchName.F4, PitchName.A4, PitchName.C5],
+        description="F大三和弦"
+    ),
+    Chord(
+        root=PitchName.F4,
+        type=ChordType.MAJOR_SEVENTH,
+        notes=[PitchName.F4, PitchName.A4, PitchName.C5, PitchName.E5],
+        description="F大七和弦"
+    )
+]
