@@ -51,6 +51,9 @@ async def lifespan(app: FastAPI):
 
             logger.info("building Pitch Interval cache...")
             pitch_service.build_pitch_interval_cache()
+
+            logger.info("building Pitch Chord cache...")
+            pitch_service.build_pitch_chord_cache()
         finally:
             db.close()
     except Exception as e:

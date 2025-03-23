@@ -8,7 +8,7 @@ from app.core.config import settings
 from app.core.logger import logger
 from app.db.base import SessionLocal
 from app.models.pitch import Pitch, PitchGroup, PITCH_GROUP_NAMES, PITCH_GROUP_RANGES, PitchInterval, Interval, \
-    PitchIntervalPair
+    PitchIntervalPair, PitchChord, Chord
 
 
 class PitchService:
@@ -16,6 +16,7 @@ class PitchService:
     PITCH_CACHE: Dict[int, Pitch] = {}  # ID -> Pitch对象的缓存
     PITCH_GROUP_CACHE: Dict[int, PitchGroup] = {}  # ID -> PitchGroup对象的缓存
     PITCH_INTERVAL_CACHE: Dict[int, PitchInterval] = {}  # ID -> PitchInterval对象的缓存
+    PITCH_CHORD_CACHE: Dict[int, PitchChord] = {}  # ID -> PitchChord对象的缓存
 
     def __new__(cls):
         if cls._instance is None:
@@ -135,6 +136,45 @@ class PitchService:
             logger.error("Failed to build Pitch Interval cache", exc_info=True)
             raise e
 
+    def build_pitch_chord_cache(self):
+        """构建和弦缓存"""
+        try:
+            # 清空现有音程缓存
+            self.PITCH_CHORD_CACHE.clear()
+
+            index = 1
+            # 为每个音程创建缓存
+            for chord in Chord:
+                intervals = chord.intervals
+                pitch_pairs: List[List] = []
+                # 遍历所有音高，找出符合当前音程的音高对
+                for base_pitch in self.PITCH_CACHE.values():
+                    pitch_chord_pair = []
+                    for interval in intervals:
+                        target_number = base_pitch.pitch_number + interval
+                        if target_number <= 88:  # 确保不超过钢琴最高音
+                            if target_pitch := self.PITCH_CACHE.get(target_number):
+                                pitch_chord_pair.append(target_pitch)
+                    if pitch_chord_pair:
+                        pitch_pairs.append(pitch_chord_pair)
+
+                if pitch_pairs:
+                    # 创建音程对象并缓存
+                    pitch_chord = PitchChord(
+                        index = index,
+                        value = chord.value,
+                        cn_value = chord.cn_value,
+                        list = pitch_pairs,
+                        count = len(pitch_pairs),
+                    )
+                    self.PITCH_CHORD_CACHE[index] = pitch_chord
+                index += 1
+
+            logger.info(f"Successfully built Pitch chord cache with {len(self.PITCH_CHORD_CACHE)} intervals")
+        except Exception as e:
+            logger.error("Failed to build Pitch chord cache", exc_info=True)
+            raise e
+
     async def get_all_pitch(self) -> List[Pitch]:
         try:
             return list(self.PITCH_CACHE.values())
@@ -178,6 +218,22 @@ class PitchService:
             return self.PITCH_INTERVAL_CACHE[index]
         except Exception as e:
             logger.error(f"Failed to get interval with index {index}", exc_info=True)
+            raise e
+
+    async def get_all_chords(self) -> List[PitchChord]:
+        """获取所有音程"""
+        try:
+            return list(self.PITCH_CHORD_CACHE.values())
+        except Exception as e:
+            logger.error("Failed to get all chords", exc_info=True)
+            raise e
+
+    async def get_chord_by_index(self, index: int) -> PitchChord:
+        """根据索引获取特定音程"""
+        try:
+            return self.PITCH_CHORD_CACHE[index]
+        except Exception as e:
+            logger.error(f"Failed to get chord with index {index}", exc_info=True)
             raise e
 
 pitch_service = PitchService()

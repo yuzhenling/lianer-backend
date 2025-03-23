@@ -119,11 +119,47 @@ class Interval(str, enum.Enum):
     MAJOR_FOURTEENTH = "major_fourteenth"   # 大十四度
     PERFECT_FIFTEENTH = "perfect_fifteenth" # 纯十五度
 
+#TODO
+# class Interval(str, Enum):
+#     # 单音程
+#     MINOR_SECOND = ("minor_second", "小二度")
+#     MAJOR_SECOND = ("major_second", "大二度")
+#     MINOR_THIRD = ("minor_third", "小三度")
+#     MAJOR_THIRD = ("major_third", "大三度")
+#     PERFECT_FOURTH = ("perfect_fourth", "纯四度")
+#     TRITONE = ("tritone", "增四度/减五度")
+#     PERFECT_FIFTH = ("perfect_fifth", "纯五度")
+#     MINOR_SIXTH = ("minor_sixth", "小六度")
+#     MAJOR_SIXTH = ("major_sixth", "大六度")
+#     MINOR_SEVENTH = ("minor_seventh", "小七度")
+#     MAJOR_SEVENTH = ("major_seventh", "大七度")
+#     PERFECT_OCTAVE = ("perfect_octave", "纯八度")
+#
+#     # 复音程
+#     MINOR_NINTH = ("minor_ninth", "小九度")
+#     MAJOR_NINTH = ("major_ninth", "大九度")
+#     MINOR_TENTH = ("minor_tenth", "小十度")
+#     MAJOR_TENTH = ("major_tenth", "大十度")
+#     PERFECT_ELEVENTH = ("perfect_eleventh", "纯十一度")
+#     AUGMENTED_ELEVENTH = ("augmented_eleventh", "增十一度")
+#     PERFECT_TWELFTH = ("perfect_twelfth", "纯十二度")
+#     MINOR_THIRTEENTH = ("minor_thirteenth", "小十三度")
+#     MAJOR_THIRTEENTH = ("major_thirteenth", "大十三度")
+#     MINOR_FOURTEENTH = ("minor_fourteenth", "小十四度")
+#     MAJOR_FOURTEENTH = ("major_fourteenth", "大十四度")
+#     PERFECT_FIFTEENTH = ("perfect_fifteenth", "纯十五度")
+#
+#     def __init__(self, value, description):
+#         self._value_ = value  # 设置枚举值
+#         self.description = description  # 添加描述字段
+#
+#     def __str__(self):
+#         return self.value  # 返回枚举值
+
 class PitchIntervalPair:
     def __init__(self, first: Pitch, second: Pitch) -> None:
         self.first = first
         self.second = second
-
 
 # 音程模型
 class PitchInterval:
@@ -135,8 +171,46 @@ class PitchInterval:
         self.count = count
 
 
+# 和弦模型
+class Chord(enum.Enum):
+    # 三和弦
+    MAJOR = ("major", "大三和弦", 4, 7)  # 大三度 + 小三度
+    MINOR = ("minor", "小三和弦", 3, 7)  # 小三度 + 大三度
+    AUGMENTED = ("augmented", "增三和弦", 4, 8)  # 大三度 + 大三度
+    DIMINISHED = ("diminished", "减三和弦", 3, 6)  # 小三度 + 小三度
+
+    # 七和弦
+    MAJOR_SEVENTH = ("major_seventh", "大七和弦", 4, 7, 11)  # 大三度 + 小三度 + 大三度
+    MINOR_SEVENTH = ("minor_seventh", "小七和弦", 3, 7, 10)  # 小三度 + 大三度 + 小三度
+    DOMINANT_SEVENTH = ("dominant_seventh", "大小七和弦", 4, 7, 10)  # 大三度 + 小三度 + 小三度
+    MINOR_MAJOR_SEVENTH = ("minor_major_seventh", "小大七和弦", 3, 7, 11)  # 小三度 + 小三度 + 小三度
+    HALF_DIMINISHED = ("half_diminished", "半减七和弦", 3, 6, 10)  # 小三度 + 小三度 + 大三度
+    DIMINISHED_SEVENTH = ("diminished_seventh", "减七和弦", 3, 6, 9)  # 小三度 + 小三度 + 小三度
+    AUGMENTED_MAJOR_SEVENTH = ("diminished_seventh", "减七和弦", 4, 8, 11)  # 小三度 + 小三度 + 小三度
+
+    #
+    # # 九和弦
+    # MAJOR_NINTH = ("major_ninth", "大九和弦", 4, 7, 11, 14)  # 大三度 + 小三度 + 大三度 + 小三度
+    # MINOR_NINTH = ("minor_ninth", "小九和弦", 3, 7, 10, 14)  # 小三度 + 大三度 + 小三度 + 大三度
+    # DOMINANT_NINTH = ("dominant_ninth", "属九和弦", 4, 7, 10, 14)  # 大三度 + 小三度 + 小三度 + 大三度
+
+    def __init__(self, value, cn_value, *intervals):
+        self._value_ = value  # 设置枚举值
+        self.cn_value = cn_value  # 设置描述
+        self.intervals = intervals  # 设置音程列表
+
+    def __str__(self):
+        return self.value  # 返回枚举值
 
 
+# 和弦模型
+class PitchChord:
+    def __init__(self, index: int, value: str, cn_value: str, list: List[List], count: int) -> None:
+        self.index = index
+        self.value = value
+        self.cn_value = cn_value
+        self.list = list
+        self.count = count
 
 
 
@@ -289,12 +363,7 @@ class PitchInterval:
 
 
 #
-# # 和弦模型
-# class Chord(BaseModel):
-#     root: PitchName
-#     type: ChordType
-#     notes: List[PitchName]
-#     description: str
+
 #
 # # 全局常量定义
 # PITCH_FILE_MAPPING: Dict[PitchName, str] = {

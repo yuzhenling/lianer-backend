@@ -111,6 +111,20 @@ class PitchIntervalResponse(BaseModel):
     }
 
 
+class PitchChordResponse(BaseModel):
+    index: int
+    value: str
+    cn_value: str
+    list: List[List[PitchResponse]]
+    count: int
+    model_config = {
+        "from_attributes": True,
+        "arbitrary_types_allowed": True,
+        "json_schema_extra": {
+
+        }
+    }
+
 @router.get("/piano/pitch/info", response_model=List[PitchResponse])
 async def get_all_pitches(
         request: Request,
@@ -303,6 +317,30 @@ async def get_all_pitchinterval(
     except Exception as e:
         logger.error(
             f"Error in get_all_pitchinterval: {str(e)}\nTraceback: {traceback.format_exc()}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
+        )
+
+@router.get("/piano/pitchchord", response_model=List[PitchChordResponse])
+async def get_all_pitchchord(
+    request: Request,
+    current_user: User = Depends(get_current_user),
+):
+    lang = get_language(request)
+    try:
+        pitch_chords= await pitch_service.get_all_chords()
+        if not pitch_chords:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=i18n.get_text("PITCH_CHORD_NOT_FOUND", lang)
+            )
+        return pitch_chords
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(
+            f"Error in get_all_pitchchord: {str(e)}\nTraceback: {traceback.format_exc()}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
