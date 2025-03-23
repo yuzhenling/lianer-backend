@@ -1,0 +1,104 @@
+{
+	"info": {
+		"_postman_id": "0b71b088-6166-4173-b575-2a7a00ccb2d4",
+		"name": "声艺宝典",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "2839189"
+	},
+	"item": [
+		{
+			"name": "http://127.0.0.1:8000/",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:8000/"
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/api/v1/auth/wechat-login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// 解析响应数据",
+							"const response = pm.response.json();",
+							"",
+							"// 检查响应是否成功",
+							"if (response.access_token) {",
+							"    // 将 token 设置为环境变量",
+							"    pm.environment.set(\"token\", response.access_token);",
+							"    console.log(\"Token 已设置为环境变量:\", response.access_token);",
+							"} else {",
+							"    console.log(\"响应失败或未找到 token\");",
+							"    console.log(\"响应状态码:\", pm.response.code);",
+							"    console.log(\"响应内容:\", pm.response.text());",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"code\":\"0f1Zn01w3U0uz43r3a4w37t5a22Zn01q\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:8000/api/v1/auth/wechat-login"
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/api/v1/vips",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{token}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:8000/api/v1/vips"
+			},
+			"response": []
+		}
+	]
+}

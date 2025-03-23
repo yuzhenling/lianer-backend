@@ -5,12 +5,13 @@ from contextlib import asynccontextmanager
 from app.core.config import settings
 from app.middleware.logging import LoggingMiddleware
 from app.api.v1 import auth_api, pitch_api, order_api, vip_api
-from app.db.init_data import init_vip_levels
+from app.db.init_data import init_vip_levels, init_pitches
 from app.db.base import SessionLocal, Base, engine
 from app.core.logger import logger
 
 # 导入所有模型以确保它们被注册到Base.metadata
 from app.models import user, pitch, order
+from app.services.pitch_service import pitch_service
 from app.services.vip_service import vip_service
 
 Base.metadata.create_all(bind=engine)
@@ -33,8 +34,11 @@ async def lifespan(app: FastAPI):
             logger.info("Initializing database data...")
             init_vip_levels(db)
 
+            init_pitches(db)
+
             logger.info("Loading VIP cache...")
             await vip_service.load_vip_cache(db)
+            await pitch_service.load_pitch_cache(db)
         finally:
             db.close()
     except Exception as e:

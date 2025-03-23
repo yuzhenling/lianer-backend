@@ -1,7 +1,11 @@
+from pathlib import Path
+
 from sqlalchemy.orm import Session
 
 from app.core.logger import logger
+from app.models.pitch import Pitch
 from app.models.vip import Vip, VipLevel
+from app.constants.constant import PIANO_KEYS_MAPPING
 
 
 def init_vip_levels(db: Session):
@@ -56,4 +60,46 @@ def init_vip_levels(db: Session):
     except Exception as e:
         logger.error("Failed to initialize VIP levels", exc_info=True)
         db.rollback()
-        raise e 
+        raise e
+
+def init_pitches(db: Session):
+    """初始化音高数据"""
+    try:
+        # 检查是否已经有数据
+        pitches = db.query(Pitch).all()
+        if pitches:
+            logger.info("Pitch initialized, skipping...")
+            return
+
+        # 获取音频文件目录的绝对路径
+        audio_dir = Path("app/static/audio")
+
+        # 遍历PIANO_KEYS中的所有音高
+        for number, note_name in PIANO_KEYS_MAPPING.items():
+            # 分割主音名和别名
+            if "_" in note_name:
+                name, alias = note_name.split("_")
+            else:
+                name = note_name
+                alias = None
+
+            # 构建文件路径
+            file_name = f"tone_{number}_{note_name}.wav"
+            file_path = str(audio_dir / file_name)
+
+            # 创建Pitch实例
+            pitch = Pitch(
+                pitch_number=number,
+                name=name,
+                alias=alias,
+                file_path=file_path
+            )
+            db.add(pitch)
+
+        db.commit()
+        print("Successfully initialized pitch data")
+
+    except Exception as e:
+        db.rollback()
+        print(f"Error initializing pitch data: {str(e)}")
+        raise

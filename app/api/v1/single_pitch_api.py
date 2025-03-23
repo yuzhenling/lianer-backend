@@ -1,11 +1,10 @@
 from fastapi import APIRouter, HTTPException, status, Request
 from fastapi.responses import FileResponse, JSONResponse
 from typing import Dict, List
-import os
-import logging
 import traceback
 from pathlib import Path
 
+from app.core.logger import logger
 from app.models.pitch import (
     PitchName, Interval, ChordType, Pitch, PitchGroup,
     IntervalModel, Chord, PITCH_GROUPS, INTERVALS, CHORDS
@@ -13,31 +12,6 @@ from app.models.pitch import (
 from app.core.i18n import i18n, get_language
 
 router = APIRouter()
-logger = logging.getLogger(__name__)
-
-# 音频文件目录
-AUDIO_DIR = Path("app/static/audio/mp3")
-
-def scan_audio_files() -> Dict[PitchName, str]:
-    """扫描音频文件目录并建立音名到文件路径的映射"""
-    mapping = {}
-    try:
-        for file in AUDIO_DIR.glob("*.mp3"):
-            # 假设文件名格式为 "C4.mp3", "C#4.mp3" 等
-            pitch_name = file.stem
-            # 将文件名转换为PitchName枚举（例如：'C4' -> PitchName.C4）
-            try:
-                enum_name = pitch_name.replace("#", "S")  # C#4 -> CS4
-                pitch_enum = PitchName[enum_name]
-                mapping[pitch_enum] = str(file)
-            except KeyError:
-                logger.warning(f"Unknown pitch name in file: {file}")
-    except Exception as e:
-        logger.error(f"Error scanning audio files: {str(e)}\nTraceback: {traceback.format_exc()}")
-    return mapping
-
-# 在启动时扫描音频文件
-PITCH_FILE_MAPPING = scan_audio_files()
 
 @router.get("/pitches/all")
 async def get_all_pitches(request: Request):
