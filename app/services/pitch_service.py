@@ -24,7 +24,7 @@ class PitchService:
     async def load_pitch_cache(self, db: Session) -> None:
         """从数据库加载所有Pitch数据到缓存"""
         try:
-            pitches = db.query(Pitch).all()
+            pitches = db.query(Pitch).order_by(Pitch.pitch_number).all()
             # 清空现有缓存
             self._pitch_cache.clear()
 

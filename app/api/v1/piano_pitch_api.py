@@ -18,13 +18,13 @@ class PitchResponse(BaseModel):
     pitch_number: int
     name: str
     alias: Optional[str] = None
-    file_path: str
+    url: str
     model_config = {
         "from_attributes": True,
         "arbitrary_types_allowed": True
     }
 
-@router.get("/piano/pitch", response_model=List[PitchResponse])
+@router.get("/piano/pitch/info", response_model=List[PitchResponse])
 async def get_all_pitches(
         request: Request,
         current_user: User = Depends(get_current_user)
@@ -36,6 +36,31 @@ async def get_all_pitches(
         if not pitches:
             return []
         return [PitchResponse.model_validate(pitch) for pitch in pitches]
+    except Exception as e:
+        logger.error(f"Error in get_all_pitches: {str(e)}\nTraceback: {traceback.format_exc()}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
+        )
+
+@router.get("/piano/pitch/wav", response_model=List[PitchResponse])
+async def get_all_pitches_wav(
+        request: Request,
+        current_user: User = Depends(get_current_user)
+):
+    lang = get_language(request)
+    try:
+        """获取所有信息"""
+        pitches = await pitch_service.get_all_pitch()
+        if not pitches:
+            return []
+        pitches_copy = pitches[:]
+        pitches_copy.sort(key=lambda pitch: pitch.pitch_number, reverse=False)
+        base_url = str(request.base_url).rstrip('/')
+        for pitch in pitches_copy:
+            pitch.url = base_url + pitch.url
+
+        return [PitchResponse.model_validate(pitch) for pitch in pitches_copy]
     except Exception as e:
         logger.error(f"Error in get_all_pitches: {str(e)}\nTraceback: {traceback.format_exc()}")
         raise HTTPException(

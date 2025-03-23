@@ -60,7 +60,7 @@ class Pitch(Base):
     pitch_number = Column(Integer, nullable=False, unique=True)  # 钢琴键位号（1-88）
     name = Column(String(10), nullable=False)  # 主音名（如 A#0）
     alias = Column(String(10), nullable=True)  # 别名（如 Bb0）
-    file_path = Column(String(255), nullable=False)  # 音频文件路径
+    url = Column(String(255), nullable=False)  # 音频文件路径
 
 
 #
