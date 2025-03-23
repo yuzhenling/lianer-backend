@@ -6,7 +6,9 @@ import secrets
 class Settings(BaseSettings):
     PROJECT_NAME: str = "声之宝典"
     API_V1_STR: str = "/api/v1"
-    API_HOST: str = "https://api.shengyibaodian.com"  # API域名
+    # API_HOST: str = "https://api.shengyibaodian.com"  # API域名
+    API_HOST: str = "http://127.0.0.1:8000"  # API域名
+
     
     # PostgreSQL数据库配置
     POSTGRES_SERVER: str = "localhost"

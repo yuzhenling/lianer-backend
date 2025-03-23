@@ -1,7 +1,10 @@
-from typing import Dict, List
+import copy
+from typing import Dict, List, Any, Coroutine
+from urllib.parse import quote
 
 from sqlalchemy.orm import Session
 
+from app.core.config import settings
 from app.core.logger import logger
 from app.db.base import SessionLocal
 from app.models.pitch import Pitch
@@ -30,6 +33,8 @@ class PitchService:
 
             # 更新缓存
             for pitch in pitches:
+            #     url = quote(pitch.url)
+            #     pitch.url = f"{settings.API_HOST}{settings.API_V1_STR}{url}"
                 self._pitch_cache[pitch.pitch_number] = pitch
 
             logger.info(f"Successfully loaded {len(pitches)} Pitch into cache")
@@ -47,6 +52,14 @@ class PitchService:
     async def get_pitch_by_number(self, number: int) -> Pitch:
         try:
             return self._pitch_cache[number]
+        except Exception as e:
+            logger.error("Failed to load Pitch cache", exc_info=True)
+            raise e
+
+    async def get_pitch_by_name(self, name: str) -> List[Pitch]:
+        try:
+            filter_data = {k:v for k,v in self._pitch_cache.items() if name == v.name or (v.alias is not None and name == v.alias)}
+            return list(filter_data.values())
         except Exception as e:
             logger.error("Failed to load Pitch cache", exc_info=True)
             raise e

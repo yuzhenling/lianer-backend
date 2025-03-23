@@ -63,6 +63,8 @@ class Pitch(Base):
     url = Column(String(255), nullable=False)  # 音频文件路径
 
 
+
+
 #
 # # 音名枚举（A0到C8，覆盖钢琴88个键）
 # class PitchName(str, enum.Enum):

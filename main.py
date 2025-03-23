@@ -64,7 +64,7 @@ app = FastAPI(
 )
 
 
-app.mount("/static", StaticFiles(directory=Path("app/static")), name="static")
+# app.mount("/static", StaticFiles(directory=Path("app/static")), name="static")
 
 # 添加CORS中间件
 app.add_middleware(

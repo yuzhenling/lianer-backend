@@ -73,10 +73,9 @@ def init_pitches(db: Session):
             return
 
         # 获取音频文件目录的绝对路径
-        # current_dir = os.path.dirname(os.path.abspath(__file__))
-        # 构建相对路径
-        # audio_dir = os.path.join(current_dir, "..", "static", "audio")
-        audio_dir = "/static/audio/"
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        audio_dir = os.path.join(current_dir, "..", "static", "audio")
+        # audio_dir = "/static/audio/"
 
         # 遍历PIANO_KEYS中的所有音高
         for number, note_name in PIANO_KEYS_MAPPING.items():
@@ -89,7 +88,7 @@ def init_pitches(db: Session):
 
             # 构建文件路径
             file_name = f"tone_{number}_{note_name}.wav"
-            url = f"{audio_dir}{file_name}"
+            url = f"{audio_dir}/{file_name}"
 
             # 创建Pitch实例
             pitch = Pitch(

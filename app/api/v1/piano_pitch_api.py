@@ -1,8 +1,13 @@
+import os
 import traceback
 from typing import Optional, List
+from urllib.parse import unquote
 
-from fastapi import APIRouter, Depends, HTTPException, status, Request
+from fastapi import APIRouter, Depends, HTTPException, status, Request, Response
+from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
+
+
 from app.api.v1.auth_api import get_current_user, get_db
 from app.core.i18n import get_language, i18n
 from app.core.logger import logger
@@ -18,7 +23,6 @@ class PitchResponse(BaseModel):
     pitch_number: int
     name: str
     alias: Optional[str] = None
-    url: str
     model_config = {
         "from_attributes": True,
         "arbitrary_types_allowed": True
@@ -43,117 +47,132 @@ async def get_all_pitches(
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
 
-@router.get("/piano/pitch/wav", response_model=List[PitchResponse])
-async def get_all_pitches_wav(
-        request: Request,
-        current_user: User = Depends(get_current_user)
-):
-    lang = get_language(request)
-    try:
-        """获取所有信息"""
-        pitches = await pitch_service.get_all_pitch()
-        if not pitches:
-            return []
-        pitches_copy = pitches[:]
-        pitches_copy.sort(key=lambda pitch: pitch.pitch_number, reverse=False)
-        base_url = str(request.base_url).rstrip('/')
-        for pitch in pitches_copy:
-            pitch.url = base_url + pitch.url
 
-        return [PitchResponse.model_validate(pitch) for pitch in pitches_copy]
-    except Exception as e:
-        logger.error(f"Error in get_all_pitches: {str(e)}\nTraceback: {traceback.format_exc()}")
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
-        )
-
-@router.get("/piano/pitch/{pitch_id}")
+@router.get("/piano/pitch/info/{pitch_number}", response_model=PitchResponse)
 async def get_pitch_by_id(
-    pitch_id: int,
+    pitch_number: int,
     request: Request,
     current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
 ):
     """根据ID获取钢琴音高信息"""
     lang = get_language(request)
     try:
-        pitch = db.query(Pitch).filter(Pitch.id == pitch_id).first()
-        
+        pitch = await pitch_service.get_pitch_by_number(pitch_number)
         if not pitch:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=i18n.get_text("PITCH_NOT_FOUND", lang)
             )
-        
-        return {
-            "id": pitch.id,
-            "pitch_number": pitch.pitch_number,
-            "name": pitch.name,
-            "alias": pitch.alias,
-            "file_path": pitch.file_path
-        }
+        return pitch
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Error in get_pitch_by_id for id {pitch_id}: {str(e)}\nTraceback: {traceback.format_exc()}")
+        logger.error(f"Error in get_pitch_by_id for id {pitch_number}: {str(e)}\nTraceback: {traceback.format_exc()}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
 
-@router.get("/piano/pitch/search")
+@router.get("/piano/pitch/name/{name}", response_model=PitchResponse)
 async def search_pitch_by_name(
     request: Request,
-    name: Optional[str] = None,
-    alias: Optional[str] = None,
+    name: str,
     current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
 ):
     """根据音名或别名搜索钢琴音高信息"""
     lang = get_language(request)
     try:
-        if not name and not alias:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=i18n.get_text("SEARCH_PARAM_REQUIRED", lang)
-            )
-        
-        query = db.query(Pitch)
-        
-        # 构建查询条件
-        if name:
-            query = query.filter(Pitch.name.ilike(f"%{name}%"))
-        if alias:
-            query = query.filter(Pitch.alias.ilike(f"%{alias}%"))
-        
-        pitches = query.all()
-        
-        if not pitches:
+        name = unquote(name)
+        pitches = await pitch_service.get_pitch_by_name(name)
+        if not pitches and len(pitches) != 1:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=i18n.get_text("PITCH_NOT_FOUND", lang)
             )
-        
-        return {
-            "total": len(pitches),
-            "pitches": [
-                {
-                    "id": pitch.id,
-                    "pitch_number": pitch.pitch_number,
-                    "name": pitch.name,
-                    "alias": pitch.alias,
-                    "file_path": pitch.file_path
-                }
-                for pitch in pitches
-            ]
-        }
+        return pitches[0]
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Error in search_pitch_by_name with name={name}, alias={alias}: {str(e)}\nTraceback: {traceback.format_exc()}")
+        logger.error(f"Error in search_pitch_by_name with name={name}: {str(e)}\nTraceback: {traceback.format_exc()}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
 
+
+
+@router.get("/piano/pitch/audio/index/{index}")
+async def get_wav(
+    request: Request,
+    index: int,
+    current_user: User = Depends(get_current_user),
+):
+    lang = get_language(request)
+    try:
+
+        pitch = await pitch_service.get_pitch_by_number(index)
+        if not pitch:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=i18n.get_text("PITCH_NOT_FOUND", lang)
+            )
+
+        if not os.path.exists(pitch.url):
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=i18n.get_text("FILE_NOT_FOUND", lang)
+            )
+
+        return FileResponse(
+            pitch.url,
+            media_type="audio/wav",
+            headers={"Content-Disposition": f"inline; filename={os.path.basename(pitch.name)}"}
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(
+            f"Error in search_pitch_by_name with name={name}: {str(e)}\nTraceback: {traceback.format_exc()}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
+        )
+
+
+@router.get("/piano/pitch/audio/name/{name}")
+async def get_wav(
+    request: Request,
+    name: str,
+    current_user: User = Depends(get_current_user),
+):
+    lang = get_language(request)
+    try:
+        name = unquote(name)
+        pitches = await pitch_service.get_pitch_by_name(name)
+        if not pitches and len(pitches) != 1:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=i18n.get_text("PITCH_NOT_FOUND", lang)
+            )
+        pitch = pitches[0]
+
+        if not os.path.exists(pitch.url):
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=i18n.get_text("FILE_NOT_FOUND", lang)
+            )
+
+        return FileResponse(
+            pitch.url,
+            media_type="audio/wav",
+            headers={"Content-Disposition": f"inline; filename={os.path.basename(pitch.name)}"}
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(
+            f"Error in search_pitch_by_name with name={name}: {str(e)}\nTraceback: {traceback.format_exc()}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
+        )
