@@ -62,6 +62,82 @@ class Pitch(Base):
     alias = Column(String(10), nullable=True)  # 别名（如 Bb0）
     url = Column(String(255), nullable=False)  # 音频文件路径
 
+# 音组模型
+class PitchGroup:
+    def __init__(self, index: int, name: str, pitches: List[Pitch], count: int) -> None:
+        self.index = index
+        self.name = name
+        self.pitches = pitches
+        self.count = count
+
+PITCH_GROUP_NAMES = [
+    "大字二组", "大字一组", "大字组",
+    "小字组", "小字一组", "小字二组",
+    "小字三组", "小字四组", "小字五组"
+]
+
+PITCH_GROUP_RANGES = [
+    (1, 3),     # 大字二组: A0, A#0/Bb0, B0
+    (4, 15),    # 大字一组: C1-B1
+    (16, 27),   # 大字组: C2-B2
+    (28, 39),   # 小字组: C3-B3
+    (40, 51),   # 小字一组: C4-B4
+    (52, 63),   # 小字二组: C5-B5
+    (64, 75),   # 小字三组: C6-B6
+    (76, 87),   # 小字四组: C7-B7
+    (88, 88)    # 小字五组: C8
+]
+
+
+#
+# # 预定义的音组列表
+# PITCH_GROUPS = [
+#     PitchGroup(
+#         name="Middle C Group",
+#         pitches=[PitchName.B3, PitchName.C4, PitchName.D4],
+#         description="以中央C为中心的音组"
+#     ),
+#     PitchGroup(
+#         name="A4 Standard Group",
+#         pitches=[PitchName.G4, PitchName.A4, PitchName.B4],
+#         description="以标准音A4(440Hz)为中心的音组"
+#     ),
+#     PitchGroup(
+#         name="Basic Scale Group C4",
+#         pitches=[PitchName.C4, PitchName.D4, PitchName.E4, PitchName.F4, PitchName.G4, PitchName.A4, PitchName.B4],
+#         description="C4大调音阶"
+#     ),
+#     PitchGroup(
+#         name="Basic Scale Group C5",
+#         pitches=[PitchName.C5, PitchName.D5, PitchName.E5, PitchName.F5, PitchName.G5, PitchName.A5, PitchName.B5],
+#         description="C5大调音阶"
+#     ),
+#     PitchGroup(
+#         name="Bass Group",
+#         pitches=[PitchName.C2, PitchName.D2, PitchName.E2, PitchName.F2, PitchName.G2],
+#         description="低音区音组"
+#     ),
+#     PitchGroup(
+#         name="Treble Group",
+#         pitches=[PitchName.C6, PitchName.D6, PitchName.E6, PitchName.F6, PitchName.G6],
+#         description="高音区音组"
+#     )
+# ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -225,12 +301,7 @@ class Pitch(Base):
 # #     file_path: str
 # #     frequency: float  # 频率（Hz）
 #
-# # 音组模型
-# class PitchGroup(BaseModel):
-#     name: str
-#     pitches: List[PitchName]
-#     description: str
-#
+
 # # 音程模型
 # class IntervalModel(BaseModel):
 #     name: Interval
@@ -250,39 +321,7 @@ class Pitch(Base):
 #     # 这里将在API中动态填充
 # }
 #
-# # 预定义的音组列表
-# PITCH_GROUPS = [
-#     PitchGroup(
-#         name="Middle C Group",
-#         pitches=[PitchName.B3, PitchName.C4, PitchName.D4],
-#         description="以中央C为中心的音组"
-#     ),
-#     PitchGroup(
-#         name="A4 Standard Group",
-#         pitches=[PitchName.G4, PitchName.A4, PitchName.B4],
-#         description="以标准音A4(440Hz)为中心的音组"
-#     ),
-#     PitchGroup(
-#         name="Basic Scale Group C4",
-#         pitches=[PitchName.C4, PitchName.D4, PitchName.E4, PitchName.F4, PitchName.G4, PitchName.A4, PitchName.B4],
-#         description="C4大调音阶"
-#     ),
-#     PitchGroup(
-#         name="Basic Scale Group C5",
-#         pitches=[PitchName.C5, PitchName.D5, PitchName.E5, PitchName.F5, PitchName.G5, PitchName.A5, PitchName.B5],
-#         description="C5大调音阶"
-#     ),
-#     PitchGroup(
-#         name="Bass Group",
-#         pitches=[PitchName.C2, PitchName.D2, PitchName.E2, PitchName.F2, PitchName.G2],
-#         description="低音区音组"
-#     ),
-#     PitchGroup(
-#         name="Treble Group",
-#         pitches=[PitchName.C6, PitchName.D6, PitchName.E6, PitchName.F6, PitchName.G6],
-#         description="高音区音组"
-#     )
-# ]
+
 #
 # # 预定义的音程列表
 # INTERVALS = [

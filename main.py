@@ -43,8 +43,11 @@ async def lifespan(app: FastAPI):
             logger.info("Loading VIP cache...")
             await vip_service.load_vip_cache(db)
 
-            logger.info("Loading PITCH cache...")
+            logger.info("Loading Pitch cache...")
             await pitch_service.load_pitch_cache(db)
+
+            logger.info("building Pitch Group cache...")
+            pitch_service.build_pitch_group_cache()
         finally:
             db.close()
     except Exception as e:

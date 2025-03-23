@@ -28,6 +28,15 @@ class PitchResponse(BaseModel):
         "arbitrary_types_allowed": True
     }
 
+class PitchGroupResponse(BaseModel):
+    index: int
+    name: str
+    pitches: List[PitchResponse]
+    count: int
+    model_config = {
+        "from_attributes": True,
+    }
+
 @router.get("/piano/pitch/info", response_model=List[PitchResponse])
 async def get_all_pitches(
         request: Request,
@@ -102,7 +111,7 @@ async def search_pitch_by_name(
 
 
 @router.get("/piano/pitch/audio/index/{index}")
-async def get_wav(
+async def get_wav_by_index(
     request: Request,
     index: int,
     current_user: User = Depends(get_current_user),
@@ -132,7 +141,7 @@ async def get_wav(
         raise
     except Exception as e:
         logger.error(
-            f"Error in search_pitch_by_name with name={name}: {str(e)}\nTraceback: {traceback.format_exc()}")
+            f"Error in search_pitch_by_name with index={index}: {str(e)}\nTraceback: {traceback.format_exc()}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
@@ -140,7 +149,7 @@ async def get_wav(
 
 
 @router.get("/piano/pitch/audio/name/{name}")
-async def get_wav(
+async def get_wav_by_name(
     request: Request,
     name: str,
     current_user: User = Depends(get_current_user),
@@ -172,6 +181,30 @@ async def get_wav(
     except Exception as e:
         logger.error(
             f"Error in search_pitch_by_name with name={name}: {str(e)}\nTraceback: {traceback.format_exc()}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
+        )
+
+@router.get("/piano/pitchgroup", response_model=List[PitchGroupResponse])
+async def get_all_pitchgroups(
+    request: Request,
+    current_user: User = Depends(get_current_user),
+):
+    lang = get_language(request)
+    try:
+        pitch_groups = await pitch_service.get_all_pitchgroups()
+        if not pitch_groups:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=i18n.get_text("PITCH_GROUP_NOT_FOUND", lang)
+            )
+        return pitch_groups
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(
+            f"Error in get_all_pitchgroups: {str(e)}\nTraceback: {traceback.format_exc()}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
