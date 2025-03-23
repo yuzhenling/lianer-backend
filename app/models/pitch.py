@@ -89,40 +89,53 @@ PITCH_GROUP_RANGES = [
 ]
 
 
-#
-# # 预定义的音组列表
-# PITCH_GROUPS = [
-#     PitchGroup(
-#         name="Middle C Group",
-#         pitches=[PitchName.B3, PitchName.C4, PitchName.D4],
-#         description="以中央C为中心的音组"
-#     ),
-#     PitchGroup(
-#         name="A4 Standard Group",
-#         pitches=[PitchName.G4, PitchName.A4, PitchName.B4],
-#         description="以标准音A4(440Hz)为中心的音组"
-#     ),
-#     PitchGroup(
-#         name="Basic Scale Group C4",
-#         pitches=[PitchName.C4, PitchName.D4, PitchName.E4, PitchName.F4, PitchName.G4, PitchName.A4, PitchName.B4],
-#         description="C4大调音阶"
-#     ),
-#     PitchGroup(
-#         name="Basic Scale Group C5",
-#         pitches=[PitchName.C5, PitchName.D5, PitchName.E5, PitchName.F5, PitchName.G5, PitchName.A5, PitchName.B5],
-#         description="C5大调音阶"
-#     ),
-#     PitchGroup(
-#         name="Bass Group",
-#         pitches=[PitchName.C2, PitchName.D2, PitchName.E2, PitchName.F2, PitchName.G2],
-#         description="低音区音组"
-#     ),
-#     PitchGroup(
-#         name="Treble Group",
-#         pitches=[PitchName.C6, PitchName.D6, PitchName.E6, PitchName.F6, PitchName.G6],
-#         description="高音区音组"
-#     )
-# ]
+# 音程枚举
+class Interval(str, enum.Enum):
+    # 单音程
+    MINOR_SECOND = "minor_second"  # 小二度
+    MAJOR_SECOND = "major_second"  # 大二度
+    MINOR_THIRD = "minor_third"    # 小三度
+    MAJOR_THIRD = "major_third"    # 大三度
+    PERFECT_FOURTH = "perfect_fourth"  # 纯四度
+    TRITONE = "tritone"           # 增四度/减五度
+    PERFECT_FIFTH = "perfect_fifth"   # 纯五度
+    MINOR_SIXTH = "minor_sixth"    # 小六度
+    MAJOR_SIXTH = "major_sixth"    # 大六度
+    MINOR_SEVENTH = "minor_seventh"  # 小七度
+    MAJOR_SEVENTH = "major_seventh"  # 大七度
+    PERFECT_OCTAVE = "perfect_octave" # 纯八度
+
+    # 复音程
+    MINOR_NINTH = "minor_ninth"     # 小九度
+    MAJOR_NINTH = "major_ninth"     # 大九度
+    MINOR_TENTH = "minor_tenth"     # 小十度
+    MAJOR_TENTH = "major_tenth"     # 大十度
+    PERFECT_ELEVENTH = "perfect_eleventh"  # 纯十一度
+    AUGMENTED_ELEVENTH = "augmented_eleventh"  # 增十一度
+    PERFECT_TWELFTH = "perfect_twelfth"    # 纯十二度
+    MINOR_THIRTEENTH = "minor_thirteenth"   # 小十三度
+    MAJOR_THIRTEENTH = "major_thirteenth"   # 大十三度
+    MINOR_FOURTEENTH = "minor_fourteenth"   # 小十四度
+    MAJOR_FOURTEENTH = "major_fourteenth"   # 大十四度
+    PERFECT_FIFTEENTH = "perfect_fifteenth" # 纯十五度
+
+class PitchIntervalPair:
+    def __init__(self, first: Pitch, second: Pitch) -> None:
+        self.first = first
+        self.second = second
+
+
+# 音程模型
+class PitchInterval:
+    def __init__(self, index:int, interval: Interval, semitones: int, list: List[PitchIntervalPair], count: int) -> None:
+        self.index = index
+        self.interval = interval
+        self.semitones = semitones
+        self.list = list
+        self.count = count
+
+
+
 
 
 
@@ -250,35 +263,7 @@ PITCH_GROUP_RANGES = [
 #     # 高音区（C8）
 #     C8 = "C8"
 #
-# # 音程枚举
-# class Interval(str, enum.Enum):
-#     # 单音程
-#     MINOR_SECOND = "minor_second"  # 小二度
-#     MAJOR_SECOND = "major_second"  # 大二度
-#     MINOR_THIRD = "minor_third"    # 小三度
-#     MAJOR_THIRD = "major_third"    # 大三度
-#     PERFECT_FOURTH = "perfect_fourth"  # 纯四度
-#     TRITONE = "tritone"           # 增四度/减五度
-#     PERFECT_FIFTH = "perfect_fifth"   # 纯五度
-#     MINOR_SIXTH = "minor_sixth"    # 小六度
-#     MAJOR_SIXTH = "major_sixth"    # 大六度
-#     MINOR_SEVENTH = "minor_seventh"  # 小七度
-#     MAJOR_SEVENTH = "major_seventh"  # 大七度
-#     PERFECT_OCTAVE = "perfect_octave" # 纯八度
-#
-#     # 复音程
-#     MINOR_NINTH = "minor_ninth"     # 小九度
-#     MAJOR_NINTH = "major_ninth"     # 大九度
-#     MINOR_TENTH = "minor_tenth"     # 小十度
-#     MAJOR_TENTH = "major_tenth"     # 大十度
-#     PERFECT_ELEVENTH = "perfect_eleventh"  # 纯十一度
-#     AUGMENTED_ELEVENTH = "augmented_eleventh"  # 增十一度
-#     PERFECT_TWELFTH = "perfect_twelfth"    # 纯十二度
-#     MINOR_THIRTEENTH = "minor_thirteenth"   # 小十三度
-#     MAJOR_THIRTEENTH = "major_thirteenth"   # 大十三度
-#     MINOR_FOURTEENTH = "minor_fourteenth"   # 小十四度
-#     MAJOR_FOURTEENTH = "major_fourteenth"   # 大十四度
-#     PERFECT_FIFTEENTH = "perfect_fifteenth" # 纯十五度
+
 #
 # # 和弦类型枚举
 # class ChordType(str, enum.Enum):
@@ -302,12 +287,7 @@ PITCH_GROUP_RANGES = [
 # #     frequency: float  # 频率（Hz）
 #
 
-# # 音程模型
-# class IntervalModel(BaseModel):
-#     name: Interval
-#     semitones: int
-#     description: str
-#     example: List[PitchName]  # 示例音程
+
 #
 # # 和弦模型
 # class Chord(BaseModel):

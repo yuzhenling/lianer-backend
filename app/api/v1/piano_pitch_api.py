@@ -14,7 +14,7 @@ from app.core.logger import logger
 from app.services.pitch_service import pitch_service
 from sqlalchemy.orm import Session
 from app.models.user import User
-from app.models.pitch import Pitch
+from app.models.pitch import Pitch, Interval, PitchIntervalPair
 
 router = APIRouter()
 
@@ -25,8 +25,18 @@ class PitchResponse(BaseModel):
     alias: Optional[str] = None
     model_config = {
         "from_attributes": True,
-        "arbitrary_types_allowed": True
+        "arbitrary_types_allowed": True,
+        "json_schema_extra": {
+            "example": {
+                "id": 1,
+                "pitch_number": 40,
+                "name": "C4",
+                "alias": None,
+                "url": ""
+            }
+        }
     }
+
 
 class PitchGroupResponse(BaseModel):
     index: int
@@ -36,6 +46,70 @@ class PitchGroupResponse(BaseModel):
     model_config = {
         "from_attributes": True,
     }
+
+class PitchIntervalPairResponse(BaseModel):
+    first: PitchResponse
+    second: PitchResponse
+    model_config = {
+        "from_attributes": True,
+        "json_schema_extra": {
+            "example": {
+                "first": {
+                    "id": 40,
+                    "pitch_number": 40,
+                    "name": "C4",
+                    "alias": None,
+                    "url": ""
+                },
+                "second": {
+                    "id": 44,
+                    "pitch_number": 44,
+                    "name": "E4",
+                    "alias": None,
+                    "url": ""
+                }
+            }
+        }
+    }
+
+
+class PitchIntervalResponse(BaseModel):
+    index: int
+    interval: Interval
+    semitones: int
+    list: List[PitchIntervalPairResponse]
+    count: int
+    model_config = {
+        "from_attributes": True,
+        "arbitrary_types_allowed": True,
+        "json_schema_extra": {
+            "example": {
+                "index": 4,
+                "interval": "major_third",
+                "semitones": 4,
+                "list": [
+                    {
+                        "first": {
+                            "id": 40,
+                            "pitch_number": 40,
+                            "name": "C4",
+                            "alias": None,
+                            "url": ""
+                        },
+                        "second": {
+                            "id": 44,
+                            "pitch_number": 44,
+                            "name": "E4",
+                            "alias": None,
+                            "url": ""
+                        }
+                    }
+                ],
+                "count": 1
+            }
+        }
+    }
+
 
 @router.get("/piano/pitch/info", response_model=List[PitchResponse])
 async def get_all_pitches(
@@ -205,6 +279,30 @@ async def get_all_pitchgroups(
     except Exception as e:
         logger.error(
             f"Error in get_all_pitchgroups: {str(e)}\nTraceback: {traceback.format_exc()}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
+        )
+
+@router.get("/piano/pitchinterval", response_model=List[PitchIntervalResponse])
+async def get_all_pitchinterval(
+    request: Request,
+    current_user: User = Depends(get_current_user),
+):
+    lang = get_language(request)
+    try:
+        pitch_intervals= await pitch_service.get_all_intervals()
+        if not pitch_intervals:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=i18n.get_text("PITCH_INTERVAL_NOT_FOUND", lang)
+            )
+        return pitch_intervals
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(
+            f"Error in get_all_pitchinterval: {str(e)}\nTraceback: {traceback.format_exc()}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)

@@ -7,13 +7,15 @@ from sqlalchemy.orm import Session
 from app.core.config import settings
 from app.core.logger import logger
 from app.db.base import SessionLocal
-from app.models.pitch import Pitch, PitchGroup, PITCH_GROUP_NAMES, PITCH_GROUP_RANGES
+from app.models.pitch import Pitch, PitchGroup, PITCH_GROUP_NAMES, PITCH_GROUP_RANGES, PitchInterval, Interval, \
+    PitchIntervalPair
 
 
 class PitchService:
     _instance = None
     PITCH_CACHE: Dict[int, Pitch] = {}  # ID -> Pitch对象的缓存
     PITCH_GROUP_CACHE: Dict[int, PitchGroup] = {}  # ID -> PitchGroup对象的缓存
+    PITCH_INTERVAL_CACHE: Dict[int, PitchInterval] = {}  # ID -> PitchInterval对象的缓存
 
     def __new__(cls):
         if cls._instance is None:
@@ -34,13 +36,12 @@ class PitchService:
 
             # 更新缓存
             for pitch in pitches:
-            #     url = quote(pitch.url)
-            #     pitch.url = f"{settings.API_HOST}{settings.API_V1_STR}{url}"
                 self.PITCH_CACHE[pitch.pitch_number] = pitch
 
-            #音组
-            for pitch in pitches:
-                self.PITCH_CACHE[pitch.pitch_number] = pitch
+            # 构建音组缓存
+            self.build_pitch_group_cache()
+            # 构建音程缓存
+            self.build_pitch_interval_cache()
 
             logger.info(f"Successfully loaded {len(pitches)} Pitch into cache")
         except Exception as e:
@@ -66,6 +67,73 @@ class PitchService:
             i += 1
 
         logger.info(f"Successfully build Pitch Group into cache")
+
+    def build_pitch_interval_cache(self):
+        """构建音程缓存"""
+        try:
+            # 清空现有音程缓存
+            self.PITCH_INTERVAL_CACHE.clear()
+            
+            # 音程与半音数的映射
+            interval_semitones = {
+                # 单音程
+                Interval.MINOR_SECOND: 1,    # 小二度
+                Interval.MAJOR_SECOND: 2,    # 大二度
+                Interval.MINOR_THIRD: 3,     # 小三度
+                Interval.MAJOR_THIRD: 4,     # 大三度
+                Interval.PERFECT_FOURTH: 5,  # 纯四度
+                Interval.TRITONE: 6,         # 增四度/减五度
+                Interval.PERFECT_FIFTH: 7,   # 纯五度
+                Interval.MINOR_SIXTH: 8,     # 小六度
+                Interval.MAJOR_SIXTH: 9,     # 大六度
+                Interval.MINOR_SEVENTH: 10,  # 小七度
+                Interval.MAJOR_SEVENTH: 11,  # 大七度
+                Interval.PERFECT_OCTAVE: 12, # 纯八度
+                # 复音程
+                Interval.MINOR_NINTH: 13,    # 小九度
+                Interval.MAJOR_NINTH: 14,    # 大九度
+                Interval.MINOR_TENTH: 15,    # 小十度
+                Interval.MAJOR_TENTH: 16,    # 大十度
+                Interval.PERFECT_ELEVENTH: 17,  # 纯十一度
+                Interval.AUGMENTED_ELEVENTH: 18,  # 增十一度
+                Interval.PERFECT_TWELFTH: 19,    # 纯十二度
+                Interval.MINOR_THIRTEENTH: 20,   # 小十三度
+                Interval.MAJOR_THIRTEENTH: 21,   # 大十三度
+                Interval.MINOR_FOURTEENTH: 22,   # 小十四度
+                Interval.MAJOR_FOURTEENTH: 23,   # 大十四度
+                Interval.PERFECT_FIFTEENTH: 24,  # 纯十五度
+            }
+
+            index = 1
+            # 为每个音程创建缓存
+            for interval, semitones in interval_semitones.items():
+                pitch_pairs = []
+                # 遍历所有音高，找出符合当前音程的音高对
+                for base_pitch in self.PITCH_CACHE.values():
+                    target_number = base_pitch.pitch_number + semitones
+                    if target_number <= 88:  # 确保不超过钢琴最高音
+                        if target_pitch := self.PITCH_CACHE.get(target_number):
+                            pitch_interval_pair = PitchIntervalPair(
+                                first=base_pitch,
+                                second=target_pitch
+                            )
+                            pitch_pairs.append(pitch_interval_pair)
+
+                # 创建音程对象并缓存
+                pitch_interval = PitchInterval(
+                    index=index,
+                    interval=interval,
+                    semitones=semitones,
+                    list=pitch_pairs,
+                    count=len(pitch_pairs),
+                )
+                self.PITCH_INTERVAL_CACHE[semitones] = pitch_interval
+                index += 1
+
+            logger.info(f"Successfully built Pitch Interval cache with {len(self.PITCH_INTERVAL_CACHE)} intervals")
+        except Exception as e:
+            logger.error("Failed to build Pitch Interval cache", exc_info=True)
+            raise e
 
     async def get_all_pitch(self) -> List[Pitch]:
         try:
@@ -94,6 +162,22 @@ class PitchService:
             return list(self.PITCH_GROUP_CACHE.values())
         except Exception as e:
             logger.error("Failed to load Pitch cache", exc_info=True)
+            raise e
+
+    async def get_all_intervals(self) -> List[PitchInterval]:
+        """获取所有音程"""
+        try:
+            return list(self.PITCH_INTERVAL_CACHE.values())
+        except Exception as e:
+            logger.error("Failed to get all intervals", exc_info=True)
+            raise e
+
+    async def get_interval_by_index(self, index: int) -> PitchInterval:
+        """根据索引获取特定音程"""
+        try:
+            return self.PITCH_INTERVAL_CACHE[index]
+        except Exception as e:
+            logger.error(f"Failed to get interval with index {index}", exc_info=True)
             raise e
 
 pitch_service = PitchService()
