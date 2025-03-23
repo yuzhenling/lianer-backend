@@ -150,12 +150,13 @@ class PitchService:
                 # 遍历所有音高，找出符合当前音程的音高对
                 for base_pitch in self.PITCH_CACHE.values():
                     pitch_chord_pair = []
+                    pitch_chord_pair.append(base_pitch)
                     for interval in intervals:
                         target_number = base_pitch.pitch_number + interval
                         if target_number <= 88:  # 确保不超过钢琴最高音
                             if target_pitch := self.PITCH_CACHE.get(target_number):
                                 pitch_chord_pair.append(target_pitch)
-                    if pitch_chord_pair:
+                    if pitch_chord_pair and len(pitch_chord_pair) == len(intervals)+1:
                         pitch_pairs.append(pitch_chord_pair)
 
                 if pitch_pairs:
