@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from sqlalchemy.orm import Session
@@ -68,11 +69,13 @@ def init_pitches(db: Session):
         # 检查是否已经有数据
         pitches = db.query(Pitch).all()
         if pitches:
-            logger.info("Pitch initialized, skipping...")
+            logger.info("Pitch already initialized, skipping...")
             return
 
         # 获取音频文件目录的绝对路径
-        audio_dir = Path("app/static/audio")
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        # 构建相对路径
+        audio_dir = os.path.join(current_dir, "..", "static", "audio")
 
         # 遍历PIANO_KEYS中的所有音高
         for number, note_name in PIANO_KEYS_MAPPING.items():
@@ -85,7 +88,7 @@ def init_pitches(db: Session):
 
             # 构建文件路径
             file_name = f"tone_{number}_{note_name}.wav"
-            file_path = str(audio_dir / file_name)
+            file_path = f"{audio_dir} / {file_name}"
 
             # 创建Pitch实例
             pitch = Pitch(

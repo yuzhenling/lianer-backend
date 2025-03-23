@@ -39,14 +39,6 @@ class PitchService:
 
     async def get_all_pitch(self) -> List[Pitch]:
         try:
-            if not self._pitch_cache:
-                db = SessionLocal()
-                try:
-                    await self.load_pitch_cache(db)
-                except Exception as e:
-                    raise e
-                finally:
-                    db.close()
             return list(self._pitch_cache.values())
         except Exception as e:
             logger.error("Failed to load Pitch cache", exc_info=True)

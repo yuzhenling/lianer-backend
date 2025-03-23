@@ -2,7 +2,7 @@ import traceback
 from typing import Optional, List
 
 from fastapi import APIRouter, Depends, HTTPException, status, Request
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from app.api.v1.auth_api import get_current_user, get_db
 from app.core.i18n import get_language, i18n
 from app.core.logger import logger
@@ -17,16 +17,22 @@ class PitchResponse(BaseModel):
     id: int
     pitch_number: int
     name: str
-    alias: Optional[str]
+    alias: Optional[str] = None
     file_path: str
+    model_config = {
+        "from_attributes": True,
+        "arbitrary_types_allowed": True
+    }
 
-
-@router.post("/pitch", response_model=List[PitchResponse])
-async def get_all_pitches(request: Request, current_user: Depends(get_current_user)):
+@router.get("/piano/pitch", response_model=List[PitchResponse])
+async def get_all_pitches(
+        request: Request,
+        current_user: User = Depends(get_current_user)
+):
     lang = get_language(request)
     try:
         """获取所有信息"""
-        pitches = pitch_service.get_all_pitch()
+        pitches = await pitch_service.get_all_pitch()
         if not pitches:
             return []
         return [PitchResponse.model_validate(pitch) for pitch in pitches]

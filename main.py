@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 
 from app.core.config import settings
 from app.middleware.logging import LoggingMiddleware
-from app.api.v1 import auth_api, pitch_api, order_api, vip_api
+from app.api.v1 import auth_api, pitch_api, order_api, vip_api, piano_pitch_api
 from app.db.init_data import init_vip_levels, init_pitches
 from app.db.base import SessionLocal, Base, engine
 from app.core.logger import logger
@@ -38,6 +38,8 @@ async def lifespan(app: FastAPI):
 
             logger.info("Loading VIP cache...")
             await vip_service.load_vip_cache(db)
+
+            logger.info("Loading PITCH cache...")
             await pitch_service.load_pitch_cache(db)
         finally:
             db.close()
@@ -72,8 +74,9 @@ app.add_middleware(LoggingMiddleware)
 # 注册路由
 app.include_router(auth_api.router, prefix=settings.API_V1_STR)
 app.include_router(vip_api.router, prefix=settings.API_V1_STR)
-app.include_router(pitch_api.router, prefix=settings.API_V1_STR)
 app.include_router(order_api.router, prefix=settings.API_V1_STR)
+
+app.include_router(piano_pitch_api.router, prefix=settings.API_V1_STR)
 
 
 
