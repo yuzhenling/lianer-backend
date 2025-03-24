@@ -20,18 +20,6 @@ async def generate_rhythm_question(
     """生成节奏听写题"""
     try:
         response = rhythm_service.generate_question(request)
-
-        # 保存题目到数据库
-        question = RhythmQuestion(
-            difficulty=request.difficulty,
-            time_signature=request.time_signature,
-            measures_count=request.measures_count,
-            tempo=request.tempo,
-            correct_rhythm=response.dict()
-        )
-        db.add(question)
-        db.commit()
-
         return response
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

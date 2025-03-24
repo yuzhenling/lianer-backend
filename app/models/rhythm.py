@@ -48,7 +48,6 @@ class RhythmQuestionRequest(BaseModel):
 
 
 class RhythmQuestionResponse(BaseModel):
-    id: int
     correct_answer: str  # A, B, C 或 D
     options: List[RhythmScore]
     tempo: int
