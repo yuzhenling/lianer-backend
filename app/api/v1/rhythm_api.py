@@ -2,22 +2,23 @@
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from typing import List
-from app.db.session import get_db
-from app.services.rhythm_service import RhythmService
+
+from app.api.v1.auth_api import get_current_user, get_db
+from app.models.user import User
+from app.services.rhythm_service import rhythm_service
 from app.models.rhythm import *
 
-router = APIRouter(prefix="/api/v1/rhythm", tags=["rhythm"])
+router = APIRouter(prefix="/rhythm", tags=["rhythm"])
 
 
 @router.post("/generate", response_model=RhythmQuestionResponse)
 async def generate_rhythm_question(
         request: RhythmQuestionRequest,
+        current_user: User = Depends(get_current_user),
         db: Session = Depends(get_db)
 ):
     """生成节奏听写题"""
     try:
-        rhythm_service = RhythmService()
         response = rhythm_service.generate_question(request)
 
         # 保存题目到数据库
@@ -38,14 +39,10 @@ async def generate_rhythm_question(
 
 @router.get("/settings", response_model=dict)
 async def get_rhythm_settings():
-    """获取节奏听写设置选项"""
+    """节奏听写设置选项"""
     return {
         "difficulties": [d.value for d in RhythmDifficulty],
-        "time_signatures": [ts.value for ts in TimeSignature],
         "measures_counts": [4, 6, 8, 10, 12, 16],
-        "tempo_range": {
-            "min": 40,
-            "max": 120,
-            "default": 80
-        }
+        "time_signatures": [ts.value for ts in TimeSignature],
+        "tempo": [t.value for t in Tempo],
     }

@@ -3,6 +3,7 @@
 import random
 from typing import List, Tuple
 from app.models.rhythm import *
+from app.models.rhythmSettings import RhythmDifficulty, TimeSignature
 
 
 class RhythmService:
@@ -46,7 +47,8 @@ class RhythmService:
         correct_rhythm = self.generate_rhythm(
             request.difficulty,
             request.time_signature,
-            request.measures_count
+            request.measures_count.value,
+            request.tempo.value
         )
 
         # 生成三个错误选项
@@ -80,24 +82,26 @@ class RhythmService:
             self,
             difficulty: RhythmDifficulty,
             time_signature: TimeSignature,
-            measures_count: int
+            measures_count: int,
+            tempo: int = 80,
     ) -> RhythmScore:
         """生成一个正确的节奏模式"""
         measures = []
+        measures_sub = []
         patterns = self.rhythm_patterns[difficulty][time_signature]
 
-        for _ in range(measures_count):
-            pattern = random.choice(patterns)
+        pattern_selected = random.choices(patterns, k=measures_count)
+        for pattern in pattern_selected:
             notes = [
                 RhythmNote(duration=duration)
                 for duration in pattern
             ]
-            measures.append(RhythmMeasure(notes=notes))
-
+            measures_sub.append(RhythmMeasure(notes=notes))
+        measures.append(measures_sub)
         return RhythmScore(
             measures=measures,
             time_signature=time_signature,
-            tempo=80,
+            tempo=tempo,
             is_correct=True
         )
 
@@ -105,7 +109,7 @@ class RhythmService:
             self,
             correct_rhythm: RhythmScore,
             difficulty: RhythmDifficulty,
-            time_signature: TimeSignature
+            time_signature: TimeSignature,
     ) -> RhythmScore:
         """生成一个错误的节奏变体"""
         # 复制正确的节奏
@@ -142,3 +146,5 @@ class RhythmService:
             wrong_rhythm.measures[measure_idx].notes[note_idx].is_rest = True
 
         return wrong_rhythm
+
+rhythm_service = RhythmService()

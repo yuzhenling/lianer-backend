@@ -8,7 +8,7 @@ from starlette.staticfiles import StaticFiles
 
 from app.core.config import settings
 from app.middleware.logging import LoggingMiddleware
-from app.api.v1 import auth_api, pitch_api, order_api, vip_api, piano_pitch_api
+from app.api.v1 import auth_api, pitch_api, order_api, vip_api, piano_pitch_api, rhythm_api
 from app.db.init_data import init_vip_levels, init_pitches
 from app.db.base import SessionLocal, Base, engine
 from app.core.logger import logger
@@ -93,8 +93,8 @@ app.add_middleware(LoggingMiddleware)
 app.include_router(auth_api.router, prefix=settings.API_V1_STR)
 app.include_router(vip_api.router, prefix=settings.API_V1_STR)
 app.include_router(order_api.router, prefix=settings.API_V1_STR)
-
 app.include_router(piano_pitch_api.router, prefix=settings.API_V1_STR)
+app.include_router(rhythm_api.router, prefix=settings.API_V1_STR)
 
 
 

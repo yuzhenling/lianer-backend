@@ -4,22 +4,9 @@ from enum import Enum
 from pydantic import BaseModel, Field
 from typing import List, Optional
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, DateTime, Float, Enum as SQLEnum, JSON
+from sqlalchemy import Column, Integer, String, DateTime, Float, Enum as SQLEnum, JSON, func
 from app.db.base import Base
-
-
-class RhythmDifficulty(str, Enum):
-    LOW = "low"  # 低难度：主要是四分音符、二分音符
-    MEDIUM = "medium"  # 中等：加入八分音符
-    HIGH = "high"  # 高难度：加入十六分音符、符点音符
-
-
-class TimeSignature(str, Enum):
-    TWO_FOUR = "2/4"
-    THREE_FOUR = "3/4"
-    FOUR_FOUR = "4/4"
-    THREE_EIGHT = "3/8"
-    SIX_EIGHT = "6/8"
+from app.models.rhythmSettings import TimeSignature, RhythmDifficulty, MeasureCount, Tempo
 
 
 class RhythmNote(BaseModel):
@@ -34,7 +21,7 @@ class RhythmMeasure(BaseModel):
 
 
 class RhythmScore(BaseModel):
-    measures: List[RhythmMeasure]
+    measures: List[List[RhythmMeasure]]
     time_signature: TimeSignature
     tempo: int
     is_correct: bool  # 标记是否是正确答案
@@ -49,15 +36,15 @@ class RhythmQuestion(Base):
     measures_count = Column(Integer)
     tempo = Column(Integer)
     correct_rhythm = Column(JSON)  # 存储正确的节奏模式
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, server_default=func.now())
 
 
 # API请求和响应模型
 class RhythmQuestionRequest(BaseModel):
     difficulty: RhythmDifficulty
     time_signature: TimeSignature = TimeSignature.TWO_FOUR
-    measures_count: int = Field(ge=4, le=16, default=8)
-    tempo: int = Field(ge=40, le=120, default=80)
+    measures_count: MeasureCount = MeasureCount.FOUR
+    tempo: Tempo = Tempo.EIGHTY
 
 
 class RhythmQuestionResponse(BaseModel):
