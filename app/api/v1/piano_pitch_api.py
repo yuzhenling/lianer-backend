@@ -274,3 +274,30 @@ async def get_pitch_settings(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
+
+@router.post("/piano/pitch/listen/single", response_model=List[PitchResponse])
+async def get_pitch_settings(
+    request: Request,
+    pitch_setting: PitchSettingRequest,
+    current_user: User = Depends(get_current_user)
+):
+    lang = get_language(request)
+    try:
+        min_pitch_number = pitch_setting.pitch_range.pitch_number_min
+        max_pitch_number = pitch_setting.pitch_range.pitch_number_max
+        # pitch_black_keys = pitch_setting.pitch_black_keys
+        # mode_key = pitch_setting.mode_key
+
+        pitches = await pitch_service.get_pitches_by_setting(min_pitch_number, max_pitch_number)
+        if not pitches:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=i18n.get_text("PITCH_NOT_FOUND", lang)
+            )
+        return pitches
+    except Exception as e:
+        logger.error(f"Error in get_all_pitches: {str(e)}\nTraceback: {traceback.format_exc()}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
+        )

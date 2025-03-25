@@ -31,10 +31,26 @@ class PitchSettingsService:
             list=default_group.pitches
         )
 
+        pitch_black_keys = [
+            {
+                "key": pbk._value,
+                "display_value": pbk.display_value
+            }
+            for pbk in PitchBlackKey  # 或 PitchBlackKey.__members__.values()
+        ]
+        mode = [
+            {
+                "key": pm._value,
+                "display_value": pm.display_value
+            }
+            for pm in PitchMode  # 或 PitchBlackKey.__members__.values()
+        ]
+
+
         pitch_setting = PitchSettings(
             pitch_range=pitch_range,
-            pitch_black_key= list(PitchBlackKey),
-            mode= list(PitchMode),
+            pitch_black_key= pitch_black_keys,
+            mode= mode
         )
         return pitch_setting
 

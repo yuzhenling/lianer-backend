@@ -233,4 +233,15 @@ class PitchService:
             logger.error(f"Failed to get chord with index {index}", exc_info=True)
             raise e
 
+    #, pitch_black_keys: List[str], mode_key:int
+    async def get_pitches_by_setting(self, min_pitch_number: int, max_pitch_number: int) -> List[Pitch]:
+        try:
+            list = []
+            for i in range(min_pitch_number, max_pitch_number+1):
+                list.append(self.PITCH_CACHE[i])
+            return list
+        except Exception as e:
+            logger.error("Failed to load Pitch cache", exc_info=True)
+            raise e
+
 pitch_service = PitchService()
