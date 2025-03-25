@@ -1,5 +1,7 @@
+import itertools
 import os
 import traceback
+from dataclasses import replace
 from typing import Optional, List
 from urllib.parse import unquote
 
@@ -17,6 +19,7 @@ from app.models.user import User
 from app.models.pitch import Pitch, Interval, PitchIntervalPair
 
 router = APIRouter()
+
 
 class PitchResponse(BaseModel):
     id: int
@@ -277,6 +280,7 @@ async def get_wav_by_name(
 @router.get("/piano/pitchgroup", response_model=List[PitchGroupResponse])
 async def get_all_pitchgroups(
     request: Request,
+    include_black_key: bool = True,
     current_user: User = Depends(get_current_user),
 ):
     lang = get_language(request)
@@ -287,6 +291,12 @@ async def get_all_pitchgroups(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=i18n.get_text("PITCH_GROUP_NOT_FOUND", lang)
             )
+        if not include_black_key:
+            pitch_groups = [
+                replace(pg, pitches=[p for p in pg.pitches if not p.isBlackKey()], count=len([p for p in pg.pitches if not p.isBlackKey()]))
+                for pg in pitch_groups
+            ]
+
         return pitch_groups
     except HTTPException:
         raise

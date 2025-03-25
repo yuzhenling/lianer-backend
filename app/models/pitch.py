@@ -1,4 +1,6 @@
 import enum
+from dataclasses import dataclass
+
 from sqlalchemy import Column, Integer, String, DateTime, Float, Enum as SQLEnum, ForeignKey
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
@@ -62,13 +64,21 @@ class Pitch(Base):
     alias = Column(String(10), nullable=True)  # 别名（如 Bb0）
     url = Column(String(255), nullable=False)  # 音频文件路径
 
+    def isBlackKey(self):
+        if self.alias:
+            return True
+        else:
+            return False
+
+
+
 # 音组模型
+@dataclass
 class PitchGroup:
-    def __init__(self, index: int, name: str, pitches: List[Pitch], count: int) -> None:
-        self.index = index
-        self.name = name
-        self.pitches = pitches
-        self.count = count
+    index: int
+    name: str
+    pitches: List[Pitch]
+    count: int
 
 PITCH_GROUP_NAMES = [
     "大字二组", "大字一组", "大字组",
