@@ -1,12 +1,8 @@
-import copy
 from typing import Dict, List, Any, Coroutine
-from urllib.parse import quote
 
 from sqlalchemy.orm import Session
 
-from app.core.config import settings
 from app.core.logger import logger
-from app.db.base import SessionLocal
 from app.models.pitch import Pitch, PitchGroup, PITCH_GROUP_NAMES, PITCH_GROUP_RANGES, PitchInterval, Interval, \
     PitchIntervalPair, PitchChord, Chord
 

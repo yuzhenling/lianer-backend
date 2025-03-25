@@ -11,122 +11,21 @@ from pydantic import BaseModel, Field
 
 
 from app.api.v1.auth_api import get_current_user, get_db
+from app.api.v1.schemas.request.pitch_request import PitchSettingRequest
+from app.api.v1.schemas.response.pitch_response import PitchSettingResponse, PitchResponse, PitchIntervalResponse, \
+    PitchChordResponse, PitchGroupResponse
 from app.core.i18n import get_language, i18n
 from app.core.logger import logger
+from app.models.pitch_setting import PitchSettings
 from app.services.pitch_service import pitch_service
 from sqlalchemy.orm import Session
 from app.models.user import User
 from app.models.pitch import Pitch, Interval, PitchIntervalPair
+from app.services.pitch_settings_service import pitch_settings_service
 
 router = APIRouter()
 
 
-class PitchResponse(BaseModel):
-    id: int
-    pitch_number: int
-    name: str
-    alias: Optional[str] = None
-    model_config = {
-        "from_attributes": True,
-        "arbitrary_types_allowed": True,
-        "json_schema_extra": {
-            "example": {
-                "id": 1,
-                "pitch_number": 40,
-                "name": "C4",
-                "alias": None,
-                "url": ""
-            }
-        }
-    }
-
-
-class PitchGroupResponse(BaseModel):
-    index: int
-    name: str
-    pitches: List[PitchResponse]
-    count: int
-    model_config = {
-        "from_attributes": True,
-    }
-
-class PitchIntervalPairResponse(BaseModel):
-    first: PitchResponse
-    second: PitchResponse
-    model_config = {
-        "from_attributes": True,
-        "json_schema_extra": {
-            "example": {
-                "first": {
-                    "id": 40,
-                    "pitch_number": 40,
-                    "name": "C4",
-                    "alias": None,
-                    "url": ""
-                },
-                "second": {
-                    "id": 44,
-                    "pitch_number": 44,
-                    "name": "E4",
-                    "alias": None,
-                    "url": ""
-                }
-            }
-        }
-    }
-
-
-class PitchIntervalResponse(BaseModel):
-    index: int
-    interval: Interval
-    semitones: int
-    list: List[PitchIntervalPairResponse]
-    count: int
-    model_config = {
-        "from_attributes": True,
-        "arbitrary_types_allowed": True,
-        "json_schema_extra": {
-            "example": {
-                "index": 4,
-                "interval": "major_third",
-                "semitones": 4,
-                "list": [
-                    {
-                        "first": {
-                            "id": 40,
-                            "pitch_number": 40,
-                            "name": "C4",
-                            "alias": None,
-                            "url": ""
-                        },
-                        "second": {
-                            "id": 44,
-                            "pitch_number": 44,
-                            "name": "E4",
-                            "alias": None,
-                            "url": ""
-                        }
-                    }
-                ],
-                "count": 1
-            }
-        }
-    }
-
-
-class PitchChordResponse(BaseModel):
-    index: int
-    value: str
-    cn_value: str
-    list: List[List[PitchResponse]]
-    count: int
-    model_config = {
-        "from_attributes": True,
-        "arbitrary_types_allowed": True,
-        "json_schema_extra": {
-
-        }
-    }
 
 @router.get("/piano/pitch/info", response_model=List[PitchResponse])
 async def get_all_pitches(
@@ -351,6 +250,26 @@ async def get_all_pitchchord(
     except Exception as e:
         logger.error(
             f"Error in get_all_pitchchord: {str(e)}\nTraceback: {traceback.format_exc()}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
+        )
+
+
+@router.get("/piano/pitch/settings", response_model=PitchSettingResponse)
+async def get_pitch_settings(
+    request: Request,
+    current_user: User = Depends(get_current_user)
+):
+    lang = get_language(request)
+    try:
+        """获取所有信息"""
+        pitch_setting = await pitch_settings_service.get_pitch_settings()
+        if not pitch_setting:
+            return None
+        return pitch_setting
+    except Exception as e:
+        logger.error(f"Error in get_all_pitches: {str(e)}\nTraceback: {traceback.format_exc()}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)

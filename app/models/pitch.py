@@ -79,6 +79,11 @@ class PitchGroup:
     name: str
     pitches: List[Pitch]
     count: int
+    def get_min(self):
+        return self.pitches[0]
+
+    def get_max(self):
+        return self.pitches[len(self.pitches)-1]
 
 PITCH_GROUP_NAMES = [
     "大字二组", "大字一组", "大字组",

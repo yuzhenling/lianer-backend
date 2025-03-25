@@ -3078,3 +3078,367 @@
 {"timestamp": "2025-03-25T03:37:32.936049", "level": "INFO", "message": "Request completed", "module": "logging", "function": "dispatch", "line": 38, "request_id": "a9305473-40bf-4127-88e4-bbcf67c65cb4", "path": "/api/v1/piano/pitchgroup", "method": "GET"}
 {"timestamp": "2025-03-25T03:37:43.687840", "level": "INFO", "message": "Request started", "module": "logging", "function": "dispatch", "line": 21, "request_id": "b1eb814e-383e-406c-b752-a32347a6f6de", "ip": "127.0.0.1", "path": "/api/v1/piano/pitchgroup", "method": "GET"}
 {"timestamp": "2025-03-25T03:37:43.690636", "level": "INFO", "message": "Request completed", "module": "logging", "function": "dispatch", "line": 38, "request_id": "b1eb814e-383e-406c-b752-a32347a6f6de", "path": "/api/v1/piano/pitchgroup", "method": "GET"}
+{"timestamp": "2025-03-25T03:39:02.167347", "level": "INFO", "message": "Shutting down application...", "module": "main", "function": "lifespan", "line": 66}
+{"timestamp": "2025-03-25T07:49:19.236839", "level": "INFO", "message": "Creating database tables...", "module": "main", "function": "lifespan", "line": 32}
+{"timestamp": "2025-03-25T07:49:19.239549", "level": "INFO", "message": "Initializing database data...", "module": "main", "function": "lifespan", "line": 38}
+{"timestamp": "2025-03-25T07:49:19.243099", "level": "INFO", "message": "VIP levels already initialized, skipping...", "module": "init_data", "function": "init_vip_levels", "line": 18}
+{"timestamp": "2025-03-25T07:49:19.244097", "level": "INFO", "message": "Pitch already initialized, skipping...", "module": "init_data", "function": "init_pitches", "line": 72}
+{"timestamp": "2025-03-25T07:49:19.244185", "level": "INFO", "message": "Loading VIP cache...", "module": "main", "function": "lifespan", "line": 43}
+{"timestamp": "2025-03-25T07:49:19.244470", "level": "INFO", "message": "Successfully loaded 4 VIP levels into cache", "module": "vip_service", "function": "load_vip_cache", "line": 42}
+{"timestamp": "2025-03-25T07:49:19.244508", "level": "INFO", "message": "Loading Pitch cache...", "module": "main", "function": "lifespan", "line": 46}
+{"timestamp": "2025-03-25T07:49:19.245488", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T07:49:19.246250", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T07:49:19.246283", "level": "INFO", "message": "Successfully loaded 88 Pitch into cache", "module": "pitch_service", "function": "load_pitch_cache", "line": 43}
+{"timestamp": "2025-03-25T07:49:19.246311", "level": "INFO", "message": "building Pitch Group cache...", "module": "main", "function": "lifespan", "line": 49}
+{"timestamp": "2025-03-25T07:49:19.246450", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T07:49:19.246477", "level": "INFO", "message": "building Pitch Interval cache...", "module": "main", "function": "lifespan", "line": 52}
+{"timestamp": "2025-03-25T07:49:19.247171", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T07:49:19.247199", "level": "INFO", "message": "building Pitch Chord cache...", "module": "main", "function": "lifespan", "line": 55}
+{"timestamp": "2025-03-25T07:49:19.247772", "level": "INFO", "message": "Successfully built Pitch chord cache with 11 intervals", "module": "pitch_service", "function": "build_pitch_chord_cache", "line": 170}
+{"timestamp": "2025-03-25T07:49:26.941846", "level": "INFO", "message": "Request started", "module": "logging", "function": "dispatch", "line": 21, "request_id": "a8c69596-e0da-4303-abd4-c6d0fab7fc50", "ip": "127.0.0.1", "path": "/api/v1/auth/wechat-login", "method": "POST"}
+{"timestamp": "2025-03-25T07:49:26.946038", "level": "INFO", "message": "Request completed", "module": "logging", "function": "dispatch", "line": 38, "request_id": "a8c69596-e0da-4303-abd4-c6d0fab7fc50", "path": "/api/v1/auth/wechat-login", "method": "POST"}
+{"timestamp": "2025-03-25T07:49:28.765453", "level": "INFO", "message": "Request started", "module": "logging", "function": "dispatch", "line": 21, "request_id": "365f6577-5809-4fed-ab3e-d625134adf84", "ip": "127.0.0.1", "path": "/api/v1/piano/pitchgroup", "method": "GET"}
+{"timestamp": "2025-03-25T07:49:28.768477", "level": "INFO", "message": "Request completed", "module": "logging", "function": "dispatch", "line": 38, "request_id": "365f6577-5809-4fed-ab3e-d625134adf84", "path": "/api/v1/piano/pitchgroup", "method": "GET"}
+{"timestamp": "2025-03-25T07:49:33.188083", "level": "INFO", "message": "Request started", "module": "logging", "function": "dispatch", "line": 21, "request_id": "d395c17a-77bd-4c57-a713-d34b6d7e7b0b", "ip": "127.0.0.1", "path": "/api/v1/piano/pitchgroup", "method": "GET"}
+{"timestamp": "2025-03-25T07:49:33.190066", "level": "INFO", "message": "Request completed", "module": "logging", "function": "dispatch", "line": 38, "request_id": "d395c17a-77bd-4c57-a713-d34b6d7e7b0b", "path": "/api/v1/piano/pitchgroup", "method": "GET"}
+{"timestamp": "2025-03-25T07:50:52.105263", "level": "INFO", "message": "Request started", "module": "logging", "function": "dispatch", "line": 21, "request_id": "c4766763-89a5-4efb-9fab-092be170e320", "ip": "127.0.0.1", "path": "/api/v1/piano/pitch/settings", "method": "GET"}
+{"timestamp": "2025-03-25T07:50:52.107372", "level": "ERROR", "message": "Error in get_all_pitches: PitchRange() takes no arguments\nTraceback: Traceback (most recent call last):\n  File \"/home/yu/gitdev/shengyibaodian/app/api/v1/piano_pitch_api.py\", line 267, in get_pitch_settings\n    pitch_setting = await pitch_settings_service.get_pitch_settings()\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/yu/gitdev/shengyibaodian/app/services/pitch_settings_service.py\", line 28, in get_pitch_settings\n    pitch_range = PitchRange(\n                  ^^^^^^^^^^^\nTypeError: PitchRange() takes no arguments\n", "module": "piano_pitch_api", "function": "get_pitch_settings", "line": 272}
+{"timestamp": "2025-03-25T07:50:52.107709", "level": "INFO", "message": "Request completed", "module": "logging", "function": "dispatch", "line": 38, "request_id": "c4766763-89a5-4efb-9fab-092be170e320", "path": "/api/v1/piano/pitch/settings", "method": "GET"}
+{"timestamp": "2025-03-25T07:50:55.450860", "level": "INFO", "message": "Request started", "module": "logging", "function": "dispatch", "line": 21, "request_id": "b96b43c7-6940-4f41-9a13-0b195570e4ea", "ip": "127.0.0.1", "path": "/api/v1/auth/wechat-login", "method": "POST"}
+{"timestamp": "2025-03-25T07:50:55.452569", "level": "INFO", "message": "Request completed", "module": "logging", "function": "dispatch", "line": 38, "request_id": "b96b43c7-6940-4f41-9a13-0b195570e4ea", "path": "/api/v1/auth/wechat-login", "method": "POST"}
+{"timestamp": "2025-03-25T07:50:58.418388", "level": "INFO", "message": "Request started", "module": "logging", "function": "dispatch", "line": 21, "request_id": "486f5121-2ecc-4c7e-aa4d-13731c8480b1", "ip": "127.0.0.1", "path": "/api/v1/piano/pitch/settings", "method": "GET"}
+{"timestamp": "2025-03-25T07:50:58.420255", "level": "ERROR", "message": "Error in get_all_pitches: PitchRange() takes no arguments\nTraceback: Traceback (most recent call last):\n  File \"/home/yu/gitdev/shengyibaodian/app/api/v1/piano_pitch_api.py\", line 267, in get_pitch_settings\n    pitch_setting = await pitch_settings_service.get_pitch_settings()\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/yu/gitdev/shengyibaodian/app/services/pitch_settings_service.py\", line 28, in get_pitch_settings\n    pitch_range = PitchRange(\n                  ^^^^^^^^^^^\nTypeError: PitchRange() takes no arguments\n", "module": "piano_pitch_api", "function": "get_pitch_settings", "line": 272}
+{"timestamp": "2025-03-25T07:50:58.420628", "level": "INFO", "message": "Request completed", "module": "logging", "function": "dispatch", "line": 38, "request_id": "486f5121-2ecc-4c7e-aa4d-13731c8480b1", "path": "/api/v1/piano/pitch/settings", "method": "GET"}
+{"timestamp": "2025-03-25T07:53:43.429983", "level": "INFO", "message": "Shutting down application...", "module": "main", "function": "lifespan", "line": 66}
+{"timestamp": "2025-03-25T07:53:44.119460", "level": "INFO", "message": "Creating database tables...", "module": "main", "function": "lifespan", "line": 32}
+{"timestamp": "2025-03-25T07:53:44.124390", "level": "INFO", "message": "Initializing database data...", "module": "main", "function": "lifespan", "line": 38}
+{"timestamp": "2025-03-25T07:53:44.130403", "level": "INFO", "message": "VIP levels already initialized, skipping...", "module": "init_data", "function": "init_vip_levels", "line": 18}
+{"timestamp": "2025-03-25T07:53:44.131944", "level": "INFO", "message": "Pitch already initialized, skipping...", "module": "init_data", "function": "init_pitches", "line": 72}
+{"timestamp": "2025-03-25T07:53:44.132084", "level": "INFO", "message": "Loading VIP cache...", "module": "main", "function": "lifespan", "line": 43}
+{"timestamp": "2025-03-25T07:53:44.132596", "level": "INFO", "message": "Successfully loaded 4 VIP levels into cache", "module": "vip_service", "function": "load_vip_cache", "line": 42}
+{"timestamp": "2025-03-25T07:53:44.132679", "level": "INFO", "message": "Loading Pitch cache...", "module": "main", "function": "lifespan", "line": 46}
+{"timestamp": "2025-03-25T07:53:44.134242", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T07:53:44.135468", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T07:53:44.135545", "level": "INFO", "message": "Successfully loaded 88 Pitch into cache", "module": "pitch_service", "function": "load_pitch_cache", "line": 43}
+{"timestamp": "2025-03-25T07:53:44.135609", "level": "INFO", "message": "building Pitch Group cache...", "module": "main", "function": "lifespan", "line": 49}
+{"timestamp": "2025-03-25T07:53:44.135852", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T07:53:44.135913", "level": "INFO", "message": "building Pitch Interval cache...", "module": "main", "function": "lifespan", "line": 52}
+{"timestamp": "2025-03-25T07:53:44.137036", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T07:53:44.137101", "level": "INFO", "message": "building Pitch Chord cache...", "module": "main", "function": "lifespan", "line": 55}
+{"timestamp": "2025-03-25T07:53:44.138066", "level": "INFO", "message": "Successfully built Pitch chord cache with 11 intervals", "module": "pitch_service", "function": "build_pitch_chord_cache", "line": 170}
+{"timestamp": "2025-03-25T07:53:49.453974", "level": "INFO", "message": "Shutting down application...", "module": "main", "function": "lifespan", "line": 66}
+{"timestamp": "2025-03-25T07:53:50.134099", "level": "INFO", "message": "Creating database tables...", "module": "main", "function": "lifespan", "line": 32}
+{"timestamp": "2025-03-25T07:53:50.136588", "level": "INFO", "message": "Initializing database data...", "module": "main", "function": "lifespan", "line": 38}
+{"timestamp": "2025-03-25T07:53:50.139864", "level": "INFO", "message": "VIP levels already initialized, skipping...", "module": "init_data", "function": "init_vip_levels", "line": 18}
+{"timestamp": "2025-03-25T07:53:50.140799", "level": "INFO", "message": "Pitch already initialized, skipping...", "module": "init_data", "function": "init_pitches", "line": 72}
+{"timestamp": "2025-03-25T07:53:50.140873", "level": "INFO", "message": "Loading VIP cache...", "module": "main", "function": "lifespan", "line": 43}
+{"timestamp": "2025-03-25T07:53:50.141173", "level": "INFO", "message": "Successfully loaded 4 VIP levels into cache", "module": "vip_service", "function": "load_vip_cache", "line": 42}
+{"timestamp": "2025-03-25T07:53:50.141213", "level": "INFO", "message": "Loading Pitch cache...", "module": "main", "function": "lifespan", "line": 46}
+{"timestamp": "2025-03-25T07:53:50.142157", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T07:53:50.142899", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T07:53:50.142931", "level": "INFO", "message": "Successfully loaded 88 Pitch into cache", "module": "pitch_service", "function": "load_pitch_cache", "line": 43}
+{"timestamp": "2025-03-25T07:53:50.142959", "level": "INFO", "message": "building Pitch Group cache...", "module": "main", "function": "lifespan", "line": 49}
+{"timestamp": "2025-03-25T07:53:50.143161", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T07:53:50.143190", "level": "INFO", "message": "building Pitch Interval cache...", "module": "main", "function": "lifespan", "line": 52}
+{"timestamp": "2025-03-25T07:53:50.143860", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T07:53:50.143887", "level": "INFO", "message": "building Pitch Chord cache...", "module": "main", "function": "lifespan", "line": 55}
+{"timestamp": "2025-03-25T07:53:50.144441", "level": "INFO", "message": "Successfully built Pitch chord cache with 11 intervals", "module": "pitch_service", "function": "build_pitch_chord_cache", "line": 170}
+{"timestamp": "2025-03-25T07:54:46.208450", "level": "INFO", "message": "Shutting down application...", "module": "main", "function": "lifespan", "line": 66}
+{"timestamp": "2025-03-25T07:54:46.922243", "level": "INFO", "message": "Creating database tables...", "module": "main", "function": "lifespan", "line": 32}
+{"timestamp": "2025-03-25T07:54:46.924777", "level": "INFO", "message": "Initializing database data...", "module": "main", "function": "lifespan", "line": 38}
+{"timestamp": "2025-03-25T07:54:46.928333", "level": "INFO", "message": "VIP levels already initialized, skipping...", "module": "init_data", "function": "init_vip_levels", "line": 18}
+{"timestamp": "2025-03-25T07:54:46.929308", "level": "INFO", "message": "Pitch already initialized, skipping...", "module": "init_data", "function": "init_pitches", "line": 72}
+{"timestamp": "2025-03-25T07:54:46.929403", "level": "INFO", "message": "Loading VIP cache...", "module": "main", "function": "lifespan", "line": 43}
+{"timestamp": "2025-03-25T07:54:46.929679", "level": "INFO", "message": "Successfully loaded 4 VIP levels into cache", "module": "vip_service", "function": "load_vip_cache", "line": 42}
+{"timestamp": "2025-03-25T07:54:46.929715", "level": "INFO", "message": "Loading Pitch cache...", "module": "main", "function": "lifespan", "line": 46}
+{"timestamp": "2025-03-25T07:54:46.930682", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T07:54:46.931451", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T07:54:46.931486", "level": "INFO", "message": "Successfully loaded 88 Pitch into cache", "module": "pitch_service", "function": "load_pitch_cache", "line": 43}
+{"timestamp": "2025-03-25T07:54:46.931515", "level": "INFO", "message": "building Pitch Group cache...", "module": "main", "function": "lifespan", "line": 49}
+{"timestamp": "2025-03-25T07:54:46.931654", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T07:54:46.931680", "level": "INFO", "message": "building Pitch Interval cache...", "module": "main", "function": "lifespan", "line": 52}
+{"timestamp": "2025-03-25T07:54:46.932392", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T07:54:46.932423", "level": "INFO", "message": "building Pitch Chord cache...", "module": "main", "function": "lifespan", "line": 55}
+{"timestamp": "2025-03-25T07:54:46.933002", "level": "INFO", "message": "Successfully built Pitch chord cache with 11 intervals", "module": "pitch_service", "function": "build_pitch_chord_cache", "line": 170}
+{"timestamp": "2025-03-25T07:54:51.022700", "level": "INFO", "message": "Request started", "module": "logging", "function": "dispatch", "line": 21, "request_id": "716f929c-68ea-4fe2-aadb-822bda4cd2c9", "ip": "127.0.0.1", "path": "/api/v1/auth/wechat-login", "method": "POST"}
+{"timestamp": "2025-03-25T07:54:51.026758", "level": "INFO", "message": "Request completed", "module": "logging", "function": "dispatch", "line": 38, "request_id": "716f929c-68ea-4fe2-aadb-822bda4cd2c9", "path": "/api/v1/auth/wechat-login", "method": "POST"}
+{"timestamp": "2025-03-25T07:54:52.574416", "level": "INFO", "message": "Request started", "module": "logging", "function": "dispatch", "line": 21, "request_id": "faf154b8-dfd3-4fc9-977e-1766b90d4eb1", "ip": "127.0.0.1", "path": "/api/v1/piano/pitch/settings", "method": "GET"}
+{"timestamp": "2025-03-25T07:54:52.577234", "level": "ERROR", "message": "Error in get_all_pitches: PitchRange() takes no arguments\nTraceback: Traceback (most recent call last):\n  File \"/home/yu/gitdev/shengyibaodian/app/api/v1/piano_pitch_api.py\", line 267, in get_pitch_settings\n    pitch_setting = await pitch_settings_service.get_pitch_settings()\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/yu/gitdev/shengyibaodian/app/services/pitch_settings_service.py\", line 28, in get_pitch_settings\n    pitch_range = PitchRange(\n                  ^^^^^^^^^^^\nTypeError: PitchRange() takes no arguments\n", "module": "piano_pitch_api", "function": "get_pitch_settings", "line": 272}
+{"timestamp": "2025-03-25T07:54:52.577707", "level": "INFO", "message": "Request completed", "module": "logging", "function": "dispatch", "line": 38, "request_id": "faf154b8-dfd3-4fc9-977e-1766b90d4eb1", "path": "/api/v1/piano/pitch/settings", "method": "GET"}
+{"timestamp": "2025-03-25T07:56:14.187566", "level": "INFO", "message": "Shutting down application...", "module": "main", "function": "lifespan", "line": 66}
+{"timestamp": "2025-03-25T07:56:14.888645", "level": "INFO", "message": "Creating database tables...", "module": "main", "function": "lifespan", "line": 32}
+{"timestamp": "2025-03-25T07:56:14.890877", "level": "INFO", "message": "Initializing database data...", "module": "main", "function": "lifespan", "line": 38}
+{"timestamp": "2025-03-25T07:56:14.894311", "level": "INFO", "message": "VIP levels already initialized, skipping...", "module": "init_data", "function": "init_vip_levels", "line": 18}
+{"timestamp": "2025-03-25T07:56:14.895299", "level": "INFO", "message": "Pitch already initialized, skipping...", "module": "init_data", "function": "init_pitches", "line": 72}
+{"timestamp": "2025-03-25T07:56:14.895385", "level": "INFO", "message": "Loading VIP cache...", "module": "main", "function": "lifespan", "line": 43}
+{"timestamp": "2025-03-25T07:56:14.895742", "level": "INFO", "message": "Successfully loaded 4 VIP levels into cache", "module": "vip_service", "function": "load_vip_cache", "line": 42}
+{"timestamp": "2025-03-25T07:56:14.895788", "level": "INFO", "message": "Loading Pitch cache...", "module": "main", "function": "lifespan", "line": 46}
+{"timestamp": "2025-03-25T07:56:14.896846", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T07:56:14.897619", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T07:56:14.897656", "level": "INFO", "message": "Successfully loaded 88 Pitch into cache", "module": "pitch_service", "function": "load_pitch_cache", "line": 43}
+{"timestamp": "2025-03-25T07:56:14.897685", "level": "INFO", "message": "building Pitch Group cache...", "module": "main", "function": "lifespan", "line": 49}
+{"timestamp": "2025-03-25T07:56:14.897821", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T07:56:14.897849", "level": "INFO", "message": "building Pitch Interval cache...", "module": "main", "function": "lifespan", "line": 52}
+{"timestamp": "2025-03-25T07:56:14.898590", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T07:56:14.898629", "level": "INFO", "message": "building Pitch Chord cache...", "module": "main", "function": "lifespan", "line": 55}
+{"timestamp": "2025-03-25T07:56:14.899217", "level": "INFO", "message": "Successfully built Pitch chord cache with 11 intervals", "module": "pitch_service", "function": "build_pitch_chord_cache", "line": 170}
+{"timestamp": "2025-03-25T08:00:48.559081", "level": "INFO", "message": "Shutting down application...", "module": "main", "function": "lifespan", "line": 66}
+{"timestamp": "2025-03-25T08:00:49.210197", "level": "INFO", "message": "Creating database tables...", "module": "main", "function": "lifespan", "line": 32}
+{"timestamp": "2025-03-25T08:00:49.212164", "level": "INFO", "message": "Initializing database data...", "module": "main", "function": "lifespan", "line": 38}
+{"timestamp": "2025-03-25T08:00:49.215435", "level": "INFO", "message": "VIP levels already initialized, skipping...", "module": "init_data", "function": "init_vip_levels", "line": 18}
+{"timestamp": "2025-03-25T08:00:49.216371", "level": "INFO", "message": "Pitch already initialized, skipping...", "module": "init_data", "function": "init_pitches", "line": 72}
+{"timestamp": "2025-03-25T08:00:49.216447", "level": "INFO", "message": "Loading VIP cache...", "module": "main", "function": "lifespan", "line": 43}
+{"timestamp": "2025-03-25T08:00:49.216968", "level": "INFO", "message": "Successfully loaded 4 VIP levels into cache", "module": "vip_service", "function": "load_vip_cache", "line": 42}
+{"timestamp": "2025-03-25T08:00:49.217061", "level": "INFO", "message": "Loading Pitch cache...", "module": "main", "function": "lifespan", "line": 46}
+{"timestamp": "2025-03-25T08:00:49.218767", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:00:49.219949", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:00:49.220021", "level": "INFO", "message": "Successfully loaded 88 Pitch into cache", "module": "pitch_service", "function": "load_pitch_cache", "line": 43}
+{"timestamp": "2025-03-25T08:00:49.220085", "level": "INFO", "message": "building Pitch Group cache...", "module": "main", "function": "lifespan", "line": 49}
+{"timestamp": "2025-03-25T08:00:49.220334", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:00:49.220396", "level": "INFO", "message": "building Pitch Interval cache...", "module": "main", "function": "lifespan", "line": 52}
+{"timestamp": "2025-03-25T08:00:49.221531", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:00:49.221594", "level": "INFO", "message": "building Pitch Chord cache...", "module": "main", "function": "lifespan", "line": 55}
+{"timestamp": "2025-03-25T08:00:49.222635", "level": "INFO", "message": "Successfully built Pitch chord cache with 11 intervals", "module": "pitch_service", "function": "build_pitch_chord_cache", "line": 170}
+{"timestamp": "2025-03-25T08:01:03.668625", "level": "INFO", "message": "Shutting down application...", "module": "main", "function": "lifespan", "line": 66}
+{"timestamp": "2025-03-25T08:01:04.332504", "level": "INFO", "message": "Creating database tables...", "module": "main", "function": "lifespan", "line": 32}
+{"timestamp": "2025-03-25T08:01:04.334749", "level": "INFO", "message": "Initializing database data...", "module": "main", "function": "lifespan", "line": 38}
+{"timestamp": "2025-03-25T08:01:04.338177", "level": "INFO", "message": "VIP levels already initialized, skipping...", "module": "init_data", "function": "init_vip_levels", "line": 18}
+{"timestamp": "2025-03-25T08:01:04.339166", "level": "INFO", "message": "Pitch already initialized, skipping...", "module": "init_data", "function": "init_pitches", "line": 72}
+{"timestamp": "2025-03-25T08:01:04.339274", "level": "INFO", "message": "Loading VIP cache...", "module": "main", "function": "lifespan", "line": 43}
+{"timestamp": "2025-03-25T08:01:04.339563", "level": "INFO", "message": "Successfully loaded 4 VIP levels into cache", "module": "vip_service", "function": "load_vip_cache", "line": 42}
+{"timestamp": "2025-03-25T08:01:04.339603", "level": "INFO", "message": "Loading Pitch cache...", "module": "main", "function": "lifespan", "line": 46}
+{"timestamp": "2025-03-25T08:01:04.340565", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:01:04.341341", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:01:04.341375", "level": "INFO", "message": "Successfully loaded 88 Pitch into cache", "module": "pitch_service", "function": "load_pitch_cache", "line": 43}
+{"timestamp": "2025-03-25T08:01:04.341415", "level": "INFO", "message": "building Pitch Group cache...", "module": "main", "function": "lifespan", "line": 49}
+{"timestamp": "2025-03-25T08:01:04.341552", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:01:04.341578", "level": "INFO", "message": "building Pitch Interval cache...", "module": "main", "function": "lifespan", "line": 52}
+{"timestamp": "2025-03-25T08:01:04.342292", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:01:04.342320", "level": "INFO", "message": "building Pitch Chord cache...", "module": "main", "function": "lifespan", "line": 55}
+{"timestamp": "2025-03-25T08:01:04.342917", "level": "INFO", "message": "Successfully built Pitch chord cache with 11 intervals", "module": "pitch_service", "function": "build_pitch_chord_cache", "line": 170}
+{"timestamp": "2025-03-25T08:01:08.780870", "level": "INFO", "message": "Request started", "module": "logging", "function": "dispatch", "line": 21, "request_id": "557e6a18-11e4-46c7-8454-46ea97132d6e", "ip": "127.0.0.1", "path": "/api/v1/auth/wechat-login", "method": "POST"}
+{"timestamp": "2025-03-25T08:01:08.784722", "level": "INFO", "message": "Request completed", "module": "logging", "function": "dispatch", "line": 38, "request_id": "557e6a18-11e4-46c7-8454-46ea97132d6e", "path": "/api/v1/auth/wechat-login", "method": "POST"}
+{"timestamp": "2025-03-25T08:01:10.203258", "level": "INFO", "message": "Request started", "module": "logging", "function": "dispatch", "line": 21, "request_id": "b396dabd-2169-41bf-82a5-3a65c7deb9a4", "ip": "127.0.0.1", "path": "/api/v1/piano/pitch/settings", "method": "GET"}
+{"timestamp": "2025-03-25T08:01:10.205831", "level": "INFO", "message": "Request completed", "module": "logging", "function": "dispatch", "line": 38, "request_id": "b396dabd-2169-41bf-82a5-3a65c7deb9a4", "path": "/api/v1/piano/pitch/settings", "method": "GET"}
+{"timestamp": "2025-03-25T08:05:29.266029", "level": "INFO", "message": "Shutting down application...", "module": "main", "function": "lifespan", "line": 66}
+{"timestamp": "2025-03-25T08:05:29.929477", "level": "INFO", "message": "Creating database tables...", "module": "main", "function": "lifespan", "line": 32}
+{"timestamp": "2025-03-25T08:05:29.937379", "level": "INFO", "message": "Initializing database data...", "module": "main", "function": "lifespan", "line": 38}
+{"timestamp": "2025-03-25T08:05:29.946094", "level": "INFO", "message": "VIP levels already initialized, skipping...", "module": "init_data", "function": "init_vip_levels", "line": 18}
+{"timestamp": "2025-03-25T08:05:29.947725", "level": "INFO", "message": "Pitch already initialized, skipping...", "module": "init_data", "function": "init_pitches", "line": 72}
+{"timestamp": "2025-03-25T08:05:29.947865", "level": "INFO", "message": "Loading VIP cache...", "module": "main", "function": "lifespan", "line": 43}
+{"timestamp": "2025-03-25T08:05:29.948477", "level": "INFO", "message": "Successfully loaded 4 VIP levels into cache", "module": "vip_service", "function": "load_vip_cache", "line": 42}
+{"timestamp": "2025-03-25T08:05:29.948527", "level": "INFO", "message": "Loading Pitch cache...", "module": "main", "function": "lifespan", "line": 46}
+{"timestamp": "2025-03-25T08:05:29.949928", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:05:29.951079", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:05:29.951148", "level": "INFO", "message": "Successfully loaded 88 Pitch into cache", "module": "pitch_service", "function": "load_pitch_cache", "line": 43}
+{"timestamp": "2025-03-25T08:05:29.951208", "level": "INFO", "message": "building Pitch Group cache...", "module": "main", "function": "lifespan", "line": 49}
+{"timestamp": "2025-03-25T08:05:29.951511", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:05:29.951553", "level": "INFO", "message": "building Pitch Interval cache...", "module": "main", "function": "lifespan", "line": 52}
+{"timestamp": "2025-03-25T08:05:29.952254", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:05:29.952282", "level": "INFO", "message": "building Pitch Chord cache...", "module": "main", "function": "lifespan", "line": 55}
+{"timestamp": "2025-03-25T08:05:29.952851", "level": "INFO", "message": "Successfully built Pitch chord cache with 11 intervals", "module": "pitch_service", "function": "build_pitch_chord_cache", "line": 170}
+{"timestamp": "2025-03-25T08:06:22.916101", "level": "INFO", "message": "Shutting down application...", "module": "main", "function": "lifespan", "line": 66}
+{"timestamp": "2025-03-25T08:06:23.561005", "level": "INFO", "message": "Creating database tables...", "module": "main", "function": "lifespan", "line": 32}
+{"timestamp": "2025-03-25T08:06:23.563373", "level": "INFO", "message": "Initializing database data...", "module": "main", "function": "lifespan", "line": 38}
+{"timestamp": "2025-03-25T08:06:23.566713", "level": "INFO", "message": "VIP levels already initialized, skipping...", "module": "init_data", "function": "init_vip_levels", "line": 18}
+{"timestamp": "2025-03-25T08:06:23.567646", "level": "INFO", "message": "Pitch already initialized, skipping...", "module": "init_data", "function": "init_pitches", "line": 72}
+{"timestamp": "2025-03-25T08:06:23.567721", "level": "INFO", "message": "Loading VIP cache...", "module": "main", "function": "lifespan", "line": 43}
+{"timestamp": "2025-03-25T08:06:23.567988", "level": "INFO", "message": "Successfully loaded 4 VIP levels into cache", "module": "vip_service", "function": "load_vip_cache", "line": 42}
+{"timestamp": "2025-03-25T08:06:23.568024", "level": "INFO", "message": "Loading Pitch cache...", "module": "main", "function": "lifespan", "line": 46}
+{"timestamp": "2025-03-25T08:06:23.568958", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:06:23.569700", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:06:23.569733", "level": "INFO", "message": "Successfully loaded 88 Pitch into cache", "module": "pitch_service", "function": "load_pitch_cache", "line": 43}
+{"timestamp": "2025-03-25T08:06:23.569768", "level": "INFO", "message": "building Pitch Group cache...", "module": "main", "function": "lifespan", "line": 49}
+{"timestamp": "2025-03-25T08:06:23.569909", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:06:23.569934", "level": "INFO", "message": "building Pitch Interval cache...", "module": "main", "function": "lifespan", "line": 52}
+{"timestamp": "2025-03-25T08:06:23.570606", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:06:23.570633", "level": "INFO", "message": "building Pitch Chord cache...", "module": "main", "function": "lifespan", "line": 55}
+{"timestamp": "2025-03-25T08:06:23.571186", "level": "INFO", "message": "Successfully built Pitch chord cache with 11 intervals", "module": "pitch_service", "function": "build_pitch_chord_cache", "line": 170}
+{"timestamp": "2025-03-25T08:06:28.835699", "level": "INFO", "message": "Request started", "module": "logging", "function": "dispatch", "line": 21, "request_id": "edcacc16-43c8-4b32-b578-abe238ad2dd8", "ip": "127.0.0.1", "path": "/api/v1/auth/wechat-login", "method": "POST"}
+{"timestamp": "2025-03-25T08:06:28.839594", "level": "INFO", "message": "Request completed", "module": "logging", "function": "dispatch", "line": 38, "request_id": "edcacc16-43c8-4b32-b578-abe238ad2dd8", "path": "/api/v1/auth/wechat-login", "method": "POST"}
+{"timestamp": "2025-03-25T08:06:30.688108", "level": "INFO", "message": "Request started", "module": "logging", "function": "dispatch", "line": 21, "request_id": "65e07bcd-8e63-4593-9b73-912989cdc9e4", "ip": "127.0.0.1", "path": "/api/v1/piano/pitch/settings", "method": "GET"}
+{"timestamp": "2025-03-25T08:06:30.690950", "level": "INFO", "message": "Request completed", "module": "logging", "function": "dispatch", "line": 38, "request_id": "65e07bcd-8e63-4593-9b73-912989cdc9e4", "path": "/api/v1/piano/pitch/settings", "method": "GET"}
+{"timestamp": "2025-03-25T08:06:43.889095", "level": "INFO", "message": "Request started", "module": "logging", "function": "dispatch", "line": 21, "request_id": "f05459d4-707e-4d15-be75-f8ec7af1a585", "ip": "127.0.0.1", "path": "/api/v1/piano/pitch/settings", "method": "GET"}
+{"timestamp": "2025-03-25T08:06:43.890806", "level": "INFO", "message": "Request completed", "module": "logging", "function": "dispatch", "line": 38, "request_id": "f05459d4-707e-4d15-be75-f8ec7af1a585", "path": "/api/v1/piano/pitch/settings", "method": "GET"}
+{"timestamp": "2025-03-25T08:08:27.576959", "level": "INFO", "message": "Shutting down application...", "module": "main", "function": "lifespan", "line": 66}
+{"timestamp": "2025-03-25T08:08:28.229681", "level": "INFO", "message": "Creating database tables...", "module": "main", "function": "lifespan", "line": 32}
+{"timestamp": "2025-03-25T08:08:28.231660", "level": "INFO", "message": "Initializing database data...", "module": "main", "function": "lifespan", "line": 38}
+{"timestamp": "2025-03-25T08:08:28.235073", "level": "INFO", "message": "VIP levels already initialized, skipping...", "module": "init_data", "function": "init_vip_levels", "line": 18}
+{"timestamp": "2025-03-25T08:08:28.236039", "level": "INFO", "message": "Pitch already initialized, skipping...", "module": "init_data", "function": "init_pitches", "line": 72}
+{"timestamp": "2025-03-25T08:08:28.236133", "level": "INFO", "message": "Loading VIP cache...", "module": "main", "function": "lifespan", "line": 43}
+{"timestamp": "2025-03-25T08:08:28.236426", "level": "INFO", "message": "Successfully loaded 4 VIP levels into cache", "module": "vip_service", "function": "load_vip_cache", "line": 42}
+{"timestamp": "2025-03-25T08:08:28.236474", "level": "INFO", "message": "Loading Pitch cache...", "module": "main", "function": "lifespan", "line": 46}
+{"timestamp": "2025-03-25T08:08:28.237425", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:08:28.238175", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:08:28.238216", "level": "INFO", "message": "Successfully loaded 88 Pitch into cache", "module": "pitch_service", "function": "load_pitch_cache", "line": 43}
+{"timestamp": "2025-03-25T08:08:28.238253", "level": "INFO", "message": "building Pitch Group cache...", "module": "main", "function": "lifespan", "line": 49}
+{"timestamp": "2025-03-25T08:08:28.238415", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:08:28.238450", "level": "INFO", "message": "building Pitch Interval cache...", "module": "main", "function": "lifespan", "line": 52}
+{"timestamp": "2025-03-25T08:08:28.239133", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:08:28.239168", "level": "INFO", "message": "building Pitch Chord cache...", "module": "main", "function": "lifespan", "line": 55}
+{"timestamp": "2025-03-25T08:08:28.239742", "level": "INFO", "message": "Successfully built Pitch chord cache with 11 intervals", "module": "pitch_service", "function": "build_pitch_chord_cache", "line": 170}
+{"timestamp": "2025-03-25T08:08:50.908757", "level": "INFO", "message": "Shutting down application...", "module": "main", "function": "lifespan", "line": 66}
+{"timestamp": "2025-03-25T08:08:51.576567", "level": "INFO", "message": "Creating database tables...", "module": "main", "function": "lifespan", "line": 32}
+{"timestamp": "2025-03-25T08:08:51.579556", "level": "INFO", "message": "Initializing database data...", "module": "main", "function": "lifespan", "line": 38}
+{"timestamp": "2025-03-25T08:08:51.583019", "level": "INFO", "message": "VIP levels already initialized, skipping...", "module": "init_data", "function": "init_vip_levels", "line": 18}
+{"timestamp": "2025-03-25T08:08:51.583983", "level": "INFO", "message": "Pitch already initialized, skipping...", "module": "init_data", "function": "init_pitches", "line": 72}
+{"timestamp": "2025-03-25T08:08:51.584058", "level": "INFO", "message": "Loading VIP cache...", "module": "main", "function": "lifespan", "line": 43}
+{"timestamp": "2025-03-25T08:08:51.584346", "level": "INFO", "message": "Successfully loaded 4 VIP levels into cache", "module": "vip_service", "function": "load_vip_cache", "line": 42}
+{"timestamp": "2025-03-25T08:08:51.584385", "level": "INFO", "message": "Loading Pitch cache...", "module": "main", "function": "lifespan", "line": 46}
+{"timestamp": "2025-03-25T08:08:51.585389", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:08:51.586226", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:08:51.586264", "level": "INFO", "message": "Successfully loaded 88 Pitch into cache", "module": "pitch_service", "function": "load_pitch_cache", "line": 43}
+{"timestamp": "2025-03-25T08:08:51.586296", "level": "INFO", "message": "building Pitch Group cache...", "module": "main", "function": "lifespan", "line": 49}
+{"timestamp": "2025-03-25T08:08:51.586458", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:08:51.586489", "level": "INFO", "message": "building Pitch Interval cache...", "module": "main", "function": "lifespan", "line": 52}
+{"timestamp": "2025-03-25T08:08:51.587327", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:08:51.587361", "level": "INFO", "message": "building Pitch Chord cache...", "module": "main", "function": "lifespan", "line": 55}
+{"timestamp": "2025-03-25T08:08:51.588064", "level": "INFO", "message": "Successfully built Pitch chord cache with 11 intervals", "module": "pitch_service", "function": "build_pitch_chord_cache", "line": 170}
+{"timestamp": "2025-03-25T08:09:41.546879", "level": "INFO", "message": "Shutting down application...", "module": "main", "function": "lifespan", "line": 66}
+{"timestamp": "2025-03-25T08:09:42.198947", "level": "INFO", "message": "Creating database tables...", "module": "main", "function": "lifespan", "line": 32}
+{"timestamp": "2025-03-25T08:09:42.204911", "level": "INFO", "message": "Initializing database data...", "module": "main", "function": "lifespan", "line": 38}
+{"timestamp": "2025-03-25T08:09:42.212117", "level": "INFO", "message": "VIP levels already initialized, skipping...", "module": "init_data", "function": "init_vip_levels", "line": 18}
+{"timestamp": "2025-03-25T08:09:42.213664", "level": "INFO", "message": "Pitch already initialized, skipping...", "module": "init_data", "function": "init_pitches", "line": 72}
+{"timestamp": "2025-03-25T08:09:42.213779", "level": "INFO", "message": "Loading VIP cache...", "module": "main", "function": "lifespan", "line": 43}
+{"timestamp": "2025-03-25T08:09:42.214300", "level": "INFO", "message": "Successfully loaded 4 VIP levels into cache", "module": "vip_service", "function": "load_vip_cache", "line": 42}
+{"timestamp": "2025-03-25T08:09:42.214364", "level": "INFO", "message": "Loading Pitch cache...", "module": "main", "function": "lifespan", "line": 46}
+{"timestamp": "2025-03-25T08:09:42.215714", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:09:42.216613", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:09:42.216651", "level": "INFO", "message": "Successfully loaded 88 Pitch into cache", "module": "pitch_service", "function": "load_pitch_cache", "line": 43}
+{"timestamp": "2025-03-25T08:09:42.216679", "level": "INFO", "message": "building Pitch Group cache...", "module": "main", "function": "lifespan", "line": 49}
+{"timestamp": "2025-03-25T08:09:42.216832", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:09:42.216860", "level": "INFO", "message": "building Pitch Interval cache...", "module": "main", "function": "lifespan", "line": 52}
+{"timestamp": "2025-03-25T08:09:42.217581", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:09:42.217608", "level": "INFO", "message": "building Pitch Chord cache...", "module": "main", "function": "lifespan", "line": 55}
+{"timestamp": "2025-03-25T08:09:42.218148", "level": "INFO", "message": "Successfully built Pitch chord cache with 11 intervals", "module": "pitch_service", "function": "build_pitch_chord_cache", "line": 170}
+{"timestamp": "2025-03-25T08:09:46.663443", "level": "INFO", "message": "Request started", "module": "logging", "function": "dispatch", "line": 21, "request_id": "c2366dda-4e61-4687-8ece-0a7ac0bc5869", "ip": "127.0.0.1", "path": "/api/v1/auth/wechat-login", "method": "POST"}
+{"timestamp": "2025-03-25T08:09:46.667337", "level": "INFO", "message": "Request completed", "module": "logging", "function": "dispatch", "line": 38, "request_id": "c2366dda-4e61-4687-8ece-0a7ac0bc5869", "path": "/api/v1/auth/wechat-login", "method": "POST"}
+{"timestamp": "2025-03-25T08:09:48.795546", "level": "INFO", "message": "Request started", "module": "logging", "function": "dispatch", "line": 21, "request_id": "d4655544-58f6-4b4b-84bb-4ba086705c0d", "ip": "127.0.0.1", "path": "/api/v1/piano/pitch/settings", "method": "GET"}
+{"timestamp": "2025-03-25T08:09:48.798085", "level": "INFO", "message": "Request completed", "module": "logging", "function": "dispatch", "line": 38, "request_id": "d4655544-58f6-4b4b-84bb-4ba086705c0d", "path": "/api/v1/piano/pitch/settings", "method": "GET"}
+{"timestamp": "2025-03-25T08:10:17.113820", "level": "INFO", "message": "Shutting down application...", "module": "main", "function": "lifespan", "line": 66}
+{"timestamp": "2025-03-25T08:10:18.024162", "level": "INFO", "message": "Creating database tables...", "module": "main", "function": "lifespan", "line": 32}
+{"timestamp": "2025-03-25T08:10:18.026264", "level": "INFO", "message": "Initializing database data...", "module": "main", "function": "lifespan", "line": 38}
+{"timestamp": "2025-03-25T08:10:18.029712", "level": "INFO", "message": "VIP levels already initialized, skipping...", "module": "init_data", "function": "init_vip_levels", "line": 18}
+{"timestamp": "2025-03-25T08:10:18.030687", "level": "INFO", "message": "Pitch already initialized, skipping...", "module": "init_data", "function": "init_pitches", "line": 72}
+{"timestamp": "2025-03-25T08:10:18.030780", "level": "INFO", "message": "Loading VIP cache...", "module": "main", "function": "lifespan", "line": 43}
+{"timestamp": "2025-03-25T08:10:18.031065", "level": "INFO", "message": "Successfully loaded 4 VIP levels into cache", "module": "vip_service", "function": "load_vip_cache", "line": 42}
+{"timestamp": "2025-03-25T08:10:18.031115", "level": "INFO", "message": "Loading Pitch cache...", "module": "main", "function": "lifespan", "line": 46}
+{"timestamp": "2025-03-25T08:10:18.032057", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:10:18.032805", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:10:18.032847", "level": "INFO", "message": "Successfully loaded 88 Pitch into cache", "module": "pitch_service", "function": "load_pitch_cache", "line": 43}
+{"timestamp": "2025-03-25T08:10:18.032883", "level": "INFO", "message": "building Pitch Group cache...", "module": "main", "function": "lifespan", "line": 49}
+{"timestamp": "2025-03-25T08:10:18.033025", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:10:18.033059", "level": "INFO", "message": "building Pitch Interval cache...", "module": "main", "function": "lifespan", "line": 52}
+{"timestamp": "2025-03-25T08:10:18.033754", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:10:18.033792", "level": "INFO", "message": "building Pitch Chord cache...", "module": "main", "function": "lifespan", "line": 55}
+{"timestamp": "2025-03-25T08:10:18.034347", "level": "INFO", "message": "Successfully built Pitch chord cache with 11 intervals", "module": "pitch_service", "function": "build_pitch_chord_cache", "line": 170}
+{"timestamp": "2025-03-25T08:10:22.801831", "level": "INFO", "message": "Request started", "module": "logging", "function": "dispatch", "line": 21, "request_id": "eb877c7e-48eb-4d62-bf7b-8a1894acd7cd", "ip": "127.0.0.1", "path": "/api/v1/auth/wechat-login", "method": "POST"}
+{"timestamp": "2025-03-25T08:10:22.805935", "level": "INFO", "message": "Request completed", "module": "logging", "function": "dispatch", "line": 38, "request_id": "eb877c7e-48eb-4d62-bf7b-8a1894acd7cd", "path": "/api/v1/auth/wechat-login", "method": "POST"}
+{"timestamp": "2025-03-25T08:10:26.450779", "level": "INFO", "message": "Request started", "module": "logging", "function": "dispatch", "line": 21, "request_id": "730de185-3ef6-48d4-8f6b-63006ae20e93", "ip": "127.0.0.1", "path": "/api/v1/piano/pitch/settings", "method": "GET"}
+{"timestamp": "2025-03-25T08:10:26.457197", "level": "INFO", "message": "Request completed", "module": "logging", "function": "dispatch", "line": 38, "request_id": "730de185-3ef6-48d4-8f6b-63006ae20e93", "path": "/api/v1/piano/pitch/settings", "method": "GET"}
+{"timestamp": "2025-03-25T08:12:36.285538", "level": "INFO", "message": "Shutting down application...", "module": "main", "function": "lifespan", "line": 66}
+{"timestamp": "2025-03-25T08:12:36.952994", "level": "INFO", "message": "Creating database tables...", "module": "main", "function": "lifespan", "line": 32}
+{"timestamp": "2025-03-25T08:12:36.954910", "level": "INFO", "message": "Initializing database data...", "module": "main", "function": "lifespan", "line": 38}
+{"timestamp": "2025-03-25T08:12:36.958271", "level": "INFO", "message": "VIP levels already initialized, skipping...", "module": "init_data", "function": "init_vip_levels", "line": 18}
+{"timestamp": "2025-03-25T08:12:36.959254", "level": "INFO", "message": "Pitch already initialized, skipping...", "module": "init_data", "function": "init_pitches", "line": 72}
+{"timestamp": "2025-03-25T08:12:36.959332", "level": "INFO", "message": "Loading VIP cache...", "module": "main", "function": "lifespan", "line": 43}
+{"timestamp": "2025-03-25T08:12:36.959603", "level": "INFO", "message": "Successfully loaded 4 VIP levels into cache", "module": "vip_service", "function": "load_vip_cache", "line": 42}
+{"timestamp": "2025-03-25T08:12:36.959640", "level": "INFO", "message": "Loading Pitch cache...", "module": "main", "function": "lifespan", "line": 46}
+{"timestamp": "2025-03-25T08:12:36.960577", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:12:36.961358", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:12:36.961392", "level": "INFO", "message": "Successfully loaded 88 Pitch into cache", "module": "pitch_service", "function": "load_pitch_cache", "line": 43}
+{"timestamp": "2025-03-25T08:12:36.961421", "level": "INFO", "message": "building Pitch Group cache...", "module": "main", "function": "lifespan", "line": 49}
+{"timestamp": "2025-03-25T08:12:36.961565", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:12:36.961590", "level": "INFO", "message": "building Pitch Interval cache...", "module": "main", "function": "lifespan", "line": 52}
+{"timestamp": "2025-03-25T08:12:36.962272", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:12:36.962300", "level": "INFO", "message": "building Pitch Chord cache...", "module": "main", "function": "lifespan", "line": 55}
+{"timestamp": "2025-03-25T08:12:36.962865", "level": "INFO", "message": "Successfully built Pitch chord cache with 11 intervals", "module": "pitch_service", "function": "build_pitch_chord_cache", "line": 170}
+{"timestamp": "2025-03-25T08:15:06.617470", "level": "INFO", "message": "Shutting down application...", "module": "main", "function": "lifespan", "line": 66}
+{"timestamp": "2025-03-25T08:15:07.286088", "level": "INFO", "message": "Creating database tables...", "module": "main", "function": "lifespan", "line": 32}
+{"timestamp": "2025-03-25T08:15:07.290678", "level": "INFO", "message": "Initializing database data...", "module": "main", "function": "lifespan", "line": 38}
+{"timestamp": "2025-03-25T08:15:07.296739", "level": "INFO", "message": "VIP levels already initialized, skipping...", "module": "init_data", "function": "init_vip_levels", "line": 18}
+{"timestamp": "2025-03-25T08:15:07.298441", "level": "INFO", "message": "Pitch already initialized, skipping...", "module": "init_data", "function": "init_pitches", "line": 72}
+{"timestamp": "2025-03-25T08:15:07.298586", "level": "INFO", "message": "Loading VIP cache...", "module": "main", "function": "lifespan", "line": 43}
+{"timestamp": "2025-03-25T08:15:07.299135", "level": "INFO", "message": "Successfully loaded 4 VIP levels into cache", "module": "vip_service", "function": "load_vip_cache", "line": 42}
+{"timestamp": "2025-03-25T08:15:07.299213", "level": "INFO", "message": "Loading Pitch cache...", "module": "main", "function": "lifespan", "line": 46}
+{"timestamp": "2025-03-25T08:15:07.300924", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:15:07.301894", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:15:07.301938", "level": "INFO", "message": "Successfully loaded 88 Pitch into cache", "module": "pitch_service", "function": "load_pitch_cache", "line": 43}
+{"timestamp": "2025-03-25T08:15:07.301965", "level": "INFO", "message": "building Pitch Group cache...", "module": "main", "function": "lifespan", "line": 49}
+{"timestamp": "2025-03-25T08:15:07.302100", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:15:07.302125", "level": "INFO", "message": "building Pitch Interval cache...", "module": "main", "function": "lifespan", "line": 52}
+{"timestamp": "2025-03-25T08:15:07.302811", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:15:07.302838", "level": "INFO", "message": "building Pitch Chord cache...", "module": "main", "function": "lifespan", "line": 55}
+{"timestamp": "2025-03-25T08:15:07.303400", "level": "INFO", "message": "Successfully built Pitch chord cache with 11 intervals", "module": "pitch_service", "function": "build_pitch_chord_cache", "line": 170}
+{"timestamp": "2025-03-25T08:15:26.374665", "level": "INFO", "message": "Shutting down application...", "module": "main", "function": "lifespan", "line": 66}
+{"timestamp": "2025-03-25T08:15:27.038394", "level": "INFO", "message": "Creating database tables...", "module": "main", "function": "lifespan", "line": 32}
+{"timestamp": "2025-03-25T08:15:27.040361", "level": "INFO", "message": "Initializing database data...", "module": "main", "function": "lifespan", "line": 38}
+{"timestamp": "2025-03-25T08:15:27.043569", "level": "INFO", "message": "VIP levels already initialized, skipping...", "module": "init_data", "function": "init_vip_levels", "line": 18}
+{"timestamp": "2025-03-25T08:15:27.044494", "level": "INFO", "message": "Pitch already initialized, skipping...", "module": "init_data", "function": "init_pitches", "line": 72}
+{"timestamp": "2025-03-25T08:15:27.044569", "level": "INFO", "message": "Loading VIP cache...", "module": "main", "function": "lifespan", "line": 43}
+{"timestamp": "2025-03-25T08:15:27.044841", "level": "INFO", "message": "Successfully loaded 4 VIP levels into cache", "module": "vip_service", "function": "load_vip_cache", "line": 42}
+{"timestamp": "2025-03-25T08:15:27.044878", "level": "INFO", "message": "Loading Pitch cache...", "module": "main", "function": "lifespan", "line": 46}
+{"timestamp": "2025-03-25T08:15:27.045803", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:15:27.046535", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:15:27.046566", "level": "INFO", "message": "Successfully loaded 88 Pitch into cache", "module": "pitch_service", "function": "load_pitch_cache", "line": 43}
+{"timestamp": "2025-03-25T08:15:27.046590", "level": "INFO", "message": "building Pitch Group cache...", "module": "main", "function": "lifespan", "line": 49}
+{"timestamp": "2025-03-25T08:15:27.046725", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:15:27.046749", "level": "INFO", "message": "building Pitch Interval cache...", "module": "main", "function": "lifespan", "line": 52}
+{"timestamp": "2025-03-25T08:15:27.047420", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:15:27.047445", "level": "INFO", "message": "building Pitch Chord cache...", "module": "main", "function": "lifespan", "line": 55}
+{"timestamp": "2025-03-25T08:15:27.047999", "level": "INFO", "message": "Successfully built Pitch chord cache with 11 intervals", "module": "pitch_service", "function": "build_pitch_chord_cache", "line": 170}
+{"timestamp": "2025-03-25T08:15:33.572941", "level": "INFO", "message": "Shutting down application...", "module": "main", "function": "lifespan", "line": 66}
+{"timestamp": "2025-03-25T08:15:34.218365", "level": "INFO", "message": "Creating database tables...", "module": "main", "function": "lifespan", "line": 32}
+{"timestamp": "2025-03-25T08:15:34.220835", "level": "INFO", "message": "Initializing database data...", "module": "main", "function": "lifespan", "line": 38}
+{"timestamp": "2025-03-25T08:15:34.224258", "level": "INFO", "message": "VIP levels already initialized, skipping...", "module": "init_data", "function": "init_vip_levels", "line": 18}
+{"timestamp": "2025-03-25T08:15:34.225409", "level": "INFO", "message": "Pitch already initialized, skipping...", "module": "init_data", "function": "init_pitches", "line": 72}
+{"timestamp": "2025-03-25T08:15:34.225526", "level": "INFO", "message": "Loading VIP cache...", "module": "main", "function": "lifespan", "line": 43}
+{"timestamp": "2025-03-25T08:15:34.225959", "level": "INFO", "message": "Successfully loaded 4 VIP levels into cache", "module": "vip_service", "function": "load_vip_cache", "line": 42}
+{"timestamp": "2025-03-25T08:15:34.226012", "level": "INFO", "message": "Loading Pitch cache...", "module": "main", "function": "lifespan", "line": 46}
+{"timestamp": "2025-03-25T08:15:34.227450", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:15:34.228632", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:15:34.228686", "level": "INFO", "message": "Successfully loaded 88 Pitch into cache", "module": "pitch_service", "function": "load_pitch_cache", "line": 43}
+{"timestamp": "2025-03-25T08:15:34.228731", "level": "INFO", "message": "building Pitch Group cache...", "module": "main", "function": "lifespan", "line": 49}
+{"timestamp": "2025-03-25T08:15:34.228954", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:15:34.228995", "level": "INFO", "message": "building Pitch Interval cache...", "module": "main", "function": "lifespan", "line": 52}
+{"timestamp": "2025-03-25T08:15:34.230205", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:15:34.230263", "level": "INFO", "message": "building Pitch Chord cache...", "module": "main", "function": "lifespan", "line": 55}
+{"timestamp": "2025-03-25T08:15:34.231265", "level": "INFO", "message": "Successfully built Pitch chord cache with 11 intervals", "module": "pitch_service", "function": "build_pitch_chord_cache", "line": 170}
+{"timestamp": "2025-03-25T08:16:02.416105", "level": "INFO", "message": "Shutting down application...", "module": "main", "function": "lifespan", "line": 66}
+{"timestamp": "2025-03-25T08:16:03.092605", "level": "INFO", "message": "Creating database tables...", "module": "main", "function": "lifespan", "line": 32}
+{"timestamp": "2025-03-25T08:16:03.097042", "level": "INFO", "message": "Initializing database data...", "module": "main", "function": "lifespan", "line": 38}
+{"timestamp": "2025-03-25T08:16:03.101594", "level": "INFO", "message": "VIP levels already initialized, skipping...", "module": "init_data", "function": "init_vip_levels", "line": 18}
+{"timestamp": "2025-03-25T08:16:03.103198", "level": "INFO", "message": "Pitch already initialized, skipping...", "module": "init_data", "function": "init_pitches", "line": 72}
+{"timestamp": "2025-03-25T08:16:03.103348", "level": "INFO", "message": "Loading VIP cache...", "module": "main", "function": "lifespan", "line": 43}
+{"timestamp": "2025-03-25T08:16:03.103842", "level": "INFO", "message": "Successfully loaded 4 VIP levels into cache", "module": "vip_service", "function": "load_vip_cache", "line": 42}
+{"timestamp": "2025-03-25T08:16:03.103926", "level": "INFO", "message": "Loading Pitch cache...", "module": "main", "function": "lifespan", "line": 46}
+{"timestamp": "2025-03-25T08:16:03.105591", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:16:03.106706", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:16:03.106751", "level": "INFO", "message": "Successfully loaded 88 Pitch into cache", "module": "pitch_service", "function": "load_pitch_cache", "line": 43}
+{"timestamp": "2025-03-25T08:16:03.106781", "level": "INFO", "message": "building Pitch Group cache...", "module": "main", "function": "lifespan", "line": 49}
+{"timestamp": "2025-03-25T08:16:03.106933", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:16:03.106960", "level": "INFO", "message": "building Pitch Interval cache...", "module": "main", "function": "lifespan", "line": 52}
+{"timestamp": "2025-03-25T08:16:03.107672", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:16:03.107703", "level": "INFO", "message": "building Pitch Chord cache...", "module": "main", "function": "lifespan", "line": 55}
+{"timestamp": "2025-03-25T08:16:03.108293", "level": "INFO", "message": "Successfully built Pitch chord cache with 11 intervals", "module": "pitch_service", "function": "build_pitch_chord_cache", "line": 170}
+{"timestamp": "2025-03-25T08:16:06.249970", "level": "INFO", "message": "Request started", "module": "logging", "function": "dispatch", "line": 21, "request_id": "9e2d3d77-b1aa-49dd-89c4-e7e37690f727", "ip": "127.0.0.1", "path": "/api/v1/auth/wechat-login", "method": "POST"}
+{"timestamp": "2025-03-25T08:16:06.255431", "level": "INFO", "message": "Request completed", "module": "logging", "function": "dispatch", "line": 38, "request_id": "9e2d3d77-b1aa-49dd-89c4-e7e37690f727", "path": "/api/v1/auth/wechat-login", "method": "POST"}
+{"timestamp": "2025-03-25T08:16:07.427545", "level": "INFO", "message": "Request started", "module": "logging", "function": "dispatch", "line": 21, "request_id": "bd56e17f-ffaf-4974-a4b2-d3e32ac71b56", "ip": "127.0.0.1", "path": "/api/v1/piano/pitch/settings", "method": "GET"}
+{"timestamp": "2025-03-25T08:16:07.431195", "level": "INFO", "message": "Request completed", "module": "logging", "function": "dispatch", "line": 38, "request_id": "bd56e17f-ffaf-4974-a4b2-d3e32ac71b56", "path": "/api/v1/piano/pitch/settings", "method": "GET"}
+{"timestamp": "2025-03-25T08:16:09.926531", "level": "INFO", "message": "Shutting down application...", "module": "main", "function": "lifespan", "line": 66}
+{"timestamp": "2025-03-25T08:16:10.659848", "level": "INFO", "message": "Creating database tables...", "module": "main", "function": "lifespan", "line": 32}
+{"timestamp": "2025-03-25T08:16:10.661879", "level": "INFO", "message": "Initializing database data...", "module": "main", "function": "lifespan", "line": 38}
+{"timestamp": "2025-03-25T08:16:10.665269", "level": "INFO", "message": "VIP levels already initialized, skipping...", "module": "init_data", "function": "init_vip_levels", "line": 18}
+{"timestamp": "2025-03-25T08:16:10.666248", "level": "INFO", "message": "Pitch already initialized, skipping...", "module": "init_data", "function": "init_pitches", "line": 72}
+{"timestamp": "2025-03-25T08:16:10.666330", "level": "INFO", "message": "Loading VIP cache...", "module": "main", "function": "lifespan", "line": 43}
+{"timestamp": "2025-03-25T08:16:10.666612", "level": "INFO", "message": "Successfully loaded 4 VIP levels into cache", "module": "vip_service", "function": "load_vip_cache", "line": 42}
+{"timestamp": "2025-03-25T08:16:10.666651", "level": "INFO", "message": "Loading Pitch cache...", "module": "main", "function": "lifespan", "line": 46}
+{"timestamp": "2025-03-25T08:16:10.667602", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:16:10.668355", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:16:10.668388", "level": "INFO", "message": "Successfully loaded 88 Pitch into cache", "module": "pitch_service", "function": "load_pitch_cache", "line": 43}
+{"timestamp": "2025-03-25T08:16:10.668415", "level": "INFO", "message": "building Pitch Group cache...", "module": "main", "function": "lifespan", "line": 49}
+{"timestamp": "2025-03-25T08:16:10.668562", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 66}
+{"timestamp": "2025-03-25T08:16:10.668589", "level": "INFO", "message": "building Pitch Interval cache...", "module": "main", "function": "lifespan", "line": 52}
+{"timestamp": "2025-03-25T08:16:10.669268", "level": "INFO", "message": "Successfully built Pitch Interval cache with 24 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 130}
+{"timestamp": "2025-03-25T08:16:10.669296", "level": "INFO", "message": "building Pitch Chord cache...", "module": "main", "function": "lifespan", "line": 55}
+{"timestamp": "2025-03-25T08:16:10.669872", "level": "INFO", "message": "Successfully built Pitch chord cache with 11 intervals", "module": "pitch_service", "function": "build_pitch_chord_cache", "line": 170}
