@@ -16,6 +16,7 @@ class Question:
 @dataclass
 class ExamType(Enum):
     SINGLE = ("single", "单音听辨", 20)
+    GROUP = ("group", "音组听辨", 20)
     def __init__(self, value, display_value, question_num):
         self._value = value  # 设置枚举值
         self.display_value = display_value  # 设置描述
@@ -32,6 +33,24 @@ class SinglePitchExam:
     exam_type: str
     question_num: int
     questions: List[Question]
+    correct_number: int = 0
+    wrong_number: int = 0
+    created_at: datetime = datetime.now()
+    completed_at: Optional[datetime] = None
+
+
+@dataclass
+class GroupQuestion:
+    id: int
+    pitches: List[Pitch]  # 音高，如 "C4"
+
+@dataclass
+class GroupPitchExam:
+    id: int
+    user_id: int
+    exam_type: str
+    question_num: int
+    questions: List[GroupQuestion]
     correct_number: int = 0
     wrong_number: int = 0
     created_at: datetime = datetime.now()

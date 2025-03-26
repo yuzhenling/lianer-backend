@@ -406,3 +406,13 @@ class PitchGroupSettingResponse(BaseModel):
             }
         }
     }
+class GroupQuestionResponse(BaseModel):
+    id: int
+    pitches: List[PitchResponse]  # 音高，如 "C4"
+
+class GroupPitchExamResponse(BaseModel):
+    exam_type: str
+    question_num: int
+    questions: List[GroupQuestionResponse]
+    correct_number: int = 0
+    wrong_number: int = 0

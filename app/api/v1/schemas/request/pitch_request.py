@@ -30,6 +30,17 @@ class PitchRangeRequest(BaseModel):
 
 class PitchSettingRequest(BaseModel):
     pitch_range: PitchRangeRequest
+    pitch_black_keys: List[str] = []
+    model_config = {
+        "from_attributes": True,
+        "arbitrary_types_allowed": True,
+        "json_schema_extra": {
+
+        }
+    }
+
+class PitchGroupSettingRequest(PitchSettingRequest):
+    count: int = Field(..., ge=2, le=10)
     model_config = {
         "from_attributes": True,
         "arbitrary_types_allowed": True,

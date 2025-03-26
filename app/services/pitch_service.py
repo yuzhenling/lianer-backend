@@ -4,7 +4,7 @@ from typing import Dict, List
 from sqlalchemy.orm import Session
 
 from app.core.logger import logger
-from app.models.exam import Question, SinglePitchExam, ExamType
+from app.models.exam import Question, SinglePitchExam, ExamType, GroupPitchExam, GroupQuestion
 from app.models.pitch import Pitch, PitchGroup, PITCH_GROUP_NAMES, PITCH_GROUP_RANGES, PitchInterval, Interval, \
     PitchIntervalPair, PitchChord, Chord
 
@@ -246,13 +246,13 @@ class PitchService:
             logger.error("Failed to load Pitch cache", exc_info=True)
             raise e
 
-    async def generate_single_exam(self, min_pitch_number: int, max_pitch_number: int ) -> SinglePitchExam:
+    async def generate_single_exam(self, min_pitch_number: int, max_pitch_number: int, pitch_black_keys: List[str]) -> SinglePitchExam:
         """根据设置生成考试题目"""
         # 获取指定音域范围内的所有可用音高
-        available_pitches = await self.get_pitches_by_setting(min_pitch_number, max_pitch_number)
+        available_pitches = await self.get_pitches_by_range_black(min_pitch_number, max_pitch_number, pitch_black_keys)
 
         # 生成指定数量的随机题目
-        questions = self.generate_questions(available_pitches, ExamType.SINGLE.question_num)
+        questions = self.generate_single_questions(available_pitches, ExamType.SINGLE.question_num)
 
         # 创建考试对象
         exam = SinglePitchExam(
@@ -266,7 +266,7 @@ class PitchService:
         )
         return exam
 
-    def generate_questions(self, available_pitches: List[Pitch], question_num: int) -> List[Question]:
+    def generate_single_questions(self, available_pitches: List[Pitch], question_num: int) -> List[Question]:
         """生成指定数量的随机题目"""
         questions = []
         index = 1
@@ -281,6 +281,53 @@ class PitchService:
 
         return questions
 
+    async def generate_group_exam(self, min_pitch_number: int, max_pitch_number: int, pitch_black_keys: List[str], count: int ) -> SinglePitchExam:
+        """根据设置生成考试题目"""
+        # 获取指定音域范围内的所有可用音高
+        available_pitches = await self.get_pitches_by_range_black(min_pitch_number, max_pitch_number, pitch_black_keys)
+
+        # 生成指定数量的随机题目
+        questions = self.generate_group_questions(available_pitches, ExamType.GROUP.question_num, count)
+
+        # 创建考试对象
+        exam = GroupPitchExam(
+            id = 0,
+            user_id = 0,
+            exam_type= ExamType.GROUP._value,
+            question_num=ExamType.GROUP.question_num,
+            questions=questions,
+            correct_number = 0,
+            wrong_number = 0,
+        )
+        return exam
+
+    def generate_group_questions(self, available_pitches: List[Pitch], question_num: int, count: int) -> List[Question]:
+        """生成指定数量的随机题目"""
+        questions = []
+        index = 1
+        while len(questions) < question_num:
+            # 随机选择一个音高
+            pitches = random.choices(available_pitches, k=count)
+            questions.append(GroupQuestion(
+                id=index,
+                pitches=pitches,
+            ))
+            index += 1
+
+        return questions
+
+    async def get_pitches_by_range_black(self,min_pitch_number: int, max_pitch_number: int, pitch_black_keys: List[str]) -> List[Pitch]:
+        pitches = await self.get_pitches_by_setting(min_pitch_number, max_pitch_number)
+        available_pitches = []
+        for p in pitches:
+            if not p.name.__contains__("#"):
+                available_pitches.append(p)
+                continue
+            for pitch_black_key in pitch_black_keys:
+                if p.name.__contains__("#") and pitch_black_key in p.name:
+                    available_pitches.append(p)
+                    continue
+        return available_pitches
     # def create_student_exam(self, user_id: int, exam_id: int) -> StudentExam:
     #     """创建学生考试记录"""
     #     return StudentExam(
