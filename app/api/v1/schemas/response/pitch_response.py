@@ -269,3 +269,15 @@ class PitchSettingResponse(BaseModel):
         }
     }
 
+class Question(BaseModel):
+    id: int
+    pitch: PitchResponse  # 音高，如 "C4"
+
+class SinglePitchExamResponse(BaseModel):
+    exam_type: str
+    question_num: int
+    questions: List[Question]
+    correct_number: int = 0
+    wrong_number: int = 0
+
+

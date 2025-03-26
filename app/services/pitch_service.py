@@ -1,8 +1,10 @@
-from typing import Dict, List, Any, Coroutine
+import random
+from typing import Dict, List
 
 from sqlalchemy.orm import Session
 
 from app.core.logger import logger
+from app.models.exam import Question, SinglePitchExam, ExamType
 from app.models.pitch import Pitch, PitchGroup, PITCH_GROUP_NAMES, PITCH_GROUP_RANGES, PitchInterval, Interval, \
     PitchIntervalPair, PitchChord, Chord
 
@@ -243,5 +245,65 @@ class PitchService:
         except Exception as e:
             logger.error("Failed to load Pitch cache", exc_info=True)
             raise e
+
+    async def generate_single_exam(self, min_pitch_number: int, max_pitch_number: int ) -> SinglePitchExam:
+        """根据设置生成考试题目"""
+        # 获取指定音域范围内的所有可用音高
+        available_pitches = await self.get_pitches_by_setting(min_pitch_number, max_pitch_number)
+
+        # 生成指定数量的随机题目
+        questions = self.generate_questions(available_pitches, ExamType.SINGLE.question_num)
+
+        # 创建考试对象
+        exam = SinglePitchExam(
+            id = 0,
+            user_id = 0,
+            exam_type= ExamType.SINGLE._value,
+            question_num=ExamType.SINGLE.question_num,
+            questions=questions,
+            correct_number = 0,
+            wrong_number = 0,
+        )
+        return exam
+
+    def generate_questions(self, available_pitches: List[Pitch], question_num: int) -> List[Question]:
+        """生成指定数量的随机题目"""
+        questions = []
+        index = 1
+        while len(questions) < question_num:
+            # 随机选择一个音高
+            pitch = random.choice(available_pitches)
+            questions.append(Question(
+                id=index,
+                pitch=pitch,
+            ))
+            index += 1
+
+        return questions
+
+    # def create_student_exam(self, user_id: int, exam_id: int) -> StudentExam:
+    #     """创建学生考试记录"""
+    #     return StudentExam(
+    #         id=random.randint(1000, 9999),  # 临时ID生成方式
+    #         user_id=user_id,
+    #         exam_id=exam_id
+    #     )
+    #
+    # def update_student_exam_result(
+    #         self,
+    #         student_exam: StudentExam,
+    #         correct: bool
+    # ) -> StudentExam:
+    #     """更新学生考试结果"""
+    #     if correct:
+    #         student_exam.correct_number += 1
+    #     else:
+    #         student_exam.wrong_number += 1
+    #
+    #     # 如果所有题目都已完成，设置完成时间
+    #     if student_exam.correct_number + student_exam.wrong_number == student_exam.question_num:
+    #         student_exam.completed_at = datetime.now()
+    #
+    #     return student_exam
 
 pitch_service = PitchService()

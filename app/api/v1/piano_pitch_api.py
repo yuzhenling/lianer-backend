@@ -1,4 +1,3 @@
-import itertools
 import os
 import traceback
 from dataclasses import replace
@@ -7,20 +6,16 @@ from urllib.parse import unquote
 
 from fastapi import APIRouter, Depends, HTTPException, status, Request, Response
 from fastapi.responses import FileResponse
-from pydantic import BaseModel, Field
 
 
 from app.api.v1.auth_api import get_current_user, get_db
 from app.api.v1.schemas.request.pitch_request import PitchSettingRequest
 from app.api.v1.schemas.response.pitch_response import PitchSettingResponse, PitchResponse, PitchIntervalResponse, \
-    PitchChordResponse, PitchGroupResponse
+    PitchChordResponse, PitchGroupResponse, SinglePitchExamResponse
 from app.core.i18n import get_language, i18n
 from app.core.logger import logger
-from app.models.pitch_setting import PitchSettings
 from app.services.pitch_service import pitch_service
-from sqlalchemy.orm import Session
 from app.models.user import User
-from app.models.pitch import Pitch, Interval, PitchIntervalPair
 from app.services.pitch_settings_service import pitch_settings_service
 
 router = APIRouter()
@@ -275,8 +270,8 @@ async def get_pitch_settings(
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
 
-@router.post("/piano/pitch/listen/single", response_model=List[PitchResponse])
-async def get_pitch_settings(
+@router.post("/piano/pitch/single", response_model=List[PitchResponse])
+async def get_pitch_listen_single(
     request: Request,
     pitch_setting: PitchSettingRequest,
     current_user: User = Depends(get_current_user)
@@ -301,3 +296,22 @@ async def get_pitch_settings(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
+
+@router.post("/piano/pitch/single/exam")
+async def get_pitch_listen_single_exam(
+    request: Request,
+    pitch_setting: PitchSettingRequest,
+    current_user: User = Depends(get_current_user)
+) -> SinglePitchExamResponse:
+    lang = get_language(request)
+    try:
+        exam = await pitch_service.generate_single_exam(pitch_setting.pitch_range.pitch_number_min, pitch_setting.pitch_range.pitch_number_max)
+        return exam
+    except Exception as e:
+        logger.error(f"Error in get_pitch_listen_single_exam: {str(e)}\nTraceback: {traceback.format_exc()}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
+        )
+
+
