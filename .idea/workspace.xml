@@ -6,9 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="83c1f24d-9736-40eb-a780-45c9d33bfc91" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/v1/piano_pitch_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/piano_pitch_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/v1/schemas/response/pitch_response.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/schemas/response/pitch_response.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/pitch_setting.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/pitch_setting.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/services/pitch_settings_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/pitch_settings_service.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/app.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/app.log" afterDir="false" />
     </list>
@@ -123,7 +120,7 @@
       <workItem from="1742796657266" duration="17060000" />
       <workItem from="1742865932468" duration="22402000" />
       <workItem from="1742952215853" duration="8270000" />
-      <workItem from="1742973568560" duration="3355000" />
+      <workItem from="1742973568560" duration="4304000" />
     </task>
     <servers />
   </component>
@@ -153,6 +150,6 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/shengyibaodian$shengyibaodian.coverage" NAME="shengyibaodian 覆盖结果" MODIFIED="1742969950140" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/shengyibaodian$shengyibaodian.coverage" NAME="shengyibaodian 覆盖结果" MODIFIED="1742979618349" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>

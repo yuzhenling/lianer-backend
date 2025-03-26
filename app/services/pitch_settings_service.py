@@ -77,7 +77,7 @@ class PitchSettingsService:
         ]
 
         count = [2,4,6,8,10]
-        tempo = [50.60,70,80,90,100,110,120]
+        tempo = [50,60,70,80,90,100,110,120]
 
 
         pitch_setting = PitchGroupSetting(
