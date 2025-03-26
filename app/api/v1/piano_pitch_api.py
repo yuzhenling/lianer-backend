@@ -10,8 +10,8 @@ from fastapi.responses import FileResponse
 
 from app.api.v1.auth_api import get_current_user, get_db
 from app.api.v1.schemas.request.pitch_request import PitchSettingRequest
-from app.api.v1.schemas.response.pitch_response import PitchSettingResponse, PitchResponse, PitchIntervalResponse, \
-    PitchChordResponse, PitchGroupResponse, SinglePitchExamResponse
+from app.api.v1.schemas.response.pitch_response import PitchSingleSettingResponse, PitchResponse, PitchIntervalResponse, \
+    PitchChordResponse, PitchGroupResponse, SinglePitchExamResponse, PitchGroupSettingResponse
 from app.core.i18n import get_language, i18n
 from app.core.logger import logger
 from app.services.pitch_service import pitch_service
@@ -251,15 +251,34 @@ async def get_all_pitchchord(
         )
 
 
-@router.get("/piano/pitch/settings", response_model=PitchSettingResponse)
-async def get_pitch_settings(
+@router.get("/piano/pitch/single/setting", response_model=PitchSingleSettingResponse)
+async def get_pitch_single_setting(
     request: Request,
     current_user: User = Depends(get_current_user)
 ):
     lang = get_language(request)
     try:
         """获取所有信息"""
-        pitch_setting = await pitch_settings_service.get_pitch_settings()
+        pitch_setting = await pitch_settings_service.get_pitch_single_settings()
+        if not pitch_setting:
+            return None
+        return pitch_setting
+    except Exception as e:
+        logger.error(f"Error in get_all_pitches: {str(e)}\nTraceback: {traceback.format_exc()}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
+        )
+
+@router.get("/piano/pitch/group/setting", response_model=PitchGroupSettingResponse)
+async def get_pitch_group_settings(
+    request: Request,
+    current_user: User = Depends(get_current_user)
+):
+    lang = get_language(request)
+    try:
+        """获取所有信息"""
+        pitch_setting = await pitch_settings_service.get_pitch_group_settings()
         if not pitch_setting:
             return None
         return pitch_setting

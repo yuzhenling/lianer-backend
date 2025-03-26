@@ -51,7 +51,15 @@ class PitchMode(Enum):
         }
 
 @dataclass
-class PitchSettings:
+class PitchSingleSetting:
     pitch_range: PitchRange
     pitch_black_key: List[dict]
     mode: List[dict]
+
+
+@dataclass
+class PitchGroupSetting:
+    pitch_range: PitchRange
+    pitch_black_key: List[dict]
+    count: List[int]
+    tempo: List[int]
