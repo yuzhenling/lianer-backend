@@ -7,12 +7,11 @@
     <list default="true" id="83c1f24d-9736-40eb-a780-45c9d33bfc91" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/api/v1/piano_pitch_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/piano_pitch_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/v1/schemas/request/pitch_request.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/schemas/request/pitch_request.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/api/v1/schemas/response/pitch_response.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/schemas/response/pitch_response.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/exam.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/exam.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/services/pitch_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/pitch_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/doc/.~lock.练耳达人.docx#" beforeDir="false" afterPath="$PROJECT_DIR$/doc/.~lock.练耳达人.docx#" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/doc/练耳达人.docx" beforeDir="false" afterPath="$PROJECT_DIR$/doc/练耳达人.docx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/app.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/app.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/error.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/error.log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,7 +124,9 @@
       <workItem from="1742796657266" duration="17060000" />
       <workItem from="1742865932468" duration="22402000" />
       <workItem from="1742952215853" duration="8270000" />
-      <workItem from="1742973568560" duration="8997000" />
+      <workItem from="1742973568560" duration="10668000" />
+      <workItem from="1743061555647" duration="771000" />
+      <workItem from="1743128973726" duration="3278000" />
     </task>
     <servers />
   </component>

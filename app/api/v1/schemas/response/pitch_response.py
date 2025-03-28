@@ -416,3 +416,16 @@ class GroupPitchExamResponse(BaseModel):
     questions: List[GroupQuestionResponse]
     correct_number: int = 0
     wrong_number: int = 0
+
+
+
+class PitchIntervalSettingResponse(BaseModel):
+    answer_mode: int
+    play_mode: int
+    interval: int
+    tempo: List[int]
+    model_config = {
+        "from_attributes": True,
+        "arbitrary_types_allowed": True,
+        "json_schema_extra": {}
+    }

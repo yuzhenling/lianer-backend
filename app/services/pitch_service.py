@@ -14,6 +14,7 @@ class PitchService:
     PITCH_CACHE: Dict[int, Pitch] = {}  # ID -> Pitch对象的缓存
     PITCH_GROUP_CACHE: Dict[int, PitchGroup] = {}  # ID -> PitchGroup对象的缓存
     PITCH_INTERVAL_CACHE: Dict[int, PitchInterval] = {}  # ID -> PitchInterval对象的缓存
+    PITCH_INTERVAL_NAME_CACHE: List[Dict[int, str]] = {}  # ID -> PitchInterval对象的缓存
     PITCH_CHORD_CACHE: Dict[int, PitchChord] = {}  # ID -> PitchChord对象的缓存
 
     def __new__(cls):
@@ -72,6 +73,37 @@ class PitchService:
         try:
             # 清空现有音程缓存
             self.PITCH_INTERVAL_CACHE.clear()
+            self.PITCH_INTERVAL_NAME_CACHE.clear()
+
+            self.PITCH_INTERVAL_NAME_CACHE = {
+                1: "小二度",
+                2: "大二度",
+                3: "小三度",
+                4: "大三度",
+                5: "纯四度",
+                6: "增四度",
+                7: "减五度",
+                8: "纯五度",
+                9: "小六度",
+                10: "大六度",
+                11: "小七度",
+                12: "大七度",
+                13: "纯八度",
+                # 复音程
+                14: "小九度",
+                15: "大九度",
+                16: "小十度",
+                17: "大十度",
+                18: "纯十一度",
+                19: "增十一度",
+                20: "减十二度",
+                21: "纯十二度",
+                22: "小十三度",
+                23: "大十三度",
+                24: "小十四度",
+                25: "大十四度",
+                26: "纯十五度"
+            }
             
             # 音程与半音数的映射
             interval_semitones = {

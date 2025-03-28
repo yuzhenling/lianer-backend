@@ -355,3 +355,21 @@ async def get_pitch_listen_group_exam(
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
 
+
+@router.get("/piano/pitch/interval/setting", response_model=PitchGroupSettingResponse)
+async def get_pitch_group_settings(
+    request: Request,
+    current_user: User = Depends(get_current_user)
+):
+    lang = get_language(request)
+    try:
+        """获取所有信息"""
+        pitch_setting = await pitch_settings_service.get_pitch_group_settings()
+        if not pitch_setting:
+            return None
+        return pitch_setting
+    except Exception as e:
+        logger.error(f"Error in get_all_pitches: {str(e)}\nTraceback: {traceback.format_exc()}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
