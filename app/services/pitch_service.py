@@ -75,7 +75,7 @@ class PitchService:
             self.PITCH_INTERVAL_CACHE.clear()
             self.PITCH_INTERVAL_NAME_CACHE.clear()
 
-            self.PITCH_INTERVAL_NAME_CACHE = {
+            interval_single = {
                 1: "小二度",
                 2: "大二度",
                 3: "小三度",
@@ -89,7 +89,9 @@ class PitchService:
                 11: "小七度",
                 12: "大七度",
                 13: "纯八度",
-                # 复音程
+            }
+
+            interval_double = {
                 14: "小九度",
                 15: "大九度",
                 16: "小十度",
@@ -104,6 +106,9 @@ class PitchService:
                 25: "大十四度",
                 26: "纯十五度"
             }
+
+            self.PITCH_INTERVAL_NAME_CACHE.append(interval_single)
+            self.PITCH_INTERVAL_NAME_CACHE.append(interval_double)
             
             # 音程与半音数的映射
             interval_semitones = {

@@ -356,8 +356,8 @@ async def get_pitch_listen_group_exam(
         )
 
 
-@router.get("/piano/pitch/interval/setting", response_model=PitchGroupSettingResponse)
-async def get_pitch_group_settings(
+@router.get("/piano/pitch/interval/setting")
+async def get_pitch_interval_settings(
     request: Request,
     current_user: User = Depends(get_current_user)
 ):
@@ -369,7 +369,8 @@ async def get_pitch_group_settings(
             return None
         return pitch_setting
     except Exception as e:
-        logger.error(f"Error in get_all_pitches: {str(e)}\nTraceback: {traceback.format_exc()}")
+        logger.error(f"Error in get_pitch_interval_settings: {str(e)}\nTraceback: {traceback.format_exc()}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
+        )

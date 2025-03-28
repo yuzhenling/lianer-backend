@@ -63,3 +63,47 @@ class PitchGroupSetting:
     pitch_black_key: List[dict]
     count: List[int]
     tempo: List[int]
+
+
+class AnswerMode(Enum):
+    CONCORDANCE = (1, "听协和性")
+    QUALITY = (2, "听性质")
+    PITCH = (3, "听音高")
+
+    def __init__(self, index, display_value):
+        self.index = index
+        self.display_value = display_value
+    def __str__(self):
+        return self.value  # 返回枚举值
+    def to_dict(self) -> Dict[str, Any]:
+        """返回包含所有值的字典"""
+        return {
+            "index": self.index,
+            "display_value": self.display_value
+        }
+
+class PlayMode(Enum):
+    HARMONY = (1, "和声")
+    UP = (2, "上行")
+    DOWN = (3, "下行")
+    UP_DOWN = (4, "上/下")
+
+    def __init__(self, index, display_value):
+        self.index = index
+        self.display_value = display_value
+    def __str__(self):
+        return self.value  # 返回枚举值
+    def to_dict(self) -> Dict[str, Any]:
+        """返回包含所有值的字典"""
+        return {
+            "index": self.index,
+            "display_value": self.display_value
+        }
+
+@dataclass
+class PitchIntervalSetting:
+    answer_mode: List[AnswerMode]
+    play_mode: int
+    interval_list: List[dict[int, str]]
+    fix: int
+    tempo: List[int]
