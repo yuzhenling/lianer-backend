@@ -4,7 +4,7 @@ from pathlib import Path
 from sqlalchemy.orm import Session
 
 from app.core.logger import logger
-from app.models.pitch import Pitch
+from app.models.pitch import Pitch, PitchIntervalType, PitchInterval
 from app.models.vip import Vip, VipLevel
 from app.constants.constant import PIANO_KEYS_MAPPING
 
@@ -98,6 +98,68 @@ def init_pitches(db: Session):
                 url=url,
             )
             db.add(pitch)
+
+        db.commit()
+        print("Successfully initialized pitch data")
+
+    except Exception as e:
+        db.rollback()
+        print(f"Error initializing pitch data: {str(e)}")
+        raise
+
+
+def init_intervals(db: Session):
+    """初始化音程数据"""
+    try:
+        # type
+        types = db.query(PitchIntervalType).all()
+        if types:
+            logger.info("PitchIntervalType already initialized, skipping...")
+            return
+        types_data = {1:"单音程", 2: "复音程"}
+        for id, name in types_data.items():
+            type = PitchIntervalType(
+                id=id,
+                name=name,
+            )
+            db.add(type)
+        #
+        intervals = db.query(PitchInterval).all()
+        if intervals:
+            logger.info("PitchInterval already initialized, skipping...")
+            return
+
+        interval_single = {
+            1: "小二度",
+            2: "大二度",
+            3: "小三度",
+            4: "大三度",
+            5: "纯四度",
+            6: "增四度",
+            7: "减五度",
+            8: "纯五度",
+            9: "小六度",
+            10: "大六度",
+            11: "小七度",
+            12: "大七度",
+            13: "纯八度",
+        }
+
+        interval_double = {
+            14: "小九度",
+            15: "大九度",
+            16: "小十度",
+            17: "大十度",
+            18: "纯十一度",
+            19: "增十一度",
+            20: "减十二度",
+            21: "纯十二度",
+            22: "小十三度",
+            23: "大十三度",
+            24: "小十四度",
+            25: "大十四度",
+            26: "纯十五度"
+        }
 
         db.commit()
         print("Successfully initialized pitch data")

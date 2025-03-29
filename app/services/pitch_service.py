@@ -15,6 +15,7 @@ class PitchService:
     PITCH_GROUP_CACHE: Dict[int, PitchGroup] = {}  # ID -> PitchGroup对象的缓存
     PITCH_INTERVAL_CACHE: Dict[int, PitchInterval] = {}  # ID -> PitchInterval对象的缓存
     PITCH_INTERVAL_NAME_CACHE: List[Dict[int, str]] = {}  # ID -> PitchInterval对象的缓存
+    PITCH_INTERVAL_HARMONIC_CACHE: Dict[int, List[Pitch]] = {}  # ID -> PitchInterval对象的缓存
     PITCH_CHORD_CACHE: Dict[int, PitchChord] = {}  # ID -> PitchChord对象的缓存
 
     def __new__(cls):
@@ -75,37 +76,7 @@ class PitchService:
             self.PITCH_INTERVAL_CACHE.clear()
             self.PITCH_INTERVAL_NAME_CACHE.clear()
 
-            interval_single = {
-                1: "小二度",
-                2: "大二度",
-                3: "小三度",
-                4: "大三度",
-                5: "纯四度",
-                6: "增四度",
-                7: "减五度",
-                8: "纯五度",
-                9: "小六度",
-                10: "大六度",
-                11: "小七度",
-                12: "大七度",
-                13: "纯八度",
-            }
 
-            interval_double = {
-                14: "小九度",
-                15: "大九度",
-                16: "小十度",
-                17: "大十度",
-                18: "纯十一度",
-                19: "增十一度",
-                20: "减十二度",
-                21: "纯十二度",
-                22: "小十三度",
-                23: "大十三度",
-                24: "小十四度",
-                25: "大十四度",
-                26: "纯十五度"
-            }
 
             self.PITCH_INTERVAL_NAME_CACHE.append(interval_single)
             self.PITCH_INTERVAL_NAME_CACHE.append(interval_double)
@@ -131,7 +102,7 @@ class PitchService:
                 Interval.MINOR_TENTH: 15,    # 小十度
                 Interval.MAJOR_TENTH: 16,    # 大十度
                 Interval.PERFECT_ELEVENTH: 17,  # 纯十一度
-                Interval.AUGMENTED_ELEVENTH: 18,  # 增十一度
+                Interval.AUGMENTED_ELEVENTH: 18,  # 增十一度/减十二
                 Interval.PERFECT_TWELFTH: 19,    # 纯十二度
                 Interval.MINOR_THIRTEENTH: 20,   # 小十三度
                 Interval.MAJOR_THIRTEENTH: 21,   # 大十三度
@@ -365,6 +336,8 @@ class PitchService:
                     available_pitches.append(p)
                     continue
         return available_pitches
+
+
     # def create_student_exam(self, user_id: int, exam_id: int) -> StudentExam:
     #     """创建学生考试记录"""
     #     return StudentExam(

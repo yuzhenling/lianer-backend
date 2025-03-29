@@ -88,6 +88,40 @@ class PitchSettingsService:
         )
         return pitch_setting
 
+    async def get_pitch_interval_settings(self) -> PitchIntervalSetting:
+        #default
+        pitch_groups = await pitch_service.get_all_intervals()
+        if not pitch_groups:
+             raise Exception("No Pitch Groups found")
+
+        default_group = pitch_groups[4] #中央C4
+
+        pitch_range = PitchRange(
+            min=default_group.get_min(),
+            max=default_group.get_max(),
+            list=default_group.pitches
+        )
+
+        pitch_black_keys = [
+            {
+                "key": pbk._value,
+                "display_value": pbk.display_value
+            }
+            for pbk in PitchBlackKey  # 或 PitchBlackKey.__members__.values()
+        ]
+
+        count = [2,4,6,8,10]
+        tempo = [50,60,70,80,90,100,110,120]
+
+
+        pitch_setting = PitchGroupSetting(
+            pitch_range=pitch_range,
+            pitch_black_key= pitch_black_keys,
+            count= count,
+            tempo= tempo,
+        )
+        return pitch_setting
+
 
 
 pitch_settings_service = PitchSettingsService()

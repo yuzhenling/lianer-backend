@@ -40,6 +40,8 @@ async def lifespan(app: FastAPI):
 
             init_pitches(db)
 
+            init_intervals(db)
+
             logger.info("Loading VIP cache...")
             await vip_service.load_vip_cache(db)
 

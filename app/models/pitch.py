@@ -70,6 +70,18 @@ class Pitch(Base):
         else:
             return False
 
+class PitchIntervalType(Base):
+    __tablename__ = "pitch_interval_types"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(20), nullable=False)
+
+class PitchInterval(Base):
+    __tablename__ = "pitch_interval"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(20), nullable=False)
+    semitones = Column(String(10), nullable=True)
+    type = Column(Integer, nullable=False)
+    black = Column(bool, nullable=False)
 
 
 # 音组模型
@@ -177,13 +189,13 @@ class PitchIntervalPair:
         self.second = second
 
 # 音程模型
-class PitchInterval:
-    def __init__(self, index:int, interval: Interval, semitones: int, list: List[PitchIntervalPair], count: int) -> None:
-        self.index = index
-        self.interval = interval
-        self.semitones = semitones
-        self.list = list
-        self.count = count
+# class PitchInterval:
+#     def __init__(self, index:int, interval: Interval, semitones: int, pair_list: List[PitchIntervalPair], count: int) -> None:
+#         self.index = index
+#         self.interval = interval
+#         self.semitones = semitones
+#         self.list = pair_list
+#         self.count = count
 
 
 # 和弦模型
