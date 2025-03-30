@@ -6,15 +6,15 @@ from sqlalchemy.orm import Session
 from app.core.logger import logger
 from app.models.exam import Question, SinglePitchExam, ExamType, GroupPitchExam, GroupQuestion
 from app.models.pitch import Pitch, PitchGroup, PITCH_GROUP_NAMES, PITCH_GROUP_RANGES, PitchInterval, Interval, \
-    PitchIntervalPair, PitchChord, Chord
+    PitchIntervalPair, PitchChord, Chord, PitchIntervalWithPitches, PitchIntervalType
 
 
 class PitchService:
     _instance = None
     PITCH_CACHE: Dict[int, Pitch] = {}  # ID -> Pitch对象的缓存
     PITCH_GROUP_CACHE: Dict[int, PitchGroup] = {}  # ID -> PitchGroup对象的缓存
+    PITCH_INTERVAL_TYPE_CACHE: Dict[int, PitchIntervalType] = {}  # ID -> PitchInterval对象的缓存
     PITCH_INTERVAL_CACHE: Dict[int, PitchInterval] = {}  # ID -> PitchInterval对象的缓存
-    PITCH_INTERVAL_NAME_CACHE: List[Dict[int, str]] = {}  # ID -> PitchInterval对象的缓存
     PITCH_INTERVAL_HARMONIC_CACHE: Dict[int, List[Pitch]] = {}  # ID -> PitchInterval对象的缓存
     PITCH_CHORD_CACHE: Dict[int, PitchChord] = {}  # ID -> PitchChord对象的缓存
 
@@ -39,10 +39,10 @@ class PitchService:
             for pitch in pitches:
                 self.PITCH_CACHE[pitch.pitch_number] = pitch
 
-            # 构建音组缓存
-            self.build_pitch_group_cache()
-            # 构建音程缓存
-            self.build_pitch_interval_cache()
+            # # 构建音组缓存
+            # self.build_pitch_group_cache()
+            # # 构建音程缓存
+            # self.build_pitch_interval_cache(db)
 
             logger.info(f"Successfully loaded {len(pitches)} Pitch into cache")
         except Exception as e:
@@ -69,55 +69,32 @@ class PitchService:
 
         logger.info(f"Successfully build Pitch Group into cache")
 
-    def build_pitch_interval_cache(self):
-        """构建音程缓存"""
+    def build_pitch_interval_type_cache(self, db: Session):
         try:
             # 清空现有音程缓存
+            self.PITCH_INTERVAL_TYPE_CACHE.clear()
+            pitch_interval_types = db.query(PitchIntervalType).all()
+            for pit in pitch_interval_types:
+                self.PITCH_INTERVAL_TYPE_CACHE[pit.id] = pit
+
+        except Exception as e:
+            logger.error("Failed to build Pitch Interval cache", exc_info=True)
+            raise e
+    def build_pitch_interval_cache(self, db: Session):
+        """构建音程缓存"""
+        try:
+            self.build_pitch_interval_type_cache(db)
+            # 清空现有音程缓存
             self.PITCH_INTERVAL_CACHE.clear()
-            self.PITCH_INTERVAL_NAME_CACHE.clear()
+            pitch_intervals = db.query(PitchInterval).all()
+            pitch_interval_types = db.query(PitchIntervalType).all()
 
-
-
-            self.PITCH_INTERVAL_NAME_CACHE.append(interval_single)
-            self.PITCH_INTERVAL_NAME_CACHE.append(interval_double)
-            
-            # 音程与半音数的映射
-            interval_semitones = {
-                # 单音程
-                Interval.MINOR_SECOND: 1,    # 小二度
-                Interval.MAJOR_SECOND: 2,    # 大二度
-                Interval.MINOR_THIRD: 3,     # 小三度
-                Interval.MAJOR_THIRD: 4,     # 大三度
-                Interval.PERFECT_FOURTH: 5,  # 纯四度
-                Interval.TRITONE: 6,         # 增四度/减五度
-                Interval.PERFECT_FIFTH: 7,   # 纯五度
-                Interval.MINOR_SIXTH: 8,     # 小六度
-                Interval.MAJOR_SIXTH: 9,     # 大六度
-                Interval.MINOR_SEVENTH: 10,  # 小七度
-                Interval.MAJOR_SEVENTH: 11,  # 大七度
-                Interval.PERFECT_OCTAVE: 12, # 纯八度
-                # 复音程
-                Interval.MINOR_NINTH: 13,    # 小九度
-                Interval.MAJOR_NINTH: 14,    # 大九度
-                Interval.MINOR_TENTH: 15,    # 小十度
-                Interval.MAJOR_TENTH: 16,    # 大十度
-                Interval.PERFECT_ELEVENTH: 17,  # 纯十一度
-                Interval.AUGMENTED_ELEVENTH: 18,  # 增十一度/减十二
-                Interval.PERFECT_TWELFTH: 19,    # 纯十二度
-                Interval.MINOR_THIRTEENTH: 20,   # 小十三度
-                Interval.MAJOR_THIRTEENTH: 21,   # 大十三度
-                Interval.MINOR_FOURTEENTH: 22,   # 小十四度
-                Interval.MAJOR_FOURTEENTH: 23,   # 大十四度
-                Interval.PERFECT_FIFTEENTH: 24,  # 纯十五度
-            }
-
-            index = 1
             # 为每个音程创建缓存
-            for interval, semitones in interval_semitones.items():
+            for pi in pitch_intervals:
                 pitch_pairs = []
                 # 遍历所有音高，找出符合当前音程的音高对
                 for base_pitch in self.PITCH_CACHE.values():
-                    target_number = base_pitch.pitch_number + semitones
+                    target_number: int = int(base_pitch.pitch_number) + int(pi.semitone_number)
                     if target_number <= 88:  # 确保不超过钢琴最高音
                         if target_pitch := self.PITCH_CACHE.get(target_number):
                             pitch_interval_pair = PitchIntervalPair(
@@ -127,20 +104,23 @@ class PitchService:
                             pitch_pairs.append(pitch_interval_pair)
 
                 # 创建音程对象并缓存
-                pitch_interval = PitchInterval(
-                    index=index,
-                    interval=interval,
-                    semitones=semitones,
-                    list=pitch_pairs,
-                    count=len(pitch_pairs),
+                pitch_interval_with_pair = PitchIntervalWithPitches(
+                    id=pi.id,
+                    name=pi.name,
+                    semitone_number=pi.semitone_number,
+                    type_id=pi.type_id,
+                    type_name=self.PITCH_INTERVAL_TYPE_CACHE[pi.type_id].name,
+                    black=pi.black,
+                    pitches=pitch_pairs,
                 )
-                self.PITCH_INTERVAL_CACHE[semitones] = pitch_interval
-                index += 1
+                self.PITCH_INTERVAL_CACHE[pi.id] = pitch_interval_with_pair
 
             logger.info(f"Successfully built Pitch Interval cache with {len(self.PITCH_INTERVAL_CACHE)} intervals")
         except Exception as e:
             logger.error("Failed to build Pitch Interval cache", exc_info=True)
             raise e
+
+
 
     def build_pitch_chord_cache(self):
         """构建和弦缓存"""

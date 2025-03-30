@@ -112,23 +112,23 @@ def init_intervals(db: Session):
     """初始化音程数据"""
     try:
         # type
-        types = db.query(PitchIntervalType).all()
-        if types:
-            logger.info("PitchIntervalType already initialized, skipping...")
-            return
-        types_data = {1:"单音程", 2: "复音程"}
-        for id, name in types_data.items():
-            type = PitchIntervalType(
-                id=id,
-                name=name,
-            )
-            db.add(type)
-        #
+        init_interval_type(db)
+
         intervals = db.query(PitchInterval).all()
         if intervals:
             logger.info("PitchInterval already initialized, skipping...")
             return
+        type_datas = db.query(PitchIntervalType).all()
+        single_id: int = None;
+        double_id: int = None;
+        for type in type_datas:
+            if type.name == "单音程":
+                single_id = type.id
+            elif type.name == "复音程":
+                double_id = type.id
 
+
+        #
         interval_single = {
             1: "小二度",
             2: "大二度",
@@ -161,6 +161,60 @@ def init_intervals(db: Session):
             26: "纯十五度"
         }
 
+        # 音程与半音数的映射
+        interval_semitones = [
+            # 单音程
+            1,  # 小二度
+            2,  # 大二度
+            3,  # 小三度
+            4,  # 大三度
+            5,  # 纯四度
+            6,  # 增四度/减五度
+            6,
+            7,  # 纯五度
+            8,  # 小六度
+            9,  # 大六度
+            10,  # 小七度
+            11,  # 大七度
+            12,  # 纯八度
+            # 复音程
+            13,  # 小九度
+            14,  # 大九度
+            15,  # 小十度
+            16,  # 大十度
+            17,  # 纯十一度
+            18,  # 增十一度/减十二
+            18,
+            19,  # 纯十二度
+            20,  # 小十三度
+            21,  # 大十三度
+            22,  # 小十四度
+            23,  # 大十四度
+            24,  # 纯十五度
+        ]
+
+        ii = 0
+        for index, (key, value) in enumerate(interval_single.items()):
+            ii += 1
+            pitch_interval = PitchInterval(
+                id=key,
+                name=value,
+                semitone_number=interval_semitones[index],
+                type_id=single_id,
+                black=True if interval_semitones[index] == 6 else False,
+            )
+            db.add(pitch_interval)
+
+        for index, (key, value) in enumerate(interval_double.items()):
+            pitch_interval = PitchInterval(
+                id=key,
+                name=value,
+                semitone_number=interval_semitones[index+ii],
+                type_id=double_id,
+                black=True if interval_semitones[index+ii] == 18 else False,
+            )
+            db.add(pitch_interval)
+
         db.commit()
         print("Successfully initialized pitch data")
 
@@ -168,3 +222,19 @@ def init_intervals(db: Session):
         db.rollback()
         print(f"Error initializing pitch data: {str(e)}")
         raise
+
+def init_interval_type(db: Session):
+    types = db.query(PitchIntervalType).all()
+    if types:
+        logger.info("PitchIntervalType already initialized, skipping...")
+        return
+
+    types_data = {1: "单音程", 2: "复音程"}
+    for key, value in types_data.items():
+        type = PitchIntervalType(
+            id=key,
+            name=value,
+        )
+        db.add(type)
+
+    db.commit()

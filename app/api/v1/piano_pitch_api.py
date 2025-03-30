@@ -11,7 +11,8 @@ from fastapi.responses import FileResponse
 from app.api.v1.auth_api import get_current_user, get_db
 from app.api.v1.schemas.request.pitch_request import PitchSettingRequest, PitchGroupSettingRequest
 from app.api.v1.schemas.response.pitch_response import PitchSingleSettingResponse, PitchResponse, PitchIntervalResponse, \
-    PitchChordResponse, PitchGroupResponse, SinglePitchExamResponse, PitchGroupSettingResponse, GroupPitchExamResponse
+    PitchChordResponse, PitchGroupResponse, SinglePitchExamResponse, PitchGroupSettingResponse, GroupPitchExamResponse, \
+    PitchIntervalSettingResponse
 from app.core.i18n import get_language, i18n
 from app.core.logger import logger
 from app.services.pitch_service import pitch_service
@@ -360,11 +361,11 @@ async def get_pitch_listen_group_exam(
 async def get_pitch_interval_settings(
     request: Request,
     current_user: User = Depends(get_current_user)
-):
+)-> PitchIntervalSettingResponse:
     lang = get_language(request)
     try:
         """获取所有信息"""
-        pitch_setting = await pitch_settings_service.get_pitch_group_settings()
+        pitch_setting = await pitch_settings_service.get_pitch_interval_settings()
         if not pitch_setting:
             return None
         return pitch_setting

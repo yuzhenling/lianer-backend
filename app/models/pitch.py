@@ -1,7 +1,7 @@
 import enum
 from dataclasses import dataclass
 
-from sqlalchemy import Column, Integer, String, DateTime, Float, Enum as SQLEnum, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, Float, Enum as SQLEnum, ForeignKey, Boolean
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from datetime import datetime
@@ -79,9 +79,20 @@ class PitchInterval(Base):
     __tablename__ = "pitch_interval"
     id = Column(Integer, primary_key=True)
     name = Column(String(20), nullable=False)
-    semitones = Column(String(10), nullable=True)
-    type = Column(Integer, nullable=False)
-    black = Column(bool, nullable=False)
+    semitone_number = Column(Integer, nullable=True)
+    type_id = Column(Integer, nullable=False)
+    black = Column(Boolean, nullable=False, default=False)
+
+
+@dataclass
+class PitchIntervalWithPitches:
+    id: int
+    name: str
+    semitone_number: int
+    type_id: int
+    type_name: str
+    black: bool
+    pitches: List[Pitch]
 
 
 # 音组模型

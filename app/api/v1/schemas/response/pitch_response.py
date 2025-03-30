@@ -417,15 +417,19 @@ class GroupPitchExamResponse(BaseModel):
     correct_number: int = 0
     wrong_number: int = 0
 
-
-
 class PitchIntervalSettingResponse(BaseModel):
-    answer_mode: int
-    play_mode: int
-    interval: int
-    tempo: List[int]
+    answer_mode: List[dict[str, Any]]
+    concordance_choice: List[dict[str, Any]]
+    quality_choice: List[dict[str, Any]]
+    play_mode: List[dict[str, Any]]
+    interval_list: List[dict[str, Any]]
+    fix_mode_enabled: bool
+    fix_mode: List[dict[str, Any]]
+    fix_mode_vals: List[str]
     model_config = {
         "from_attributes": True,
         "arbitrary_types_allowed": True,
         "json_schema_extra": {}
     }
+
+

@@ -3,7 +3,8 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import List, Dict, Any
 
-from app.models.pitch import Pitch
+from app.models.pitch import Pitch, PitchInterval
+
 
 @dataclass
 class PitchRange:
@@ -137,10 +138,11 @@ class FixMode(Enum):
 
 @dataclass
 class PitchIntervalSetting:
-    answer_mode: List[AnswerMode]
-    concordance_choice: List[str]
-    CONCORDANCE_choice: List[str]
-    play_mode: int
-    interval_list: List[dict[int, str]]
+    answer_mode: List[dict[str, Any]]
+    concordance_choice: List[dict[str, Any]]
+    quality_choice: List[dict[str, Any]]
+    play_mode: List[dict[str, Any]]
+    interval_list: List[dict[str, Any]]
     fix_mode_enabled: bool
-    fix_mode: List[dict[int, str]]
+    fix_mode: List[dict[str, Any]]
+    fix_mode_vals: List[str]
