@@ -75,6 +75,12 @@ class PitchIntervalType(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(20), nullable=False)
 
+#协和性
+class PitchConcordanceType(Base):
+    __tablename__ = "pitch_concordance_type"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(20), nullable=False)
+
 class PitchInterval(Base):
     __tablename__ = "pitch_interval"
     id = Column(Integer, primary_key=True)
@@ -82,7 +88,7 @@ class PitchInterval(Base):
     semitone_number = Column(Integer, nullable=True)
     type_id = Column(Integer, nullable=False)
     black = Column(Boolean, nullable=False, default=False)
-
+    concordance_id = Column(Integer, nullable=False)
 
 @dataclass
 class PitchIntervalWithPitches:
@@ -91,6 +97,8 @@ class PitchIntervalWithPitches:
     semitone_number: int
     type_id: int
     type_name: str
+    concordance_id: int
+    concordance_name: str
     black: bool
     pitches: List[Pitch]
 

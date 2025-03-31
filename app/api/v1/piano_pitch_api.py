@@ -9,7 +9,8 @@ from fastapi.responses import FileResponse
 
 
 from app.api.v1.auth_api import get_current_user, get_db
-from app.api.v1.schemas.request.pitch_request import PitchSettingRequest, PitchGroupSettingRequest
+from app.api.v1.schemas.request.pitch_request import PitchSettingRequest, PitchGroupSettingRequest, \
+    PitchIntervalSettingRequest
 from app.api.v1.schemas.response.pitch_response import PitchSingleSettingResponse, PitchResponse, PitchIntervalResponse, \
     PitchChordResponse, PitchGroupResponse, SinglePitchExamResponse, PitchGroupSettingResponse, GroupPitchExamResponse, \
     PitchIntervalSettingResponse
@@ -371,6 +372,23 @@ async def get_pitch_interval_settings(
         return pitch_setting
     except Exception as e:
         logger.error(f"Error in get_pitch_interval_settings: {str(e)}\nTraceback: {traceback.format_exc()}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
+        )
+
+@router.post("/piano/pitch/interval/exam")
+async def get_pitch_listen_interval_exam(
+    request: Request,
+    pitch_interval_setting: PitchIntervalSettingRequest,
+    current_user: User = Depends(get_current_user)
+) -> GroupPitchExamResponse:
+    lang = get_language(request)
+    try:
+        exam = await pitch_service.generate_interval_exam(pitch_interval_setting)
+        return exam
+    except Exception as e:
+        logger.error(f"Error in get_pitch_listen_single_exam: {str(e)}\nTraceback: {traceback.format_exc()}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)

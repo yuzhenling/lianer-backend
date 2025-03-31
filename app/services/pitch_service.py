@@ -3,10 +3,12 @@ from typing import Dict, List
 
 from sqlalchemy.orm import Session
 
+from app.api.v1.schemas.request.pitch_request import PitchIntervalSettingRequest
 from app.core.logger import logger
 from app.models.exam import Question, SinglePitchExam, ExamType, GroupPitchExam, GroupQuestion
 from app.models.pitch import Pitch, PitchGroup, PITCH_GROUP_NAMES, PITCH_GROUP_RANGES, PitchInterval, Interval, \
-    PitchIntervalPair, PitchChord, Chord, PitchIntervalWithPitches, PitchIntervalType
+    PitchIntervalPair, PitchChord, Chord, PitchIntervalWithPitches, PitchIntervalType, PitchConcordanceType
+from app.models.pitch_setting import AnswerMode, ConcordanceChoice
 
 
 class PitchService:
@@ -14,6 +16,7 @@ class PitchService:
     PITCH_CACHE: Dict[int, Pitch] = {}  # ID -> Pitch对象的缓存
     PITCH_GROUP_CACHE: Dict[int, PitchGroup] = {}  # ID -> PitchGroup对象的缓存
     PITCH_INTERVAL_TYPE_CACHE: Dict[int, PitchIntervalType] = {}  # ID -> PitchInterval对象的缓存
+    PITCH_INTERVAL_CONCORDANCE_TYPE_CACHE: Dict[int, PitchConcordanceType] = {}  # ID -> PitchInterval对象的缓存
     PITCH_INTERVAL_CACHE: Dict[int, PitchInterval] = {}  # ID -> PitchInterval对象的缓存
     PITCH_INTERVAL_HARMONIC_CACHE: Dict[int, List[Pitch]] = {}  # ID -> PitchInterval对象的缓存
     PITCH_CHORD_CACHE: Dict[int, PitchChord] = {}  # ID -> PitchChord对象的缓存
@@ -80,14 +83,27 @@ class PitchService:
         except Exception as e:
             logger.error("Failed to build Pitch Interval cache", exc_info=True)
             raise e
+
+    def build_pitch_concordance_type_cache(self, db: Session):
+        try:
+            # 清空现有音程缓存
+            self.PITCH_INTERVAL_CONCORDANCE_TYPE_CACHE.clear()
+            pitch_concordance_types = db.query(PitchConcordanceType).all()
+            for pct in pitch_concordance_types:
+                self.PITCH_INTERVAL_TYPE_CACHE[pct.id] = pct
+
+        except Exception as e:
+            logger.error("Failed to build Pitch Concordance cache", exc_info=True)
+            raise e
+
     def build_pitch_interval_cache(self, db: Session):
         """构建音程缓存"""
         try:
             self.build_pitch_interval_type_cache(db)
+            self.build_pitch_concordance_type_cache(db)
             # 清空现有音程缓存
             self.PITCH_INTERVAL_CACHE.clear()
             pitch_intervals = db.query(PitchInterval).all()
-            pitch_interval_types = db.query(PitchIntervalType).all()
 
             # 为每个音程创建缓存
             for pi in pitch_intervals:
@@ -111,6 +127,8 @@ class PitchService:
                     type_id=pi.type_id,
                     type_name=self.PITCH_INTERVAL_TYPE_CACHE[pi.type_id].name,
                     black=pi.black,
+                    concordance_id=pi.concordance_id,
+                    concordance_name=self.PITCH_INTERVAL_CONCORDANCE_TYPE_CACHE[pi.concordance_id].name,
                     pitches=pitch_pairs,
                 )
                 self.PITCH_INTERVAL_CACHE[pi.id] = pitch_interval_with_pair
@@ -316,6 +334,49 @@ class PitchService:
                     available_pitches.append(p)
                     continue
         return available_pitches
+
+
+    async def generate_interval_exam(self, pitch_interval_setting: PitchIntervalSettingRequest) -> IntervalPitchExam:
+        answer_mode_id = pitch_interval_setting.answer_mode
+        if answer_mode_id is AnswerMode.CONCORDANCE.__index__:
+            answer_choices = [ConcordanceChoice.CONCORDANCE.to_dict(),ConcordanceChoice.CONCORDANCE_PART.to_dict(),ConcordanceChoice.CONCORDANCE_NO.to_dict()]
+            #生成检测题
+
+
+
+
+        elif answer_mode_id is AnswerMode.QUALITY.__index__:
+            if pitch_interval_setting.interval_list:
+                answer_choices = self.generate_default_interval_choices()
+
+        elif answer_mode_id is AnswerMode.PITCH] .__index__:
+            if pitch_interval_setting.interval_list:
+                answer_choices = self.generate_default_interval_choices()
+
+
+        # 生成指定数量的随机题目
+        questions = self.generate_group_questions(available_pitches, ExamType.GROUP.question_num, count)
+
+        # 创建考试对象
+        exam = GroupPitchExam(
+            id = 0,
+            user_id = 0,
+            exam_type= ExamType.GROUP._value,
+            question_num=ExamType.GROUP.question_num,
+            questions=questions,
+            correct_number = 0,
+            wrong_number = 0,
+        )
+        return exam
+
+    def generate_default_interval_choices(self) -> List[PitchInterval]:
+        list: List[PitchInterval] = []
+        for key, value in self.PITCH_INTERVAL_CACHE:
+            if key <= 12:
+                list.append(value)
+        return list
+
+    def generate_interval_exam(self) -> None:
 
 
     # def create_student_exam(self, user_id: int, exam_id: int) -> StudentExam:

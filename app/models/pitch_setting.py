@@ -76,6 +76,10 @@ class AnswerMode(Enum):
         self.display_value = display_value
     def __str__(self):
         return self.value  # 返回枚举值
+    def __index__(self):
+        return self.index  # 返回枚举值
+    def __display_value__(self):
+        return self.display_value  # 返回枚举值
     def to_dict(self) -> Dict[str, Any]:
         """返回包含所有值的字典"""
         return {

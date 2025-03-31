@@ -4,7 +4,7 @@ from pathlib import Path
 from sqlalchemy.orm import Session
 
 from app.core.logger import logger
-from app.models.pitch import Pitch, PitchIntervalType, PitchInterval
+from app.models.pitch import Pitch, PitchIntervalType, PitchInterval, PitchConcordanceType
 from app.models.vip import Vip, VipLevel
 from app.constants.constant import PIANO_KEYS_MAPPING
 
@@ -113,6 +113,7 @@ def init_intervals(db: Session):
     try:
         # type
         init_interval_type(db)
+        init_concordance_type(db)
 
         intervals = db.query(PitchInterval).all()
         if intervals:
@@ -232,6 +233,22 @@ def init_interval_type(db: Session):
     types_data = {1: "单音程", 2: "复音程"}
     for key, value in types_data.items():
         type = PitchIntervalType(
+            id=key,
+            name=value,
+        )
+        db.add(type)
+
+    db.commit()
+
+def init_concordance_type(db: Session):
+    types = db.query(PitchConcordanceType).all()
+    if types:
+        logger.info("PitchConcordanceType already initialized, skipping...")
+        return
+
+    types_data = {1: "协和", 2: "不完全协和", 3: "不协和"}
+    for key, value in types_data.items():
+        type = PitchConcordanceType(
             id=key,
             name=value,
         )
