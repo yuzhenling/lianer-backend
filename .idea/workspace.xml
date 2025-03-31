@@ -6,12 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="83c1f24d-9736-40eb-a780-45c9d33bfc91" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/v1/piano_pitch_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/piano_pitch_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/v1/schemas/request/pitch_request.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/schemas/request/pitch_request.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/v1/schemas/response/pitch_response.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/schemas/response/pitch_response.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/db/init_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/db/init_data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/exam.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/exam.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/services/pitch_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/pitch_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/utils/ptest.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/utils/ptest.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/app.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/app.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/error.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/error.log" afterDir="false" />
     </list>
@@ -46,8 +42,8 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "FastAPI.shengyibaodian.executor": "Run",
-    "Python.ptest.executor": "Run",
+    "FastAPI.shengyibaodian.executor": "Debug",
+    "Python.ptest.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
@@ -160,7 +156,7 @@
       <workItem from="1743128973726" duration="5897000" />
       <workItem from="1743213026688" duration="8408000" />
       <workItem from="1743303792146" duration="22403000" />
-      <workItem from="1743384562947" duration="14747000" />
+      <workItem from="1743384562947" duration="17250000" />
     </task>
     <servers />
   </component>
@@ -188,14 +184,34 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app/services/pitch_service.py</url>
-          <line>93</line>
-          <option name="timeStamp" value="2" />
+          <line>345</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/app/services/pitch_service.py</url>
+          <line>387</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/app/services/pitch_service.py</url>
+          <line>390</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/app/services/pitch_service.py</url>
+          <line>380</line>
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/app/services/pitch_service.py</url>
+          <line>349</line>
+          <option name="timeStamp" value="15" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/shengyibaodian$shengyibaodian.coverage" NAME="shengyibaodian 覆盖结果" MODIFIED="1743407655621" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/shengyibaodian$ptest.coverage" NAME="ptest 覆盖结果" MODIFIED="1743324014946" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/utils" />
+    <SUITE FILE_PATH="coverage/shengyibaodian$shengyibaodian.coverage" NAME="shengyibaodian 覆盖结果" MODIFIED="1743416294907" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/shengyibaodian$ptest.coverage" NAME="ptest 覆盖结果" MODIFIED="1743416046396" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/utils" />
   </component>
 </project>

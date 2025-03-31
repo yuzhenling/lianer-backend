@@ -342,7 +342,8 @@ class PitchService:
         exam_type = ExamType.INTERVAL.display_value
         question_num: int = ExamType.INTERVAL.question_num
         questions = []
-        if answer_mode_id is AnswerMode.CONCORDANCE.__index__:
+        q= answer_mode_id
+        if answer_mode_id == AnswerMode.CONCORDANCE.to_dict().get("index"):
             answer_choices = [ConcordanceChoice.CONCORDANCE.to_dict(),ConcordanceChoice.CONCORDANCE_PART.to_dict(),ConcordanceChoice.CONCORDANCE_NO.to_dict()]
             #生成检测题
             interval_ids = self.generate_default_interval_choices()
@@ -350,13 +351,13 @@ class PitchService:
                 interval_ids = pitch_interval_setting.interval_list
             questions= self.generate_interval_exam_concordance(interval_ids, question_num)
 
-        elif answer_mode_id is AnswerMode.QUALITY.__index__:
+        elif answer_mode_id == AnswerMode.QUALITY.to_dict().get("index"):
             interval_ids = self.generate_default_interval_choices()
             if pitch_interval_setting.interval_list:
                 interval_ids = pitch_interval_setting.interval_list
             questions = self.generate_interval_exam_quality(interval_ids, question_num)
 
-        elif answer_mode_id is AnswerMode.PITCH.__index__:
+        elif answer_mode_id == AnswerMode.PITCH.to_dict().get("index"):
             interval_ids = self.generate_default_interval_choices()
             if pitch_interval_setting.interval_list:
                 interval_ids = pitch_interval_setting.interval_list
@@ -376,7 +377,7 @@ class PitchService:
 
     def generate_default_interval_choices(self) -> List[int]:
         list: List[int] = []
-        for key, value in self.PITCH_INTERVAL_CACHE:
+        for key, value in self.PITCH_INTERVAL_CACHE.items():
             if key <= 12:
                 list.append(key)
         return list
