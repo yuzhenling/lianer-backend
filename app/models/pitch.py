@@ -90,10 +90,36 @@ class PitchInterval(Base):
     black = Column(Boolean, nullable=False, default=False)
     concordance_id = Column(Integer, nullable=False)
 
+
 class PitchIntervalPair:
     def __init__(self, first: Pitch, second: Pitch) -> None:
         self.first = first
         self.second = second
+
+    def sort_up(self):
+        if self.first.pitch_number > self.second.pitch_number:
+            self.first, self.second = self.second, self.first
+    def sort_down(self):
+        if self.first.pitch_number < self.second.pitch_number:
+            self.first, self.second = self.second, self.first
+    def first_contain_start_not_black(self, start: str)-> bool:
+        if self.first.name.startswith(start):
+            if not self.first.name.__contains__("#") and not self.second.name.__contains__("#"):
+                return True
+        return False
+    def second_contain_start_not_black(self, start: str)-> bool:
+        if self.second.name.startswith(start):
+            if not self.first.name.__contains__("#") and not self.second.name.__contains__("#"):
+                return True
+        return False
+    def contain_start_not_black(self, start: str)-> bool:
+        if self.first.name.startswith(start) or self.second.name.startswith(start):
+            if not self.first.name.__contains__("#") and not self.second.name.__contains__("#"):
+                return True
+        return False
+
+
+
 
 @dataclass
 class PitchIntervalWithPitches:

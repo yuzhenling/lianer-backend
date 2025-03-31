@@ -1,5 +1,6 @@
 import random
-from typing import Dict, List
+from dataclasses import replace
+from typing import Dict, List, Any
 
 from sqlalchemy.orm import Session
 
@@ -382,7 +383,7 @@ class PitchService:
                 list.append(key)
         return list
 
-    def generate_interval_exam_concordance(self, interval_list: List[int], question_num: int) -> List[dict]:
+    def generate_interval_exam_concordance(self, interval_list: List[int], question_num: int, play_mode: int, fix_mode_enabled: bool, fix_mode: int, fix_mode_val: str) -> List[dict]:
         questions = []
         # 从PITCH_INTERVAL_CACHE中获取所有可用的音程
         available_intervals = list(self.PITCH_INTERVAL_CACHE.keys())
@@ -398,11 +399,47 @@ class PitchService:
         if not filtered_intervals:
             raise ValueError("No valid intervals found in the cache")
 
+        filtered_intervals_mode = []
+
+        #filter mode
+        if fix_mode_enabled :
+            if fix_mode == 1:
+                for pi in filtered_intervals:
+                    pitch_pairs = pi.pitch_pairs
+                    filter_pitch_pairs = []
+                    for pitch_pair in pitch_pairs:
+                        if pitch_pair.first_contain_start_not_black():
+                            filter_pitch_pairs.append(pitch_pair)
+                    new_pi = replace(pi, pitch_pairs=filter_pitch_pairs)
+                    filtered_intervals_mode.append(new_pi)
+
+            elif fix_mode == 2:
+                for pi in filtered_intervals:
+                    pitch_pairs = pi.pitch_pairs
+                    filter_pitch_pairs = []
+                    for pitch_pair in pitch_pairs:
+                        if pitch_pair.second_contain_start_not_black():
+                            filter_pitch_pairs.append(pitch_pair)
+                    new_pi = replace(pi, pitch_pairs=filter_pitch_pairs)
+                    filtered_intervals_mode.append(new_pi)
+
+            else:
+                for pi in filtered_intervals:
+                    pitch_pairs = pi.pitch_pairs
+                    filter_pitch_pairs = []
+                    for pitch_pair in pitch_pairs:
+                        if pitch_pair.contain_start_not_black():
+                            filter_pitch_pairs.append(pitch_pair)
+                    new_pi = replace(pi, pitch_pairs=filter_pitch_pairs)
+                    filtered_intervals_mode.append(new_pi)
+
+            filtered_intervals = filtered_intervals_mode
+
         # 生成20道题目
         for i in range(question_num):
             # 选一个答案音程
             interval: PitchIntervalWithPitches = random.choice(filtered_intervals)
-            pitch_pair = random.choice(interval.pitch_pairs)
+            pitch_pair: PitchIntervalPair = random.choice(interval.pitch_pairs)
 
             # 创建题目
             question = IntervalQuestion(
@@ -414,6 +451,22 @@ class PitchService:
             questions.append(question)
 
         return questions
+
+    def getPitchNameStart(self, fix_mode_val: str)-> str:
+        if fix_mode_val == "Do":
+            return "C"
+        elif fix_mode_val == "Re":
+            return "D"
+        elif fix_mode_val == "Mi":
+            return "E"
+        if fix_mode_val == "Fa":
+            return "F"
+        elif fix_mode_val == "Sol":
+            return "G"
+        elif fix_mode_val == "La":
+            return "A"
+        if fix_mode_val == "Ti":
+            return "B"
 
     def generate_interval_exam_quality(self, interval_list: List[int], question_num: int) -> List[dict]:
         questions = []
@@ -440,8 +493,8 @@ class PitchService:
             # 创建题目
             question = IntervalQuestion(
                 id=i + 1,
-                answer_id=interval.concordance_id,
-                answer_name=interval.concordance_name,
+                answer_id=interval.id,
+                answer_name=interval.name,
                 question=pitch_pair,
             )
             questions.append(question)
