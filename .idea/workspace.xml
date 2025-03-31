@@ -8,11 +8,9 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/api/v1/piano_pitch_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/piano_pitch_api.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/api/v1/schemas/request/pitch_request.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/schemas/request/pitch_request.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/db/init_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/db/init_data.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/models/pitch.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/pitch.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/pitch_setting.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/pitch_setting.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/services/pitch_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/pitch_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/app.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/app.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/services/pitch_settings_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/pitch_settings_service.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -159,7 +157,7 @@
       <workItem from="1743128973726" duration="5897000" />
       <workItem from="1743213026688" duration="8408000" />
       <workItem from="1743303792146" duration="22403000" />
-      <workItem from="1743384562947" duration="4464000" />
+      <workItem from="1743384562947" duration="6809000" />
     </task>
     <servers />
   </component>

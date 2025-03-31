@@ -90,6 +90,11 @@ class PitchInterval(Base):
     black = Column(Boolean, nullable=False, default=False)
     concordance_id = Column(Integer, nullable=False)
 
+class PitchIntervalPair:
+    def __init__(self, first: Pitch, second: Pitch) -> None:
+        self.first = first
+        self.second = second
+
 @dataclass
 class PitchIntervalWithPitches:
     id: int
@@ -100,7 +105,7 @@ class PitchIntervalWithPitches:
     concordance_id: int
     concordance_name: str
     black: bool
-    pitches: List[Pitch]
+    pitch_pairs: List[PitchIntervalPair]
 
 
 # 音组模型
@@ -202,10 +207,7 @@ class Interval(str, enum.Enum):
 #     def __str__(self):
 #         return self.value  # 返回枚举值
 
-class PitchIntervalPair:
-    def __init__(self, first: Pitch, second: Pitch) -> None:
-        self.first = first
-        self.second = second
+
 
 # 音程模型
 # class PitchInterval:

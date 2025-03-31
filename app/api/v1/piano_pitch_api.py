@@ -189,7 +189,7 @@ async def get_all_pitchgroups(
             )
         if not include_black_key:
             pitch_groups = [
-                replace(pg, pitches=[p for p in pg.pitches if not p.isBlackKey()], count=len([p for p in pg.pitches if not p.isBlackKey()]))
+                replace(pg, pitches=[p for p in pg.pitch_pairs if not p.isBlackKey()], count=len([p for p in pg.pitch_pairs if not p.isBlackKey()]))
                 for pg in pitch_groups
             ]
 

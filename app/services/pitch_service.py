@@ -17,7 +17,7 @@ class PitchService:
     PITCH_GROUP_CACHE: Dict[int, PitchGroup] = {}  # ID -> PitchGroup对象的缓存
     PITCH_INTERVAL_TYPE_CACHE: Dict[int, PitchIntervalType] = {}  # ID -> PitchInterval对象的缓存
     PITCH_INTERVAL_CONCORDANCE_TYPE_CACHE: Dict[int, PitchConcordanceType] = {}  # ID -> PitchInterval对象的缓存
-    PITCH_INTERVAL_CACHE: Dict[int, PitchInterval] = {}  # ID -> PitchInterval对象的缓存
+    PITCH_INTERVAL_CACHE: Dict[int, PitchIntervalWithPitches] = {}  # ID -> PitchInterval对象的缓存
     PITCH_INTERVAL_HARMONIC_CACHE: Dict[int, List[Pitch]] = {}  # ID -> PitchInterval对象的缓存
     PITCH_CHORD_CACHE: Dict[int, PitchChord] = {}  # ID -> PitchChord对象的缓存
 
@@ -129,7 +129,7 @@ class PitchService:
                     black=pi.black,
                     concordance_id=pi.concordance_id,
                     concordance_name=self.PITCH_INTERVAL_CONCORDANCE_TYPE_CACHE[pi.concordance_id].name,
-                    pitches=pitch_pairs,
+                    pitch_pairs=pitch_pairs,
                 )
                 self.PITCH_INTERVAL_CACHE[pi.id] = pitch_interval_with_pair
 
@@ -341,7 +341,7 @@ class PitchService:
         if answer_mode_id is AnswerMode.CONCORDANCE.__index__:
             answer_choices = [ConcordanceChoice.CONCORDANCE.to_dict(),ConcordanceChoice.CONCORDANCE_PART.to_dict(),ConcordanceChoice.CONCORDANCE_NO.to_dict()]
             #生成检测题
-
+            interval_list = pitch_interval_setting.interval_list
 
 
 
@@ -349,7 +349,7 @@ class PitchService:
             if pitch_interval_setting.interval_list:
                 answer_choices = self.generate_default_interval_choices()
 
-        elif answer_mode_id is AnswerMode.PITCH] .__index__:
+        elif answer_mode_id is AnswerMode.PITCH.__index__:
             if pitch_interval_setting.interval_list:
                 answer_choices = self.generate_default_interval_choices()
 
@@ -376,8 +376,37 @@ class PitchService:
                 list.append(value)
         return list
 
-    def generate_interval_exam(self) -> None:
+    def generate_interval_exam(self, interval_list: List[int]) -> List[dict]:
+        questions = []
+        # 从PITCH_INTERVAL_CACHE中获取所有可用的音程
+        available_intervals = list(self.PITCH_INTERVAL_CACHE.keys())
 
+        # 过滤出指定音程的条目
+        filtered_intervals = []
+        for id in interval_list:
+            if id in available_intervals:
+                pi = self.PITCH_INTERVAL_CACHE.get(id)
+                if pi:
+                    filtered_intervals.append(pi)
+
+        if not filtered_intervals:
+            raise ValueError("No valid intervals found in the cache")
+
+        # 生成20道题目
+        for i in range(20):
+            # 选一个答案音程
+            interval: PitchIntervalWithPitches = random.choice(filtered_intervals)
+            pitch_pair = random.choice(interval.pitch_pairs)
+
+            # 创建题目
+            question = {
+                "id": i + 1,
+                "answer": interval.concordance_name,
+                "question": pitch_pair,
+            }
+            questions.append(question)
+
+        return questions
 
     # def create_student_exam(self, user_id: int, exam_id: int) -> StudentExam:
     #     """创建学生考试记录"""
