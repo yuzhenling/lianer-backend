@@ -52,7 +52,7 @@ class PitchGroupSettingRequest(PitchSettingRequest):
 class PitchIntervalSettingRequest(BaseModel):
     answer_mode: int = Field(..., ge=1, le=3)
     play_mode: int = Field(..., ge=1, le=4)
-    interval_list: List[int] = Field(..., gt=1, le=26)
+    interval_list: List[int]
     fix_mode_enabled: bool = False
     fix_mode:int = Field(..., ge=1, le=3)
     fix_mode_vals: List[str]

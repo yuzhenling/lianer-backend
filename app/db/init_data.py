@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from typing import List
 
 from sqlalchemy.orm import Session
 
@@ -119,6 +120,12 @@ def init_intervals(db: Session):
         if intervals:
             logger.info("PitchInterval already initialized, skipping...")
             return
+
+        #1: "协和", 2: "不完全协和", 3: "不协和"
+        concordance_types = db.query(PitchConcordanceType).all()
+
+
+
         type_datas = db.query(PitchIntervalType).all()
         single_id: int = None;
         double_id: int = None;
@@ -197,12 +204,15 @@ def init_intervals(db: Session):
         ii = 0
         for index, (key, value) in enumerate(interval_single.items()):
             ii += 1
+            _semitone_number = interval_semitones[index]
+
             pitch_interval = PitchInterval(
                 id=key,
                 name=value,
-                semitone_number=interval_semitones[index],
+                semitone_number=_semitone_number,
                 type_id=single_id,
                 black=True if interval_semitones[index] == 6 else False,
+                concordance_id=get_concordance_type(_semitone_number, concordance_types),
             )
             db.add(pitch_interval)
 
@@ -213,6 +223,7 @@ def init_intervals(db: Session):
                 semitone_number=interval_semitones[index+ii],
                 type_id=double_id,
                 black=True if interval_semitones[index+ii] == 18 else False,
+                concordance_id=get_concordance_type(_semitone_number, concordance_types),
             )
             db.add(pitch_interval)
 
@@ -223,6 +234,17 @@ def init_intervals(db: Session):
         db.rollback()
         print(f"Error initializing pitch data: {str(e)}")
         raise
+def get_concordance_type(semitone_number: int, concordance_types: List[PitchConcordanceType]) -> int:
+    concordance = [0, 12, 5, 7, 12, 24, 17, 19]
+    concordance_part = [4, 3, 9, 8, 15, 16, 20, 21]
+    concordance_no = [1, 2, 10, 11, 6, 6, 13, 14, 22, 23, 18, 18]
+    if semitone_number in concordance:
+        return 1
+    elif semitone_number in concordance_part:
+        return 2
+    elif semitone_number in concordance_no:
+        return 3
+
 
 def init_interval_type(db: Session):
     types = db.query(PitchIntervalType).all()

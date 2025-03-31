@@ -13,7 +13,7 @@ from app.api.v1.schemas.request.pitch_request import PitchSettingRequest, PitchG
     PitchIntervalSettingRequest
 from app.api.v1.schemas.response.pitch_response import PitchSingleSettingResponse, PitchResponse, PitchIntervalResponse, \
     PitchChordResponse, PitchGroupResponse, SinglePitchExamResponse, PitchGroupSettingResponse, GroupPitchExamResponse, \
-    PitchIntervalSettingResponse
+    PitchIntervalSettingResponse, PitchIntervalExamResponse
 from app.core.i18n import get_language, i18n
 from app.core.logger import logger
 from app.services.pitch_service import pitch_service
@@ -382,7 +382,7 @@ async def get_pitch_listen_interval_exam(
     request: Request,
     pitch_interval_setting: PitchIntervalSettingRequest,
     current_user: User = Depends(get_current_user)
-) -> GroupPitchExamResponse:
+) -> PitchIntervalExamResponse:
     lang = get_language(request)
     try:
         exam = await pitch_service.generate_interval_exam(pitch_interval_setting)

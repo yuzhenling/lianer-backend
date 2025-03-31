@@ -5,7 +5,8 @@ from sqlalchemy.orm import Session
 
 from app.api.v1.schemas.request.pitch_request import PitchIntervalSettingRequest
 from app.core.logger import logger
-from app.models.exam import Question, SinglePitchExam, ExamType, GroupPitchExam, GroupQuestion
+from app.models.exam import Question, SinglePitchExam, ExamType, GroupPitchExam, GroupQuestion, IntervalQuestion, \
+    PitchIntervalExam
 from app.models.pitch import Pitch, PitchGroup, PITCH_GROUP_NAMES, PITCH_GROUP_RANGES, PitchInterval, Interval, \
     PitchIntervalPair, PitchChord, Chord, PitchIntervalWithPitches, PitchIntervalType, PitchConcordanceType
 from app.models.pitch_setting import AnswerMode, ConcordanceChoice
@@ -90,7 +91,7 @@ class PitchService:
             self.PITCH_INTERVAL_CONCORDANCE_TYPE_CACHE.clear()
             pitch_concordance_types = db.query(PitchConcordanceType).all()
             for pct in pitch_concordance_types:
-                self.PITCH_INTERVAL_TYPE_CACHE[pct.id] = pct
+                self.PITCH_INTERVAL_CONCORDANCE_TYPE_CACHE[pct.id] = pct
 
         except Exception as e:
             logger.error("Failed to build Pitch Concordance cache", exc_info=True)
@@ -336,47 +337,51 @@ class PitchService:
         return available_pitches
 
 
-    async def generate_interval_exam(self, pitch_interval_setting: PitchIntervalSettingRequest) -> IntervalPitchExam:
+    async def generate_interval_exam(self, pitch_interval_setting: PitchIntervalSettingRequest) -> PitchIntervalExam:
         answer_mode_id = pitch_interval_setting.answer_mode
+        exam_type = ExamType.INTERVAL.display_value
+        question_num: int = ExamType.INTERVAL.question_num
+        questions = []
         if answer_mode_id is AnswerMode.CONCORDANCE.__index__:
             answer_choices = [ConcordanceChoice.CONCORDANCE.to_dict(),ConcordanceChoice.CONCORDANCE_PART.to_dict(),ConcordanceChoice.CONCORDANCE_NO.to_dict()]
             #生成检测题
-            interval_list = pitch_interval_setting.interval_list
-
-
+            interval_ids = self.generate_default_interval_choices()
+            if pitch_interval_setting.interval_list:
+                interval_ids = pitch_interval_setting.interval_list
+            questions= self.generate_interval_exam_concordance(interval_ids, question_num)
 
         elif answer_mode_id is AnswerMode.QUALITY.__index__:
+            interval_ids = self.generate_default_interval_choices()
             if pitch_interval_setting.interval_list:
-                answer_choices = self.generate_default_interval_choices()
+                interval_ids = pitch_interval_setting.interval_list
+            questions = self.generate_interval_exam_quality(interval_ids, question_num)
 
         elif answer_mode_id is AnswerMode.PITCH.__index__:
+            interval_ids = self.generate_default_interval_choices()
             if pitch_interval_setting.interval_list:
-                answer_choices = self.generate_default_interval_choices()
+                interval_ids = pitch_interval_setting.interval_list
+            questions = self.generate_interval_exam_pitch(interval_ids, question_num)
 
-
-        # 生成指定数量的随机题目
-        questions = self.generate_group_questions(available_pitches, ExamType.GROUP.question_num, count)
-
-        # 创建考试对象
-        exam = GroupPitchExam(
+        pie = PitchIntervalExam(
             id = 0,
             user_id = 0,
-            exam_type= ExamType.GROUP._value,
-            question_num=ExamType.GROUP.question_num,
+            exam_type = ExamType.INTERVAL._value,
+            question_num=ExamType.INTERVAL.question_num,
             questions=questions,
             correct_number = 0,
             wrong_number = 0,
         )
-        return exam
 
-    def generate_default_interval_choices(self) -> List[PitchInterval]:
-        list: List[PitchInterval] = []
+        return pie
+
+    def generate_default_interval_choices(self) -> List[int]:
+        list: List[int] = []
         for key, value in self.PITCH_INTERVAL_CACHE:
             if key <= 12:
-                list.append(value)
+                list.append(key)
         return list
 
-    def generate_interval_exam(self, interval_list: List[int]) -> List[dict]:
+    def generate_interval_exam_concordance(self, interval_list: List[int], question_num: int) -> List[dict]:
         questions = []
         # 从PITCH_INTERVAL_CACHE中获取所有可用的音程
         available_intervals = list(self.PITCH_INTERVAL_CACHE.keys())
@@ -393,17 +398,84 @@ class PitchService:
             raise ValueError("No valid intervals found in the cache")
 
         # 生成20道题目
-        for i in range(20):
+        for i in range(question_num):
             # 选一个答案音程
             interval: PitchIntervalWithPitches = random.choice(filtered_intervals)
             pitch_pair = random.choice(interval.pitch_pairs)
 
             # 创建题目
-            question = {
-                "id": i + 1,
-                "answer": interval.concordance_name,
-                "question": pitch_pair,
-            }
+            question = IntervalQuestion(
+                id= i + 1,
+                answer_id= interval.concordance_id,
+                answer_name= interval.concordance_name,
+                question= pitch_pair,
+            )
+            questions.append(question)
+
+        return questions
+
+    def generate_interval_exam_quality(self, interval_list: List[int], question_num: int) -> List[dict]:
+        questions = []
+        # 从PITCH_INTERVAL_CACHE中获取所有可用的音程
+        available_intervals = list(self.PITCH_INTERVAL_CACHE.keys())
+
+        # 过滤出指定音程的条目
+        filtered_intervals = []
+        for id in interval_list:
+            if id in available_intervals:
+                pi = self.PITCH_INTERVAL_CACHE.get(id)
+                if pi:
+                    filtered_intervals.append(pi)
+
+        if not filtered_intervals:
+            raise ValueError("No valid intervals found in the cache")
+
+        # 生成20道题目
+        for i in range(question_num):
+            # 选一个答案音程
+            interval: PitchIntervalWithPitches = random.choice(filtered_intervals)
+            pitch_pair = random.choice(interval.pitch_pairs)
+
+            # 创建题目
+            question = IntervalQuestion(
+                id=i + 1,
+                answer_id=interval.concordance_id,
+                answer_name=interval.concordance_name,
+                question=pitch_pair,
+            )
+            questions.append(question)
+
+        return questions
+
+    def generate_interval_exam_pitch(self, interval_list: List[int], question_num: int) -> List[dict]:
+        questions = []
+        # 从PITCH_INTERVAL_CACHE中获取所有可用的音程
+        available_intervals = list(self.PITCH_INTERVAL_CACHE.keys())
+
+        # 过滤出指定音程的条目
+        filtered_intervals = []
+        for id in interval_list:
+            if id in available_intervals:
+                pi = self.PITCH_INTERVAL_CACHE.get(id)
+                if pi:
+                    filtered_intervals.append(pi)
+
+        if not filtered_intervals:
+            raise ValueError("No valid intervals found in the cache")
+
+        # 生成20道题目
+        for i in range(question_num):
+            # 选一个答案音程
+            interval: PitchIntervalWithPitches = random.choice(filtered_intervals)
+            pitch_pair = random.choice(interval.pitch_pairs)
+
+            # 创建题目
+            question = IntervalQuestion(
+                id=i + 1,
+                answer_id=interval.concordance_id,
+                answer_name=interval.concordance_name,
+                question=pitch_pair,
+            )
             questions.append(question)
 
         return questions

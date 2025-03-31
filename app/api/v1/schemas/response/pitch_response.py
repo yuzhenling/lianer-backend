@@ -432,4 +432,15 @@ class PitchIntervalSettingResponse(BaseModel):
         "json_schema_extra": {}
     }
 
+class IntervalQuestionResponse(BaseModel):
+    id: int
+    answer_id: int
+    answer_name: str
+    question: PitchIntervalPairResponse
 
+class PitchIntervalExamResponse(BaseModel):
+    exam_type: str
+    question_num: int
+    questions: List[IntervalQuestionResponse]
+    correct_number: int = 0
+    wrong_number: int = 0
