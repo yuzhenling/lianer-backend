@@ -7,7 +7,7 @@ from pathlib import Path
 from app.core.logger import logger
 from app.models.pitch import (
     PitchName, Interval, ChordType, Pitch, PitchGroup,
-    IntervalModel, Chord, PITCH_GROUPS, INTERVALS, CHORDS
+    IntervalModel, ChordEnum, PITCH_GROUPS, INTERVALS, CHORDS
 )
 from app.core.i18n import i18n, get_language
 

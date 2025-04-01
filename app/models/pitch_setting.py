@@ -150,3 +150,6 @@ class PitchIntervalSetting:
     fix_mode_enabled: bool
     fix_mode: List[dict[str, Any]]
     fix_mode_vals: List[str]
+
+@dataclass
+class PitchChordSetting():

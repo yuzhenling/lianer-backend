@@ -196,6 +196,17 @@ class Interval(str, enum.Enum):
     MAJOR_FOURTEENTH = "major_fourteenth"   # 大十四度
     PERFECT_FIFTEENTH = "perfect_fifteenth" # 纯十五度
 
+class PitchChordType(Base):
+    __tablename__ = "pitch_chord_type"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(20), nullable=False)
+
+class PitchChordTypeMapping(Base):
+    __tablename__ ="pitch_chord_type_mapping"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(20), nullable=False)
+    type_id = Column(Integer, nullable=False)
+
 #TODO
 # class Interval(str, Enum):
 #     # 单音程
@@ -246,7 +257,7 @@ class Interval(str, enum.Enum):
 
 
 # 和弦模型
-class Chord(enum.Enum):
+class ChordEnum(enum.Enum):
     # 三和弦
     MAJOR = ("major", "大三和弦", 4, 7)  # 大三度 + 小三度
     MINOR = ("minor", "小三和弦", 3, 7)  # 小三度 + 大三度

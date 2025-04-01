@@ -9,7 +9,7 @@ from app.core.logger import logger
 from app.models.exam import Question, SinglePitchExam, ExamType, GroupPitchExam, GroupQuestion, IntervalQuestion, \
     PitchIntervalExam
 from app.models.pitch import Pitch, PitchGroup, PITCH_GROUP_NAMES, PITCH_GROUP_RANGES, PitchInterval, Interval, \
-    PitchIntervalPair, PitchChord, Chord, PitchIntervalWithPitches, PitchIntervalType, PitchConcordanceType
+    PitchIntervalPair, PitchChord, ChordEnum, PitchIntervalWithPitches, PitchIntervalType, PitchConcordanceType
 from app.models.pitch_setting import AnswerMode, ConcordanceChoice
 
 
@@ -150,7 +150,7 @@ class PitchService:
 
             index = 1
             # 为每个音程创建缓存
-            for chord in Chord:
+            for chord in ChordEnum:
                 intervals = chord.intervals
                 pitch_pairs: List[List] = []
                 # 遍历所有音高，找出符合当前音程的音高对
