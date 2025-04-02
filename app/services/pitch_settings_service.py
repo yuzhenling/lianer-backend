@@ -116,6 +116,31 @@ class PitchSettingsService:
         )
         return pitch_interval_setting
 
+    async def get_pitch_chord_settings(self) -> PitchChordSetting:
+        #default
+        answer_mode = [ChordAnswerMode.FIRST.to_dict(),ChordAnswerMode.SECOND.to_dict()]
+        play_mode = [ChordPlayMode.COMBINE.to_dict(),ChordPlayMode.SINGLE.to_dict()]
+        fix_mode = [TransferSetMode.ORIGIN.to_dict(), TransferSetMode.TRANSFER_1.to_dict(),TransferSetMode.TRANSFER_2.to_dict(),TransferSetMode.TRANSFER_3.to_dict()]
+
+        chords = await pitch_service.get_all_chords()
+        interval_list: List[dict[int, str]] = []
+        for interval in intervals:
+            interval_dict = {"id":interval.id,"name":interval.name,"type_id":interval.type_id,"type_name": interval.type_name,"semitone_number":interval.semitone_number}
+            interval_list.append(interval_dict)
+
+        pitch_interval_setting = PitchIntervalSetting(
+            answer_mode=answer_mode,
+            concordance_choice=concordance_choice,
+            quality_choice=interval_list,
+            play_mode=play_mode,
+            interval_list=interval_list,
+            fix_mode_enabled=False,
+            fix_mode=fix_mode,
+            fix_mode_vals=fix_mode_vals,
+
+        )
+        return pitch_interval_setting
+
 
 
 pitch_settings_service = PitchSettingsService()
