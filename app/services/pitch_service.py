@@ -2,6 +2,7 @@ import random
 from dataclasses import replace
 from typing import Dict, List, Any
 
+from numba.core.event import start_event
 from sqlalchemy.orm import Session
 
 from app.api.v1.schemas.request.pitch_request import PitchIntervalSettingRequest
@@ -153,6 +154,7 @@ class PitchService:
             for chord in ChordEnum:
                 intervals = chord.intervals
                 pitch_pairs: List[List] = []
+                is_three = True if chord.cn_value.__contains__("三") else False
                 # 遍历所有音高，找出符合当前音程的音高对
                 for base_pitch in self.PITCH_CACHE.values():
                     pitch_chord_pair = []
@@ -169,10 +171,10 @@ class PitchService:
                     # 创建音程对象并缓存
                     pitch_chord = PitchChord(
                         index = index,
-                        value = chord.value,
-                        cn_value = chord.cn_value,
-                        list = pitch_pairs,
+                        name = chord.cn_value,
+                        pair = pitch_pairs,
                         count = len(pitch_pairs),
+                        is_three = is_three,
                     )
                     self.PITCH_CHORD_CACHE[index] = pitch_chord
                 index += 1

@@ -6,9 +6,10 @@ from sqlalchemy.orm import Session
 
 from app.core.logger import logger
 from app.models.pitch import Pitch, PitchIntervalType, PitchInterval, PitchConcordanceType, PitchChordType, \
-    PitchChordTypeMapping
+    PitchChordTypeMapping, ChordEnum
 from app.models.vip import Vip, VipLevel
 from app.constants.constant import PIANO_KEYS_MAPPING
+from app.services.pitch_service import pitch_service
 
 
 def init_vip_levels(db: Session):
@@ -296,17 +297,27 @@ def init_pitch_chord_type(db: Session):
         db.add(type)
     db.commit()
 
-def init_pitch_chord(db: Session):
+def init_pitch_chord(db: Session, types: List[PitchChordType]):
     types = db.query(PitchChordTypeMapping).all()
     if types:
         logger.info("PitchChordTypeMapping already initialized, skipping...")
         return
 
-    types_data = {1: "三和弦", 2: "七和弦"}
-    for key, value in types_data.items():
-        type = PitchChordTypeMapping(
-            id=key,
-            name=value,
+    id3 = types[0].id if types[0].name.__contains__("三") else types[1].id
+    id7 = types[1].id if types[1].name.__contains__("三") else types[0].id
+    index = 1
+    for chord in ChordEnum:
+        intervals = chord.intervals
+        is_three = True if chord.cn_value.__contains__("三") else False
+        type_id = id3 if is_three else id7
+        pitch_chord = PitchChordTypeMapping(
+            id = index,
+            name=chord.cn_value,
+            simple_name=str.replace(chord.cn_value,"和弦", ""),
+            type_id=type_id,
+            interval_1=chord.intervals[0],
+            interval_2=chord.intervals[1],
+            interval_3=chord.intervals[2] if chord.intervals[2] else None,
         )
-        db.add(type)
+        index += 1
     db.commit()

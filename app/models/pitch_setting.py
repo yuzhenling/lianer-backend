@@ -153,3 +153,11 @@ class PitchIntervalSetting:
 
 @dataclass
 class PitchChordSetting():
+    answer_mode: List[dict[str, Any]]
+    chord_choice: List[dict[str, Any]]
+    quality_choice: List[dict[str, Any]]
+    play_mode: List[dict[str, Any]]
+    interval_list: List[dict[str, Any]]
+    fix_mode_enabled: bool
+    fix_mode: List[dict[str, Any]]
+    fix_mode_vals: List[str]

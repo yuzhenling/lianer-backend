@@ -1,6 +1,7 @@
 import enum
 from dataclasses import dataclass
 
+from librosa.core import intervals
 from sqlalchemy import Column, Integer, String, DateTime, Float, Enum as SQLEnum, ForeignKey, Boolean
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
@@ -211,9 +212,9 @@ class PitchChordTypeMapping(Base):
     interval_1 = Column(Integer, nullable=False)
     interval_2 = Column(Integer, nullable=False)
     interval_3 = Column(Integer, nullable=True)
-    pitch_id1 = Column(Integer, nullable=False)
-    pitch_id2 = Column(Integer, nullable=False)
-    pitch_id3 = Column(Integer, nullable=True)
+    # pitch_id1 = Column(Integer, nullable=False)
+    # pitch_id2 = Column(Integer, nullable=False)
+    # pitch_id3 = Column(Integer, nullable=True)
 
 
 
@@ -226,7 +227,7 @@ class PitchChordTypeMapping(Base):
 #     MAJOR_THIRD = ("major_third", "大三度")
 #     PERFECT_FOURTH = ("perfect_fourth", "纯四度")
 #     TRITONE = ("tritone", "增四度/减五度")
-#     PERFECT_FIFTH = ("perfect_fifth", "纯五度")
+#     PERFECT_FIFTH = ("perfect_fiftyth", "纯五度")
 #     MINOR_SIXTH = ("minor_sixth", "小六度")
 #     MAJOR_SIXTH = ("major_sixth", "大六度")
 #     MINOR_SEVENTH = ("minor_seventh", "小七度")
@@ -300,12 +301,13 @@ class ChordEnum(enum.Enum):
 
 # 和弦模型
 class PitchChord:
-    def __init__(self, index: int, value: str, cn_value: str, list: List[List], count: int) -> None:
+    def __init__(self, index: int, name: str, pair: List[List], count: int, is_three: bool) -> None:
         self.index = index
-        self.value = value
-        self.cn_value = cn_value
-        self.list = list
+        self.name = name
+        self.pair = pair
         self.count = count
+        self.is_three = is_three
+
 
 
 

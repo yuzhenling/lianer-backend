@@ -8,6 +8,8 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/db/init_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/db/init_data.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/models/pitch.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/pitch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/pitch_setting.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/pitch_setting.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/services/pitch_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/pitch_service.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -157,7 +159,7 @@
       <workItem from="1743303792146" duration="22403000" />
       <workItem from="1743384562947" duration="25265000" />
       <workItem from="1743473248070" duration="3750000" />
-      <workItem from="1743561615913" duration="1639000" />
+      <workItem from="1743561615913" duration="4904000" />
     </task>
     <servers />
   </component>
@@ -185,17 +187,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app/services/pitch_service.py</url>
-          <line>350</line>
+          <line>353</line>
           <option name="timeStamp" value="15" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app/services/pitch_service.py</url>
-          <line>346</line>
+          <line>349</line>
           <option name="timeStamp" value="19" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app/services/pitch_service.py</url>
-          <line>470</line>
+          <line>473</line>
           <option name="timeStamp" value="20" />
         </line-breakpoint>
       </breakpoints>

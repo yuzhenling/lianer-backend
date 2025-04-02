@@ -42,7 +42,7 @@ async def lifespan(app: FastAPI):
 
             init_intervals(db)
 
-            init_chord(db)
+            # init_chord(db)
 
             logger.info("Loading VIP cache...")
             await vip_service.load_vip_cache(db)
