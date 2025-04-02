@@ -10,7 +10,8 @@ from app.core.logger import logger
 from app.models.exam import Question, SinglePitchExam, ExamType, GroupPitchExam, GroupQuestion, IntervalQuestion, \
     PitchIntervalExam
 from app.models.pitch import Pitch, PitchGroup, PITCH_GROUP_NAMES, PITCH_GROUP_RANGES, PitchInterval, Interval, \
-    PitchIntervalPair, PitchChord, ChordEnum, PitchIntervalWithPitches, PitchIntervalType, PitchConcordanceType
+    PitchIntervalPair, PitchChord, ChordEnum, PitchIntervalWithPitches, PitchIntervalType, PitchConcordanceType, \
+    PitchChordTypeMapping, PitchChordType
 from app.models.pitch_setting import AnswerMode, ConcordanceChoice
 
 
@@ -22,6 +23,7 @@ class PitchService:
     PITCH_INTERVAL_CONCORDANCE_TYPE_CACHE: Dict[int, PitchConcordanceType] = {}  # ID -> PitchInterval对象的缓存
     PITCH_INTERVAL_CACHE: Dict[int, PitchIntervalWithPitches] = {}  # ID -> PitchInterval对象的缓存
     PITCH_INTERVAL_HARMONIC_CACHE: Dict[int, List[Pitch]] = {}  # ID -> PitchInterval对象的缓存
+    PITCH_CHORD_TYPE_CACHE: Dict[int, PitchChordType] = {}  # ID -> PitchChord对象的缓存
     PITCH_CHORD_CACHE: Dict[int, PitchChord] = {}  # ID -> PitchChord对象的缓存
 
     def __new__(cls):
@@ -143,46 +145,70 @@ class PitchService:
 
 
 
-    def build_pitch_chord_cache(self):
+    def build_pitch_chord_cache(self, db: Session):
         """构建和弦缓存"""
         try:
+            self.build_pitch_chord_type_cache(db)
             # 清空现有音程缓存
             self.PITCH_CHORD_CACHE.clear()
 
-            index = 1
+
+            pitch_chords = db.query(PitchChordTypeMapping).all()
+
             # 为每个音程创建缓存
-            for chord in ChordEnum:
-                intervals = chord.intervals
+            for chord in pitch_chords:
+                interval1 = chord.interval_1
+                interval2 = chord.interval_2
+                interval3 = chord.interval_3
                 pitch_pairs: List[List] = []
-                is_three = True if chord.cn_value.__contains__("三") else False
+
                 # 遍历所有音高，找出符合当前音程的音高对
                 for base_pitch in self.PITCH_CACHE.values():
                     pitch_chord_pair = []
                     pitch_chord_pair.append(base_pitch)
-                    for interval in intervals:
-                        target_number = base_pitch.pitch_number + interval
-                        if target_number <= 88:  # 确保不超过钢琴最高音
-                            if target_pitch := self.PITCH_CACHE.get(target_number):
-                                pitch_chord_pair.append(target_pitch)
-                    if pitch_chord_pair and len(pitch_chord_pair) == len(intervals)+1:
+                    second_pitch_number = base_pitch.pitch_number + interval1
+                    third_pitch_number = base_pitch.pitch_number + interval2
+                    fourth_pitch_number = base_pitch.pitch_number + interval3 if interval3 is not None else None
+
+                    if second_pitch_number <= 88:  # 确保不超过钢琴最高音
+                        if second_pitch := self.PITCH_CACHE.get(second_pitch_number):
+                            pitch_chord_pair.append(second_pitch)
+                        if third_pitch_number <= 88:
+                            if third_pitch := self.PITCH_CACHE.get(third_pitch_number):
+                                pitch_chord_pair.append(third_pitch)
+                            if fourth_pitch_number is not None and fourth_pitch_number <= 88:
+                                if fourth_pitch := self.PITCH_CACHE.get(fourth_pitch_number):
+                                    pitch_chord_pair.append(fourth_pitch)
+                    else:
+                        continue
+
+                    if pitch_chord_pair and len(pitch_chord_pair) == chord.get_interval_count() +1:
                         pitch_pairs.append(pitch_chord_pair)
 
                 if pitch_pairs:
                     # 创建音程对象并缓存
                     pitch_chord = PitchChord(
-                        index = index,
-                        name = chord.cn_value,
+                        index = chord.id,
+                        name = chord.name,
                         pair = pitch_pairs,
                         count = len(pitch_pairs),
-                        is_three = is_three,
+                        is_three = True if self.PITCH_CHORD_TYPE_CACHE[chord.type_id].name.__contains__("three") else False,
+                        simple_name = chord.simple_name,
+                        type_id = chord.type_id,
+                        type_name = self.PITCH_CHORD_TYPE_CACHE[chord.type_id].name,
                     )
-                    self.PITCH_CHORD_CACHE[index] = pitch_chord
-                index += 1
+                    self.PITCH_CHORD_CACHE[chord.id] = pitch_chord
 
             logger.info(f"Successfully built Pitch chord cache with {len(self.PITCH_CHORD_CACHE)} intervals")
         except Exception as e:
             logger.error("Failed to build Pitch chord cache", exc_info=True)
             raise e
+
+    def build_pitch_chord_type_cache(self, db: Session):
+        self.PITCH_CHORD_TYPE_CACHE.clear()
+        chord_types = db.query(PitchChordType).all()
+        for chord_type in chord_types:
+            self.PITCH_CHORD_TYPE_CACHE[chord_type.id] = chord_type
 
     async def get_all_pitch(self) -> List[Pitch]:
         try:

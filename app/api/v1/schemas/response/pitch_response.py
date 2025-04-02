@@ -103,10 +103,13 @@ class PitchIntervalResponse(BaseModel):
 
 class PitchChordResponse(BaseModel):
     index: int
-    value: str
-    cn_value: str
-    list: List[List[PitchResponse]]
+    name: str
+    simple_name: str
+    pair: List[List[PitchResponse]]
     count: int
+    is_three:bool
+    type_id: int
+    type_name: str
     model_config = {
         "from_attributes": True,
         "arbitrary_types_allowed": True,

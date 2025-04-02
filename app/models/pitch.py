@@ -216,6 +216,11 @@ class PitchChordTypeMapping(Base):
     # pitch_id2 = Column(Integer, nullable=False)
     # pitch_id3 = Column(Integer, nullable=True)
 
+    def get_interval_count(self) -> int:
+        if self.interval_3 is not None:
+            return 3
+        return 2
+
 
 
 #TODO
@@ -272,8 +277,8 @@ class ChordEnum(enum.Enum):
     # 三和弦
     MAJOR = ("major", "大三和弦", 4, 7)  # 大三度 + 小三度
     MINOR = ("minor", "小三和弦", 3, 7)  # 小三度 + 大三度
-    AUGMENTED = ("augmented", "增三和弦", 4, 8)  # 大三度 + 大三度
     DIMINISHED = ("diminished", "减三和弦", 3, 6)  # 小三度 + 小三度
+    AUGMENTED = ("augmented", "增三和弦", 4, 8)  # 大三度 + 大三度
 
     # 七和弦
     MAJOR_SEVENTH = ("major_seventh", "大七和弦", 4, 7, 11)  # 大三度 + 小三度 + 大三度
@@ -282,7 +287,8 @@ class ChordEnum(enum.Enum):
     MINOR_MAJOR_SEVENTH = ("minor_major_seventh", "小大七和弦", 3, 7, 11)  # 小三度 + 小三度 + 小三度
     HALF_DIMINISHED = ("half_diminished", "半减七和弦", 3, 6, 10)  # 小三度 + 小三度 + 大三度
     DIMINISHED_SEVENTH = ("diminished_seventh", "减七和弦", 3, 6, 9)  # 小三度 + 小三度 + 小三度
-    AUGMENTED_MAJOR_SEVENTH = ("diminished_seventh", "减七和弦", 4, 8, 11)  # 小三度 + 小三度 + 小三度
+    AUGMENTED_MAJOR_SEVENTH = ("diminished_seventh", "增大七和弦", 4, 8, 11)  # 小三度 + 小三度 + 小三度
+
 
     #
     # # 九和弦
@@ -301,12 +307,16 @@ class ChordEnum(enum.Enum):
 
 # 和弦模型
 class PitchChord:
-    def __init__(self, index: int, name: str, pair: List[List], count: int, is_three: bool) -> None:
+    def __init__(self, index: int, name: str, pair: List[List], count: int, is_three: bool, simple_name: str, type_id: int, type_name: str) -> None:
         self.index = index
         self.name = name
         self.pair = pair
         self.count = count
         self.is_three = is_three
+        self.simple_name = simple_name
+        self.type_id = type_id
+        self.type_name = type_name
+
 
 
 

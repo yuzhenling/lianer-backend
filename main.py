@@ -9,7 +9,7 @@ from starlette.staticfiles import StaticFiles
 from app.core.config import settings
 from app.middleware.logging import LoggingMiddleware
 from app.api.v1 import auth_api, pitch_api, order_api, vip_api, piano_pitch_api, rhythm_api
-from app.db.init_data import init_vip_levels, init_pitches, init_intervals
+from app.db.init_data import init_vip_levels, init_pitches, init_intervals, init_pitch_chord
 from app.db.base import SessionLocal, Base, engine
 from app.core.logger import logger
 
@@ -42,7 +42,7 @@ async def lifespan(app: FastAPI):
 
             init_intervals(db)
 
-            # init_chord(db)
+            init_pitch_chord(db)
 
             logger.info("Loading VIP cache...")
             await vip_service.load_vip_cache(db)
@@ -57,7 +57,7 @@ async def lifespan(app: FastAPI):
             pitch_service.build_pitch_interval_cache(db)
 
             logger.info("building Pitch Chord cache...")
-            pitch_service.build_pitch_chord_cache()
+            pitch_service.build_pitch_chord_cache(db)
         finally:
             db.close()
     except Exception as e:
