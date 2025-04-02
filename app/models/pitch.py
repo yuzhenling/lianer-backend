@@ -196,6 +196,7 @@ class Interval(str, enum.Enum):
     MAJOR_FOURTEENTH = "major_fourteenth"   # 大十四度
     PERFECT_FIFTEENTH = "perfect_fifteenth" # 纯十五度
 
+#
 class PitchChordType(Base):
     __tablename__ = "pitch_chord_type"
     id = Column(Integer, primary_key=True)
@@ -205,7 +206,16 @@ class PitchChordTypeMapping(Base):
     __tablename__ ="pitch_chord_type_mapping"
     id = Column(Integer, primary_key=True)
     name = Column(String(20), nullable=False)
+    simple_name = Column(String(20), nullable=False)
     type_id = Column(Integer, nullable=False)
+    interval_1 = Column(Integer, nullable=False)
+    interval_2 = Column(Integer, nullable=False)
+    interval_3 = Column(Integer, nullable=True)
+    pitch_id1 = Column(Integer, nullable=False)
+    pitch_id2 = Column(Integer, nullable=False)
+    pitch_id3 = Column(Integer, nullable=True)
+
+
 
 #TODO
 # class Interval(str, Enum):

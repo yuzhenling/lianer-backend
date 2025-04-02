@@ -5,7 +5,8 @@ from typing import List
 from sqlalchemy.orm import Session
 
 from app.core.logger import logger
-from app.models.pitch import Pitch, PitchIntervalType, PitchInterval, PitchConcordanceType
+from app.models.pitch import Pitch, PitchIntervalType, PitchInterval, PitchConcordanceType, PitchChordType, \
+    PitchChordTypeMapping
 from app.models.vip import Vip, VipLevel
 from app.constants.constant import PIANO_KEYS_MAPPING
 
@@ -234,6 +235,8 @@ def init_intervals(db: Session):
         db.rollback()
         print(f"Error initializing pitch data: {str(e)}")
         raise
+
+
 def get_concordance_type(semitone_number: int, concordance_types: List[PitchConcordanceType]) -> int:
     concordance = [0, 12, 5, 7, 12, 24, 17, 19]
     concordance_part = [4, 3, 9, 8, 15, 16, 20, 21]
@@ -276,4 +279,34 @@ def init_concordance_type(db: Session):
         )
         db.add(type)
 
+    db.commit()
+
+def init_pitch_chord_type(db: Session):
+    types = db.query(PitchChordType).all()
+    if types:
+        logger.info("PitchChordType already initialized, skipping...")
+        return
+
+    types_data = {1: "三和弦", 2: "七和弦"}
+    for key, value in types_data.items():
+        type = PitchChordType(
+            id=key,
+            name=value,
+        )
+        db.add(type)
+    db.commit()
+
+def init_pitch_chord(db: Session):
+    types = db.query(PitchChordTypeMapping).all()
+    if types:
+        logger.info("PitchChordTypeMapping already initialized, skipping...")
+        return
+
+    types_data = {1: "三和弦", 2: "七和弦"}
+    for key, value in types_data.items():
+        type = PitchChordTypeMapping(
+            id=key,
+            name=value,
+        )
+        db.add(type)
     db.commit()
