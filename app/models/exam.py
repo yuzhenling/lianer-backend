@@ -18,6 +18,7 @@ class ExamType(Enum):
     SINGLE = ("single", "单音听辨", 20)
     GROUP = ("group", "音组听辨", 20)
     INTERVAL = ("interval", "音程听辨", 20)
+    CHORD = ("chord", "和弦听辨", 20)
     def __init__(self, value, display_value, question_num):
         self._value = value  # 设置枚举值
         self.display_value = display_value  # 设置描述
@@ -75,3 +76,10 @@ class PitchIntervalExam:
     wrong_number: int = 0
     created_at: datetime = datetime.now()
     completed_at: Optional[datetime] = None
+
+@dataclass
+class ChordQuestion:
+    id: int
+    answer_id: int
+    answer_name: str
+    question: List[List]

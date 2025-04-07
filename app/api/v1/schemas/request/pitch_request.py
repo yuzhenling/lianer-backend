@@ -64,3 +64,16 @@ class PitchIntervalSettingRequest(BaseModel):
 
         }
     }
+
+class PitchChordSettingRequest(BaseModel):
+    answer_mode: int = Field(..., ge=1, le=2)
+    play_mode: int = Field(..., ge=1, le=2)
+    chord_list: List[int]
+    transfer_set: int
+    model_config = {
+        "from_attributes": True,
+        "arbitrary_types_allowed": True,
+        "json_schema_extra": {
+
+        }
+    }

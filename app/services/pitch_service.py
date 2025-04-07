@@ -5,14 +5,14 @@ from typing import Dict, List, Any
 from numba.core.event import start_event
 from sqlalchemy.orm import Session
 
-from app.api.v1.schemas.request.pitch_request import PitchIntervalSettingRequest
+from app.api.v1.schemas.request.pitch_request import PitchIntervalSettingRequest, PitchChordSettingRequest
 from app.core.logger import logger
 from app.models.exam import Question, SinglePitchExam, ExamType, GroupPitchExam, GroupQuestion, IntervalQuestion, \
     PitchIntervalExam
 from app.models.pitch import Pitch, PitchGroup, PITCH_GROUP_NAMES, PITCH_GROUP_RANGES, PitchInterval, Interval, \
     PitchIntervalPair, PitchChord, ChordEnum, PitchIntervalWithPitches, PitchIntervalType, PitchConcordanceType, \
     PitchChordTypeMapping, PitchChordType
-from app.models.pitch_setting import AnswerMode, ConcordanceChoice
+from app.models.pitch_setting import AnswerMode, ConcordanceChoice, ChordAnswerMode
 
 
 class PitchService:
@@ -561,6 +561,68 @@ class PitchService:
             questions.append(question)
 
         return questions
+
+    def generate_chord_exam_first(self, chord_list: List[int], question_num: int, play_mode: int, transfer_set: int) -> List[dict]:
+        questions = []
+        # 从PITCH_INTERVAL_CACHE中获取所有可用的音程
+        available_chords = list(self.PITCH_CHORD_CACHE.keys())
+
+        # 过滤出指定音程的条目
+        filtered_chords = []
+        for id in chord_list:
+            if id in available_chords:
+                chord = self.PITCH_CHORD_CACHE.get(id)
+                if chord:
+                    filtered_chords.append(chord)
+
+        if not filtered_chords:
+            raise ValueError("No valid chords found in the cache")
+
+        # 生成20道题目
+        for i in range(question_num):
+            chord: PitchChord = random.choice(filtered_chords)
+            pair: List[List] = random.choice(chord.pair)
+
+            # 创建题目
+            question = IntervalQuestion(
+                id=i + 1,
+                answer_id=chord.index,
+                answer_name=chord.simple_name,
+                question=pair,
+            )
+            questions.append(question)
+
+        return questions
+
+    async def generate_chord_exam(self, pitch_chord_setting: PitchChordSettingRequest) -> PitchIntervalExam:
+        answer_mode_id = pitch_chord_setting.answer_mode
+        exam_type = ExamType.CHORD.display_value
+        question_num: int = ExamType.CHORD.question_num
+        questions = []
+        q = answer_mode_id
+        if answer_mode_id == ChordAnswerMode.FIRST.to_dict().get("index"):
+            answer_choices = pitch_chord_setting.chord_list
+            # 生成检测题
+            questions = self.generate_chord_exam_first(answer_choices, question_num, 1, 1)
+
+        elif answer_mode_id == ChordAnswerMode.SECOND.to_dict().get("index"):
+            interval_ids = self.generate_default_interval_choices()
+            if pitch_interval_setting.interval_list:
+                interval_ids = pitch_interval_setting.interval_list
+            questions = self.generate_interval_exam_quality(interval_ids, question_num)
+
+
+        pie = PitchIntervalExam(
+            id=0,
+            user_id=0,
+            exam_type=ExamType.INTERVAL._value,
+            question_num=ExamType.INTERVAL.question_num,
+            questions=questions,
+            correct_number=0,
+            wrong_number=0,
+        )
+
+        return pie
 
     # def create_student_exam(self, user_id: int, exam_id: int) -> StudentExam:
     #     """创建学生考试记录"""
