@@ -13,7 +13,7 @@ from app.api.v1.schemas.request.pitch_request import PitchSettingRequest, PitchG
     PitchIntervalSettingRequest
 from app.api.v1.schemas.response.pitch_response import PitchSingleSettingResponse, PitchResponse, PitchIntervalResponse, \
     PitchChordResponse, PitchGroupResponse, SinglePitchExamResponse, PitchGroupSettingResponse, GroupPitchExamResponse, \
-    PitchIntervalSettingResponse, PitchIntervalExamResponse
+    PitchIntervalSettingResponse, PitchIntervalExamResponse, PitchChordSettingResponse
 from app.core.i18n import get_language, i18n
 from app.core.logger import logger
 from app.services.pitch_service import pitch_service
@@ -389,6 +389,25 @@ async def get_pitch_listen_interval_exam(
         return exam
     except Exception as e:
         logger.error(f"Error in get_pitch_listen_single_exam: {str(e)}\nTraceback: {traceback.format_exc()}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
+        )
+
+@router.get("/piano/pitch/chord/setting")
+async def get_pitch_chord_settings(
+    request: Request,
+    current_user: User = Depends(get_current_user)
+)-> PitchChordSettingResponse:
+    lang = get_language(request)
+    try:
+        """获取所有信息"""
+        chord_setting = await pitch_settings_service.get_pitch_chord_settings()
+        if not chord_setting:
+            return None
+        return chord_setting
+    except Exception as e:
+        logger.error(f"Error in get_pitch_chord_settings: {str(e)}\nTraceback: {traceback.format_exc()}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)

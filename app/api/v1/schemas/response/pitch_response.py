@@ -447,3 +447,137 @@ class PitchIntervalExamResponse(BaseModel):
     questions: List[IntervalQuestionResponse]
     correct_number: int = 0
     wrong_number: int = 0
+
+class PitchChordSettingResponse(BaseModel):
+    answer_mode: List[dict[str, Any]]
+    play_mode: List[dict[str, Any]]
+    chord_list: List[dict[str, Any]]
+    transfer_set: List[dict[str, Any]]
+    model_config = {
+        "from_attributes": True,
+        "arbitrary_types_allowed": True,
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "answer_mode": [
+                        {
+                            "index": 1,
+                            "display_value": "听性质"
+                        },
+                        {
+                            "index": 2,
+                            "display_value": "听音高"
+                        }
+                    ],
+                    "play_mode": [
+                        {
+                            "index": 1,
+                            "display_value": "柱式"
+                        },
+                        {
+                            "index": 2,
+                            "display_value": "分解"
+                        }
+                    ],
+                    "chord_list": [
+                        {
+                            "index": 1,
+                            "name": "大三和弦",
+                            "simple_name": "大三",
+                            "type_id": 1,
+                            "type_name": "三和弦"
+                        },
+                        {
+                            "index": 2,
+                            "name": "小三和弦",
+                            "simple_name": "小三",
+                            "type_id": 1,
+                            "type_name": "三和弦"
+                        },
+                        {
+                            "index": 3,
+                            "name": "减三和弦",
+                            "simple_name": "减三",
+                            "type_id": 1,
+                            "type_name": "三和弦"
+                        },
+                        {
+                            "index": 4,
+                            "name": "增三和弦",
+                            "simple_name": "增三",
+                            "type_id": 1,
+                            "type_name": "三和弦"
+                        },
+                        {
+                            "index": 5,
+                            "name": "大七和弦",
+                            "simple_name": "大七",
+                            "type_id": 1,
+                            "type_name": "三和弦"
+                        },
+                        {
+                            "index": 6,
+                            "name": "小七和弦",
+                            "simple_name": "小七",
+                            "type_id": 1,
+                            "type_name": "三和弦"
+                        },
+                        {
+                            "index": 7,
+                            "name": "大小七和弦",
+                            "simple_name": "大小七",
+                            "type_id": 1,
+                            "type_name": "三和弦"
+                        },
+                        {
+                            "index": 8,
+                            "name": "小大七和弦",
+                            "simple_name": "小大七",
+                            "type_id": 1,
+                            "type_name": "三和弦"
+                        },
+                        {
+                            "index": 9,
+                            "name": "半减七和弦",
+                            "simple_name": "半减七",
+                            "type_id": 1,
+                            "type_name": "三和弦"
+                        },
+                        {
+                            "index": 10,
+                            "name": "减七和弦",
+                            "simple_name": "减七",
+                            "type_id": 1,
+                            "type_name": "三和弦"
+                        },
+                        {
+                            "index": 11,
+                            "name": "增大七和弦",
+                            "simple_name": "增大七",
+                            "type_id": 1,
+                            "type_name": "三和弦"
+                        }
+                    ],
+                    "transfer_set": [
+                        {
+                            "index": 1,
+                            "display_value": "原位"
+                        },
+                        {
+                            "index": 2,
+                            "display_value": "一转位"
+                        },
+                        {
+                            "index": 3,
+                            "display_value": "二转位"
+                        },
+                        {
+                            "index": 4,
+                            "display_value": "三转位"
+                        }
+                    ]
+                }
+            ]
+
+        }
+    }

@@ -219,6 +219,6 @@ class TransferSetMode(Enum):
 @dataclass
 class PitchChordSetting:
     answer_mode: List[dict[str, Any]]
-    play_mode: List[dict[str, str]]
-    chord_list: List[dict[int, str]]
-    transfer_set: List[dict[int, str]]
+    play_mode: List[dict[str, Any]]
+    chord_list: List[dict[str, Any]]
+    transfer_set: List[dict[str, Any]]
