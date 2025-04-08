@@ -3,6 +3,7 @@ from typing import List, Literal
 from pydantic import BaseModel, Field
 
 from app.models.pitch_setting import PitchBlackKey, PitchMode
+from app.models.rhythmSettings import RhythmDifficulty, TimeSignature, MeasureCount, Tempo
 
 
 class PitchRangeRequest(BaseModel):
@@ -77,3 +78,10 @@ class PitchChordSettingRequest(BaseModel):
 
         }
     }
+
+# API请求和响应模型
+class RhythmQuestionRequest(BaseModel):
+    difficulty: RhythmDifficulty
+    time_signature: TimeSignature = TimeSignature.TWO_FOUR
+    measures_count: MeasureCount = MeasureCount.FOUR
+    tempo: Tempo = Tempo.EIGHTY

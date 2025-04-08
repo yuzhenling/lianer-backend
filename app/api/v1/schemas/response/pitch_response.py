@@ -5,7 +5,7 @@ from sqlalchemy import null
 
 from app.models.pitch import Interval
 from app.models.pitch_setting import PitchBlackKey, PitchMode
-
+from app.models.rhythmSettings import TimeSignature, RhythmDifficulty
 
 
 class PitchResponse(BaseModel):
@@ -1149,6 +1149,826 @@ class PitchChordExamResponse(BaseModel):
                     ],
                     "correct_number": 0,
                     "wrong_number": 0
+                }
+            ]
+        }
+    }
+
+class RhythmNote(BaseModel):
+    duration: float  # 音符时值：1.0=四分音符，0.5=八分音符，2.0=二分音符
+    is_rest: bool = False  # 是否是休止符
+    is_dotted: bool = False  # 是否是符点音符
+    tied_to_next: bool = False  # 是否有连音线
+
+
+class RhythmMeasure(BaseModel):
+    notes: List[RhythmNote]
+
+
+class RhythmScore(BaseModel):
+    measures: List[List[RhythmMeasure]]
+    time_signature: TimeSignature
+    tempo: int
+    is_correct: bool  # 标记是否是正确答案
+
+class RhythmQuestionResponse(BaseModel):
+    correct_answer: str  # A, B, C 或 D
+    options: List[RhythmScore]
+    tempo: int
+    time_signature: TimeSignature
+    measures_count: int
+    difficulty: RhythmDifficulty
+    model_config = {
+        "from_attributes": True,
+        "arbitrary_types_allowed": True,
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "correct_answer": "A",
+                    "options": [
+                        {
+                            "measures": [
+                                [
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            ],
+                            "time_signature": "2/4",
+                            "tempo": 80,
+                            "is_correct": "true"
+                        },
+                        {
+                            "measures": [
+                                [
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 1.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "true",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            ],
+                            "time_signature": "2/4",
+                            "tempo": 80,
+                            "is_correct": "false"
+                        },
+                        {
+                            "measures": [
+                                [
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            ],
+                            "time_signature": "2/4",
+                            "tempo": 80,
+                            "is_correct": "false"
+                        },
+                        {
+                            "measures": [
+                                [
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "true",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            },
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            ],
+                            "time_signature": "2/4",
+                            "tempo": 80,
+                            "is_correct": "false"
+                        }
+                    ],
+                    "tempo": 80,
+                    "time_signature": "2/4",
+                    "measures_count": 8,
+                    "difficulty": "medium"
+                }
+            ]
+        }
+    }
+
+class RhythmSettingResponse(BaseModel):
+    difficulties: List[str]
+    measures_counts: List[int]
+    time_signatures: List[str]
+    tempo: List[int]
+    model_config = {
+        "from_attributes": True,
+        "arbitrary_types_allowed": True,
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "difficulties": [
+                        "low",
+                        "medium",
+                        "high"
+                    ],
+                    "measures_counts": [
+                        4,
+                        6,
+                        8,
+                        10,
+                        12,
+                        16
+                    ],
+                    "time_signatures": [
+                        "2/4",
+                        "3/4",
+                        "4/4",
+                        "3/8",
+                        "6/8"
+                    ],
+                    "tempo": [
+                        40,
+                        45,
+                        50,
+                        60,
+                        80,
+                        100
+                    ]
                 }
             ]
         }

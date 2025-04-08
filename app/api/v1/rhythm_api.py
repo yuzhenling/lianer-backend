@@ -4,6 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.api.v1.auth_api import get_current_user, get_db
+from app.api.v1.schemas.request.pitch_request import RhythmQuestionRequest
+from app.api.v1.schemas.response.pitch_response import RhythmQuestionResponse, RhythmSettingResponse
 from app.models.user import User
 from app.services.rhythm_service import rhythm_service
 from app.models.rhythm import *
@@ -25,12 +27,13 @@ async def generate_rhythm_question(
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.get("/settings", response_model=dict)
+@router.get("/settings", response_model=RhythmSettingResponse)
 async def get_rhythm_settings():
     """节奏听写设置选项"""
-    return {
-        "difficulties": [d.value for d in RhythmDifficulty],
-        "measures_counts": [4, 6, 8, 10, 12, 16],
-        "time_signatures": [ts.value for ts in TimeSignature],
-        "tempo": [t.value for t in Tempo],
-    }
+    settings = RhythmSettingResponse(
+        difficulties=[d.value for d in RhythmDifficulty],
+        measures_counts= [4, 6, 8, 10, 12, 16],
+         time_signatures= [ts.value for ts in TimeSignature],
+         tempo = [t.value for t in Tempo],
+    )
+    return settings
