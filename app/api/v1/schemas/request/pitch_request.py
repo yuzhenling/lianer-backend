@@ -3,7 +3,7 @@ from typing import List, Literal
 from pydantic import BaseModel, Field
 
 from app.models.pitch_setting import PitchBlackKey, PitchMode
-from app.models.rhythmSettings import RhythmDifficulty, TimeSignature, MeasureCount, Tempo
+from app.models.rhythm_settings import RhythmDifficulty, TimeSignature, MeasureCount, Tempo
 
 
 class PitchRangeRequest(BaseModel):

@@ -6,7 +6,7 @@ from typing import List, Tuple
 from app.api.v1.schemas.request.pitch_request import RhythmQuestionRequest
 from app.api.v1.schemas.response.pitch_response import RhythmQuestionResponse, RhythmNote, RhythmMeasure, RhythmScore
 from app.models.rhythm import *
-from app.models.rhythmSettings import RhythmDifficulty, TimeSignature
+from app.models.rhythm_settings import RhythmDifficulty, TimeSignature
 
 
 class RhythmService:

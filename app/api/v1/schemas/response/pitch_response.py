@@ -5,7 +5,7 @@ from sqlalchemy import null
 
 from app.models.pitch import Interval
 from app.models.pitch_setting import PitchBlackKey, PitchMode
-from app.models.rhythmSettings import TimeSignature, RhythmDifficulty
+from app.models.rhythm_settings import TimeSignature, RhythmDifficulty
 
 
 class PitchResponse(BaseModel):
@@ -1973,3 +1973,16 @@ class RhythmSettingResponse(BaseModel):
             ]
         }
     }
+
+    class MelodyQuestionResponse(BaseModel):
+        correct_answer: str  # A, B, C 或 D
+        options: List[RhythmScore]
+        tempo: int
+        time_signature: TimeSignature
+        measures_count: int
+        difficulty: RhythmDifficulty
+        model_config = {
+            "from_attributes": True,
+            "arbitrary_types_allowed": True,
+            "json_schema_extra": {}
+        }

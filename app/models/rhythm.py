@@ -6,7 +6,7 @@ from typing import List, Optional
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, DateTime, Float, Enum as SQLEnum, JSON, func
 from app.db.base import Base
-from app.models.rhythmSettings import TimeSignature, RhythmDifficulty, MeasureCount, Tempo
+from app.models.rhythm_settings import TimeSignature, RhythmDifficulty, MeasureCount, Tempo
 
 
 
