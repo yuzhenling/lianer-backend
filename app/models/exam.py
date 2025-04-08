@@ -80,6 +80,20 @@ class PitchIntervalExam:
 @dataclass
 class ChordQuestion:
     id: int
+    play_mode: int
+    transfer_set: int
     answer_id: int
     answer_name: str
     question: List[List]
+
+@dataclass
+class PitchChordExam:
+    id: int
+    user_id: int
+    exam_type: str
+    question_num: int
+    questions: List[ChordQuestion]
+    correct_number: int = 0
+    wrong_number: int = 0
+    created_at: datetime = datetime.now()
+    completed_at: Optional[datetime] = None

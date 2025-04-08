@@ -10,10 +10,10 @@ from fastapi.responses import FileResponse
 
 from app.api.v1.auth_api import get_current_user, get_db
 from app.api.v1.schemas.request.pitch_request import PitchSettingRequest, PitchGroupSettingRequest, \
-    PitchIntervalSettingRequest
+    PitchIntervalSettingRequest, PitchChordSettingRequest
 from app.api.v1.schemas.response.pitch_response import PitchSingleSettingResponse, PitchResponse, PitchIntervalResponse, \
     PitchChordResponse, PitchGroupResponse, SinglePitchExamResponse, PitchGroupSettingResponse, GroupPitchExamResponse, \
-    PitchIntervalSettingResponse, PitchIntervalExamResponse, PitchChordSettingResponse
+    PitchIntervalSettingResponse, PitchIntervalExamResponse, PitchChordSettingResponse, PitchChordExamResponse
 from app.core.i18n import get_language, i18n
 from app.core.logger import logger
 from app.services.pitch_service import pitch_service
@@ -408,6 +408,23 @@ async def get_pitch_chord_settings(
         return chord_setting
     except Exception as e:
         logger.error(f"Error in get_pitch_chord_settings: {str(e)}\nTraceback: {traceback.format_exc()}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
+        )
+
+@router.post("/piano/pitch/chord/exam")
+async def get_pitch_listen_chord_exam(
+    request: Request,
+    pitch_chord_setting: PitchChordSettingRequest,
+    current_user: User = Depends(get_current_user)
+) -> PitchChordExamResponse:
+    lang = get_language(request)
+    try:
+        exam = await pitch_service.generate_chord_exam(pitch_chord_setting)
+        return exam
+    except Exception as e:
+        logger.error(f"Error in get_pitch_listen_chord_exam: {str(e)}\nTraceback: {traceback.format_exc()}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)

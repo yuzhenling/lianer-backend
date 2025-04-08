@@ -5,10 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="83c1f24d-9736-40eb-a780-45c9d33bfc91" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/app/models/chord_inversion.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/v1/schemas/request/pitch_request.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/schemas/request/pitch_request.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api/v1/piano_pitch_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/piano_pitch_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api/v1/schemas/response/pitch_response.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/schemas/response/pitch_response.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/models/exam.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/exam.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/services/pitch_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/pitch_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/doc/.~lock.练耳达人.docx#" beforeDir="false" afterPath="$PROJECT_DIR$/doc/.~lock.练耳达人.docx#" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/app.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/app.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/error.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/error.log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -158,7 +163,8 @@
       <workItem from="1743384562947" duration="25265000" />
       <workItem from="1743473248070" duration="3750000" />
       <workItem from="1743561615913" duration="12965000" />
-      <workItem from="1744006014599" duration="7775000" />
+      <workItem from="1744006014599" duration="7817000" />
+      <workItem from="1744072713555" duration="4490000" />
     </task>
     <servers />
   </component>
@@ -188,7 +194,7 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/shengyibaodian$shengyibaodian.coverage" NAME="shengyibaodian 覆盖结果" MODIFIED="1744028314642" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/shengyibaodian$shengyibaodian.coverage" NAME="shengyibaodian 覆盖结果" MODIFIED="1744076810183" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/shengyibaodian$ptest.coverage" NAME="ptest 覆盖结果" MODIFIED="1743416046396" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/utils" />
   </component>
 </project>
