@@ -1,10 +1,14 @@
-
+import copy
 import random
+
+from fastapi import HTTPException
+from starlette import status
 
 from app.api.v1.schemas.request.pitch_request import  MelodyQuestionRequest
 from app.api.v1.schemas.response.pitch_response import RhythmNote, RhythmMeasure, RhythmScore, \
     MelodyQuestionResponse, MelodyScorePitch, MelodyNotePitch, \
-    MelodyMeasurePitch
+    MelodyMeasurePitch, PitchResponse
+from app.core.i18n import i18n
 from app.core.logger import logger
 from app.models.melody_settings import Tonality, TonalityChoice
 from app.models.pitch import Pitch
@@ -65,6 +69,7 @@ class MelodyService:
         wrong_options = []
         for i in range(3):
             wrong_melody = self.generate_wrong_melody(
+                correct_melody,
                 request.difficulty,
                 request.time_signature,
                 request.measures_count.value,
@@ -72,7 +77,7 @@ class MelodyService:
                 request.tonality,
                 request.tonality_choice,
             )
-            wrong_options.extend(wrong_melody)
+            wrong_options.append(wrong_melody)
 
 
         return MelodyQuestionResponse(
@@ -98,7 +103,7 @@ class MelodyService:
         measures_sub = []
         patterns = self.rhythm_patterns[difficulty][time_signature]
 
-        pitch_list = self.get_pitch_list(tonality, tonality_choice)
+        pitch_list = self.get_pitch_list(tonality, tonality_choice, difficulty)
         pitch_index = 0
         pattern_selected = random.choices(patterns, k=measures_count)
         for pattern in pattern_selected:
@@ -124,21 +129,22 @@ class MelodyService:
     def generate_wrong_melody(
             self,
             correct_melody: MelodyScorePitch,
-            measures_count: int,
             difficulty: RhythmDifficulty,
             time_signature: TimeSignature,
+            measures_count: int,
+            tempo: int = 80,
             tonality: int = 1,
             tonality_choice: int = 1,
     ) -> MelodyScorePitch:
         """生成一个错误的节奏变体"""
         try:
             # 复制正确的旋律
-            wrong_melody = correct_melody.model_copy(deep=True)
+            wrong_melody = copy.deepcopy(correct_melody)
             wrong_melody.is_correct = False
 
             # 获取调式和调式选择类型
-            tonality_obj = Tonality(tonality)
-            tonality_choice_obj = TonalityChoice(tonality_choice)
+            tonality_obj = self.get_tonality(tonality)
+            tonality_choice_obj = self.get_tonality_choice(tonality_choice)
 
             # 定义可能的变化类型
             variation_types = [
@@ -158,14 +164,14 @@ class MelodyService:
                     if t != tonality_choice_obj
                 ]
                 if available_choices:
-                    new_choice = random.choice(available_choices)
+                    new_choice: TonalityChoice = random.choice(available_choices)
                     # 使用新的音阶生成旋律
                     measures = []
                     measures_sub = []
                     patterns = self.rhythm_patterns[difficulty][time_signature]
                     pattern_selected = random.choices(patterns, k=measures_count)
 
-                    pitch_list = self.get_pitch_list(tonality, new_choice)
+                    pitch_list = self.get_pitch_list(tonality, new_choice.get_index(), difficulty)
                     pitch_index = 0
                     for pattern in pattern_selected:
                         notes = []
@@ -187,21 +193,28 @@ class MelodyService:
                     if t != tonality_obj
                 ]
                 if available_tonalities:
-                    new_tonality = random.choice(available_tonalities)
+                    new_tonality:Tonality = random.choice(available_tonalities)
                     # 使用新的调式生成旋律
                     measures = []
                     measures_sub = []
                     patterns = self.rhythm_patterns[difficulty][time_signature]
                     pattern_selected = random.choices(patterns, k=measures_count)
 
-                    pitch_list = self.get_pitch_list(new_tonality, tonality_choice)
+                    pitch_list = self.get_pitch_list(new_tonality.get_index(), tonality_choice, difficulty)
                     pitch_index = 0
                     for pattern in pattern_selected:
                         notes = []
                         for duration in pattern:
+                            pitch = pitch_list[pitch_index % len(pitch_list)]
+
                             notes.append(MelodyNotePitch(
                                 duration=duration,
-                                pitch=pitch_list[pitch_index % len(pitch_list)],
+                                pitch=PitchResponse(
+                                    id= pitch.id,
+                                    pitch_number=pitch.pitch_number,
+                                    name=pitch.name,
+                                    alias=pitch.alias,
+                                ),
                             ))
                             pitch_index += 1
                         measures_sub.append(MelodyMeasurePitch(notes=notes))
@@ -209,7 +222,8 @@ class MelodyService:
                     wrong_melody.measures = measures
 
             elif variation_type == 'add_accidental':
-                sub = wrong_melody.measures
+                ms = wrong_melody.measures
+                sub = random.choice(ms)
                 mmp = random.choice(sub)
                 origin_notes: List[MelodyNotePitch] = mmp.notes
 
@@ -233,13 +247,14 @@ class MelodyService:
                 measures_sub = []
                 patterns = self.rhythm_patterns[difficulty][time_signature]
                 pattern_selected = random.choices(patterns, k=measures_count)
-                pitch_list = self.get_pitch_list(tonality, tonality_choice)
+                pitch_list = self.get_pitch_list(tonality, tonality_choice, difficulty)
 
                 pitch_index = 0
                 for pattern in pattern_selected:
                     notes = []
                     for duration in pattern:
-                        pitch: Pitch = pitch_list[pitch_index % len(pitch_list)],
+                        pitch_t = pitch_list[pitch_index%len(pitch_list)],
+                        pitch:Pitch = pitch_t[0]
                         change_pitch = None
                         # 随机决定是否移动八度
                         if random.random() < 0.5:  # 30%的概率移动八度
@@ -259,21 +274,27 @@ class MelodyService:
                 measures.append(measures_sub)
                 wrong_melody.measures = measures
 
-                return wrong_melody
+            return wrong_melody
         except Exception as e:
             logger.error(f"Error generating wrong melody: {str(e)}")
 
     def get_pitch_list(self, tonality:int, tonality_choice: int, difficulty: RhythmDifficulty) -> List[Pitch]:
-        t = Tonality(tonality)
-        choice = TonalityChoice(tonality_choice)
+        t = self.get_tonality(tonality)
+        choice = self.get_tonality_choice(tonality_choice)
         root_note = t.get_root_note()
         interval_nums = choice.get_interval_nums()
-        pitch_list = []
+        pitch_list:List[Pitch] = []
         num = random.randint(1,7)
         for interval_num in interval_nums:
             pitch_name = f'{root_note}{num}'#TODO
-            pitch = pitch_service.get_pitch_by_name(pitch_name)
-            pitch = pitch_service.get_pitch_by_number(pitch.number+interval_num)
+            pitches = pitch_service.get_pitch_by_name(pitch_name)
+            if not pitches and len(pitches) != 1:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="Not Found Pitch"
+                )
+            pitch = pitches[0]
+            pitch = pitch_service.get_pitch_by_number(pitch.pitch_number+interval_num)
             pitch_list.append(pitch)
 
         if difficulty == RhythmDifficulty.MEDIUM:
@@ -283,9 +304,7 @@ class MelodyService:
         elif difficulty == RhythmDifficulty.HIGH:
             pitch_list = random.sample(pitch_list, len(pitch_list))
 
-
         return pitch_list
-
 
 
     def _is_unique_rhythm(self, new_rhythm: RhythmScore, existing_rhythms: List[RhythmScore]) -> bool:
@@ -315,5 +334,15 @@ class MelodyService:
                         return False
                     
         return True
+
+    def get_tonality(self, index: int) -> Tonality:
+        for tonality in Tonality:
+            if tonality._index == index:
+                return tonality
+
+    def get_tonality_choice(self, index: int) -> TonalityChoice:
+        for tc in TonalityChoice:
+            if tc._index == index:
+                return tc
 
 melody_service = MelodyService()

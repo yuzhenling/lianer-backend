@@ -1985,33 +1985,7 @@ class MelodySettingResponse(RhythmSettingResponse):
         }
     }
 
-class MelodyQuestionResponse(BaseModel):
-    correct_answer: str  # A, B, C 或 D
-    options: List[RhythmScore]
-    tempo: int
-    time_signature: TimeSignature
-    measures_count: int
-    difficulty: RhythmDifficulty
-    model_config = {
-        "from_attributes": True,
-        "arbitrary_types_allowed": True,
-        "json_schema_extra": {}
-    }
 
-class MelodyQuestionResponse(BaseModel):
-    correct_answer: str  # A, B, C 或 D
-    options: List[RhythmScore]
-    tempo: int
-    time_signature: TimeSignature
-    measures_count: int
-    difficulty: RhythmDifficulty
-    model_config = {
-        "from_attributes": True,
-        "arbitrary_types_allowed": True,
-        "json_schema_extra": {
-
-        }
-    }
 
 class MelodyNotePitch(RhythmNote):
     pitch: PitchResponse
@@ -2025,3 +1999,17 @@ class MelodyScorePitch(BaseModel):
     tempo: int
     is_correct: bool  # 标记是否是正确答案
 
+class MelodyQuestionResponse(BaseModel):
+    correct_answer: MelodyScorePitch
+    options: List[MelodyScorePitch]
+    tempo: int
+    time_signature: TimeSignature
+    measures_count: int
+    difficulty: RhythmDifficulty
+    model_config = {
+        "from_attributes": True,
+        "arbitrary_types_allowed": True,
+        "json_schema_extra": {
+
+        }
+    }

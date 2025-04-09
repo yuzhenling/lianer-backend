@@ -63,6 +63,8 @@ class Tonality(enum.Enum):
         }
     def get_root_note(self):
         return self.root_note
+    def get_index(self):
+        return self._index
 
 class TonalityChoice(enum.Enum):
     # 大调 (Major)
@@ -90,3 +92,6 @@ class TonalityChoice(enum.Enum):
         }
     def get_interval_nums(self):
         return self.interval_nums
+
+    def get_index(self):
+        return self._index
