@@ -218,14 +218,14 @@ class PitchService:
             logger.error("Failed to load Pitch cache", exc_info=True)
             raise e
 
-    async def get_pitch_by_number(self, number: int) -> Pitch:
+    def get_pitch_by_number(self, number: int) -> Pitch:
         try:
             return self.PITCH_CACHE[number]
         except Exception as e:
             logger.error("Failed to load Pitch cache", exc_info=True)
             raise e
 
-    async def get_pitch_by_name(self, name: str) -> List[Pitch]:
+    def get_pitch_by_name(self, name: str) -> List[Pitch]:
         try:
             filter_data = {k:v for k,v in self.PITCH_CACHE.items() if name == v.name or (v.alias is not None and name == v.alias)}
             return list(filter_data.values())

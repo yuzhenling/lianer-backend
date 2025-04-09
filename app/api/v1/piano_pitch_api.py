@@ -53,7 +53,7 @@ async def get_pitch_by_id(
     """根据ID获取钢琴音高信息"""
     lang = get_language(request)
     try:
-        pitch = await pitch_service.get_pitch_by_number(pitch_number)
+        pitch = pitch_service.get_pitch_by_number(pitch_number)
         if not pitch:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -79,7 +79,7 @@ async def search_pitch_by_name(
     lang = get_language(request)
     try:
         name = unquote(name)
-        pitches = await pitch_service.get_pitch_by_name(name)
+        pitches = pitch_service.get_pitch_by_name(name)
         if not pitches and len(pitches) != 1:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -106,7 +106,7 @@ async def get_wav_by_index(
     lang = get_language(request)
     try:
 
-        pitch = await pitch_service.get_pitch_by_number(index)
+        pitch = pitch_service.get_pitch_by_number(index)
         if not pitch:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -144,7 +144,7 @@ async def get_wav_by_name(
     lang = get_language(request)
     try:
         name = unquote(name)
-        pitches = await pitch_service.get_pitch_by_name(name)
+        pitches = pitch_service.get_pitch_by_name(name)
         if not pitches and len(pitches) != 1:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,

@@ -6,10 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="83c1f24d-9736-40eb-a780-45c9d33bfc91" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/v1/schemas/response/pitch_response.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/schemas/response/pitch_response.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/melody_settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/melody_settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api/v1/piano_pitch_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/piano_pitch_api.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/services/melody_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/melody_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/.~lock.练耳达人.docx#" beforeDir="false" afterPath="$PROJECT_DIR$/doc/.~lock.练耳达人.docx#" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/services/pitch_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/pitch_service.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -165,7 +164,7 @@
       <workItem from="1744072713555" duration="5540000" />
       <workItem from="1744095607652" duration="4348000" />
       <workItem from="1744159665385" duration="4517000" />
-      <workItem from="1744166841075" duration="13880000" />
+      <workItem from="1744166841075" duration="19995000" />
     </task>
     <servers />
   </component>
