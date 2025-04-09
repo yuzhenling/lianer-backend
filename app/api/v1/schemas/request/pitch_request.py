@@ -2,6 +2,7 @@ from typing import List, Literal
 
 from pydantic import BaseModel, Field
 
+from app.models.melody_settings import Tonality
 from app.models.pitch_setting import PitchBlackKey, PitchMode
 from app.models.rhythm_settings import RhythmDifficulty, TimeSignature, MeasureCount, Tempo
 
@@ -79,9 +80,16 @@ class PitchChordSettingRequest(BaseModel):
         }
     }
 
-# API请求和响应模型
 class RhythmQuestionRequest(BaseModel):
     difficulty: RhythmDifficulty
     time_signature: TimeSignature = TimeSignature.TWO_FOUR
     measures_count: MeasureCount = MeasureCount.FOUR
     tempo: Tempo = Tempo.EIGHTY
+
+class MelodyQuestionRequest(BaseModel):
+    difficulty: RhythmDifficulty
+    time_signature: TimeSignature = TimeSignature.TWO_FOUR
+    measures_count: MeasureCount = MeasureCount.FOUR
+    tempo: Tempo = Tempo.EIGHTY
+    tonality: int = 1
+    tonality_choice: int = 1

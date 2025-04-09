@@ -33,7 +33,7 @@ async def get_rhythm_settings():
     settings = RhythmSettingResponse(
         difficulties=[d.value for d in RhythmDifficulty],
         measures_counts= [4, 6, 8, 10, 12, 16],
-         time_signatures= [ts.value for ts in TimeSignature],
-         tempo = [t.value for t in Tempo],
+        time_signatures= [ts.value for ts in TimeSignature],
+        tempo = [t.value for t in Tempo],
     )
     return settings
