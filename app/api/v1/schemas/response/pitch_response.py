@@ -1,10 +1,8 @@
 from typing import List, Optional, Any
 
 from pydantic import BaseModel
-from sqlalchemy import null
 
 from app.models.pitch import Interval
-from app.models.pitch_setting import PitchBlackKey, PitchMode
 from app.models.rhythm_settings import TimeSignature, RhythmDifficulty
 
 
@@ -2014,3 +2012,16 @@ class MelodyQuestionResponse(BaseModel):
 
         }
     }
+
+class MelodyNotePitch(RhythmNote):
+    pitch: PitchResponse
+
+class MelodyMeasurePitch(BaseModel):
+    notes: List[MelodyNotePitch]
+
+class MelodyScorePitch(BaseModel):
+    measures: List[List[MelodyMeasurePitch]]
+    time_signature: TimeSignature
+    tempo: int
+    is_correct: bool  # 标记是否是正确答案
+

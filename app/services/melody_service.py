@@ -3,9 +3,12 @@ import random
 
 from app.api.v1.schemas.request.pitch_request import  MelodyQuestionRequest
 from app.api.v1.schemas.response.pitch_response import RhythmNote, RhythmMeasure, RhythmScore, \
-    MelodyQuestionResponse
+    MelodyQuestionResponse, MelodyScorePitch, MelodyNotePitch, \
+    MelodyMeasurePitch
+from app.models.melody_settings import Tonality, TonalityChoice
 from app.models.rhythm import *
 from app.models.rhythm_settings import RhythmDifficulty, TimeSignature
+from app.services.pitch_service import pitch_service
 
 
 class MelodyService:
@@ -43,50 +46,22 @@ class MelodyService:
             },
         }
 
+
     def generate_question(self, request: MelodyQuestionRequest) -> MelodyQuestionResponse:
         """生成一个完整的节奏听写题"""
         # 生成正确答案
-        correct_rhythm = self.generate_melody(
+        correct_melody = self.generate_melody(
             request.difficulty,
             request.time_signature,
             request.measures_count.value,
-            request.tempo.value
+            request.tempo.value,
+            request.tonality,
+            request.tonality_choice,
         )
 
         # 生成三个错误选项
         wrong_options = []
-        max_attempts = 10  # 最大尝试次数，防止无限循环
-        
-        while len(wrong_options) < 3 and max_attempts > 0:
-            wrong_rhythm = self.generate_wrong_melody(
-                correct_rhythm,
-                request.difficulty,
-                request.time_signature
-            )
-            
-            # 检查新生成的错误答案是否与已有的不同
-            if self._is_unique_rhythm(wrong_rhythm, wrong_options):
-                wrong_options.append(wrong_rhythm)
-            
-            max_attempts -= 1
 
-        # 如果没有生成足够的错误答案，使用基本变化生成剩余的
-        while len(wrong_options) < 3:
-            basic_wrong = correct_rhythm.copy(deep=True)
-            basic_wrong.is_correct = False
-            # 将第一个音符改为休止符作为基本变化
-            if (len(basic_wrong.measures) > 0 and 
-                len(basic_wrong.measures[0]) > 0 and 
-                len(basic_wrong.measures[0][0].notes) > 0):
-                basic_wrong.measures[0][0].notes[0].is_rest = True
-            wrong_options.append(basic_wrong)
-
-        # 随机排列选项
-        all_options = [correct_rhythm] + wrong_options
-        random.shuffle(all_options)
-
-        # 找出正确答案的位置
-        correct_answer = chr(65 + all_options.index(correct_rhythm))  # A, B, C, or D
 
         return MelodyQuestionResponse(
             correct_answer=correct_answer,
@@ -103,23 +78,31 @@ class MelodyService:
             time_signature: TimeSignature,
             measures_count: int,
             tempo: int = 80,
-    ) -> RhythmScore:
+            tonality: int = 1,
+            tonality_choice: int = 1,
+    ) -> MelodyScorePitch:
         """生成一个正确的节奏模式"""
         measures = []
         measures_sub = []
         patterns = self.rhythm_patterns[difficulty][time_signature]
 
+        pitch_list = self.get_pitch_list(tonality, tonality_choice)
+        pitch_index = 0
         pattern_selected = random.choices(patterns, k=measures_count)
         for pattern in pattern_selected:
-            notes = [
-                RhythmNote(duration=duration)
-                for duration in pattern
-            ]
-            measures_sub.append(RhythmMeasure(notes=notes))
+            notes = []
+            for duration in pattern:
+                notes.append(MelodyNotePitch(
+                    duration=duration,
+                    pitch=pitch_list[pitch_index%len(pitch_list)],
+                ))
+                pitch_index += 1
+
+            measures_sub.append(MelodyMeasurePitch(notes=notes))
 
         measures.append(measures_sub)
 
-        return RhythmScore(
+        return MelodyScorePitch(
             measures=measures,
             time_signature=time_signature,
             tempo=tempo,
@@ -128,139 +111,188 @@ class MelodyService:
 
     def generate_wrong_melody(
             self,
-            correct_rhythm: RhythmScore,
+            correct_melody: MelodyScorePitch,
             difficulty: RhythmDifficulty,
             time_signature: TimeSignature,
-    ) -> RhythmScore:
+            tonality: int = 1,
+            tonality_choice: int = 1,
+    ) -> MelodyScorePitch:
         """生成一个错误的节奏变体"""
-        # 复制正确的节奏
-        wrong_rhythm = correct_rhythm.copy(deep=True)
-        wrong_rhythm.is_correct = False
-
-        # 定义可能的变化类型
-        variation_types = [
-            'change_duration',    # 改变音符时值
-            'add_rest',          # 添加休止符
-            'add_dot',           # 添加附点
-            'merge_notes',       # 合并音符
-            'split_notes',       # 拆分音符
-            'shift_rhythm'       # 移动节奏位置
-        ]
-
-        # 随机选择变化类型
-        variation_type = random.choice(variation_types)
-
         try:
-            if variation_type == 'change_duration':
-                # 随机改变某些音符的时值
-                measure_group_idx = random.randint(0, len(wrong_rhythm.measures) - 1)
-                measure_idx = random.randint(0, len(wrong_rhythm.measures[measure_group_idx]) - 1)
-                measure = wrong_rhythm.measures[measure_group_idx][measure_idx]
-                
-                if len(measure.notes) > 0:
-                    note_idx = random.randint(0, len(measure.notes) - 1)
-                    note = measure.notes[note_idx]
+            # 复制正确的旋律
+            wrong_melody = correct_melody.model_copy(deep=True)
+            wrong_melody.is_correct = False
 
-                    # 改变时值但保持小节总时值不变
-                    if note.duration == 1.0:
-                        note.duration = 0.5
-                        # 添加一个新的八分音符
-                        measure.notes.insert(
-                            note_idx + 1,
-                            RhythmNote(duration=0.5)
-                        )
-                    elif note.duration == 2.0:
-                        note.duration = 1.0
-                        # 添加一个新的四分音符
-                        measure.notes.insert(
-                            note_idx + 1,
-                            RhythmNote(duration=1.0)
-                        )
+            # 获取调式和调式选择类型
+            tonality_obj = Tonality(tonality)
+            tonality_choice_obj = TonalityChoice(tonality_choice)
 
-            elif variation_type == 'add_rest':
-                # 将某个音符改为休止符
-                measure_group_idx = random.randint(0, len(wrong_rhythm.measures) - 1)
-                measure_idx = random.randint(0, len(wrong_rhythm.measures[measure_group_idx]) - 1)
-                measure = wrong_rhythm.measures[measure_group_idx][measure_idx]
-                
-                if len(measure.notes) > 0:
-                    note_idx = random.randint(0, len(measure.notes) - 1)
-                    measure.notes[note_idx].is_rest = True
+            # 定义可能的变化类型
+            variation_types = [
+                'change_scale',  # 改变音阶类型
+                'change_tonality',  # 改变调式
+                'add_accidental',  # 添加变化音
+                'shift_octave'  # 移动八度
+            ]
 
-            elif variation_type == 'add_dot':
-                # 添加附点音符
-                measure_group_idx = random.randint(0, len(wrong_rhythm.measures) - 1)
-                measure_idx = random.randint(0, len(wrong_rhythm.measures[measure_group_idx]) - 1)
-                measure = wrong_rhythm.measures[measure_group_idx][measure_idx]
-                
-                if len(measure.notes) > 1:  # 需要至少两个音符
-                    note_idx = random.randint(0, len(measure.notes) - 2)  # 确保后面还有音符
-                    note = measure.notes[note_idx]
-                    next_note = measure.notes[note_idx + 1]
+            # 随机选择变化类型
+            variation_types = random.choices(variation_types, k=3)
+            for variation_type in variation_types:
+                if variation_type == 'change_scale':
+                    # 改变音阶类型（例如：从自然大调变为和声大调）
+                    # 获取所有可用的调式选择类型
+                    available_choices = [
+                        t for t in TonalityChoice
+                        if t != tonality_choice_obj
+                    ]
+                    if available_choices:
+                        new_choice = random.choice(available_choices)
+                        # 使用新的音阶生成旋律
+                        measures = []
+                        measures_sub = []
+                        patterns = self.rhythm_patterns[difficulty][time_signature]
+                        pattern_selected = random.choices(patterns, k=len(correct_melody.measures[0]))
 
-                    if note.duration == 1.0 and next_note.duration >= 0.5:
-                        # 将四分音符变为附点四分音符
-                        note.duration = 1.5
-                        note.is_dotted = True
-                        next_note.duration = 0.5
+                        pitch_list = self.get_pitch_list(tonality, tonality_choice)
+                        for pattern in pattern_selected:
+                            notes = []
+                            for duration in pattern:
+                                # 从新的音阶中随机选择一个音高
+                                pitch_interval = random.choice(new_choice.interval_nums)
+                                pitch = self
+                                notes.append(MelodyNotePitch(
+                                    duration=duration,
+                                    pitch=pitch,
+                                    is_rest=False
+                                ))
+                            measures_sub.append(RhythmMeasure(notes=notes))
+                        measures.append(measures_sub)
+                        wrong_melody.measures = measures
 
-            elif variation_type == 'merge_notes':
-                # 合并相邻音符
-                measure_group_idx = random.randint(0, len(wrong_rhythm.measures) - 1)
-                measure_idx = random.randint(0, len(wrong_rhythm.measures[measure_group_idx]) - 1)
-                measure = wrong_rhythm.measures[measure_group_idx][measure_idx]
-                
-                if len(measure.notes) > 1:
-                    note_idx = random.randint(0, len(measure.notes) - 2)
-                    note1 = measure.notes[note_idx]
-                    note2 = measure.notes[note_idx + 1]
-                    
-                    # 合并两个音符
-                    note1.duration = note1.duration + note2.duration
-                    measure.notes.pop(note_idx + 1)
+                elif variation_type == 'change_tonality':
+                    # 改变调式（例如：从C大调变为G大调）
+                    # 获取所有可用的调式
+                    available_tonalities = [
+                        t for t in Tonality
+                        if t != tonality_obj
+                    ]
+                    if available_tonalities:
+                        new_tonality = random.choice(available_tonalities)
+                        # 使用新的调式生成旋律
+                        measures = []
+                        measures_sub = []
+                        patterns = self.rhythm_patterns[difficulty][time_signature]
+                        pattern_selected = random.choices(patterns, k=len(correct_rhythm.measures[0]))
 
-            elif variation_type == 'split_notes':
-                # 拆分音符
-                measure_group_idx = random.randint(0, len(wrong_rhythm.measures) - 1)
-                measure_idx = random.randint(0, len(wrong_rhythm.measures[measure_group_idx]) - 1)
-                measure = wrong_rhythm.measures[measure_group_idx][measure_idx]
-                
-                if len(measure.notes) > 0:
-                    note_idx = random.randint(0, len(measure.notes) - 1)
-                    note = measure.notes[note_idx]
-                    
-                    if note.duration >= 1.0:
-                        # 将一个较长的音符拆分为两个较短的音符
-                        original_duration = note.duration
-                        note.duration = original_duration / 2
-                        measure.notes.insert(
-                            note_idx + 1,
-                            RhythmNote(duration=original_duration / 2)
-                        )
+                        for pattern in pattern_selected:
+                            notes = []
+                            for duration in pattern:
+                                # 从新的调式中随机选择一个音高
+                                pitch_index = random.choice(new_tonality.interval_nums)
+                                pitch = self._get_pitch_from_index(pitch_index)
+                                notes.append(RhythmNote(
+                                    duration=duration,
+                                    pitch=pitch,
+                                    is_rest=False
+                                ))
+                            measures_sub.append(RhythmMeasure(notes=notes))
+                        measures.append(measures_sub)
+                        wrong_rhythm.measures = measures
+                        wrong_rhythm.tonality = new_tonality.display_value
 
-            elif variation_type == 'shift_rhythm':
-                # 移动节奏位置（在相邻小节之间交换音符）
-                measure_group_idx = random.randint(0, len(wrong_rhythm.measures) - 1)
-                measure_group = wrong_rhythm.measures[measure_group_idx]
-                
-                if len(measure_group) >= 2:
-                    measure_idx = random.randint(0, len(measure_group) - 2)
-                    measure1 = measure_group[measure_idx]
-                    measure2 = measure_group[measure_idx + 1]
-                    
-                    if (len(measure1.notes) > 0 and len(measure2.notes) > 0 and
-                        measure1.notes[-1].duration == measure2.notes[0].duration):
-                        # 交换相邻小节的最后一个和第一个音符
-                        measure1.notes[-1], measure2.notes[0] = measure2.notes[0], measure1.notes[-1]
+                elif variation_type == 'add_accidental':
+                    # 添加变化音
+                    measures = []
+                    measures_sub = []
+                    patterns = self.rhythm_patterns[difficulty][time_signature]
+                    pattern_selected = random.choices(patterns, k=len(correct_rhythm.measures[0]))
 
+                    for pattern in pattern_selected:
+                        notes = []
+                        for duration in pattern:
+                            # 从调式音阶中随机选择一个音高
+                            pitch_index = random.choice(tonality_obj.interval_nums)
+                            pitch = self._get_pitch_from_index(pitch_index)
+
+                            # 随机决定是否添加变化音
+                            if random.random() < 0.3:  # 30%的概率添加变化音
+                                if random.choice([True, False]):
+                                    pitch = f"#{pitch}"
+                                else:
+                                    pitch = f"b{pitch}"
+
+                            notes.append(RhythmNote(
+                                duration=duration,
+                                pitch=pitch,
+                                is_rest=False
+                            ))
+                        measures_sub.append(RhythmMeasure(notes=notes))
+                    measures.append(measures_sub)
+                    wrong_rhythm.measures = measures
+
+                elif variation_type == 'shift_octave':
+                    # 移动八度
+                    measures = []
+                    measures_sub = []
+                    patterns = self.rhythm_patterns[difficulty][time_signature]
+                    pattern_selected = random.choices(patterns, k=len(correct_rhythm.measures[0]))
+
+                    for pattern in pattern_selected:
+                        notes = []
+                        for duration in pattern:
+                            # 从调式音阶中随机选择一个音高
+                            pitch_index = random.choice(tonality_obj.interval_nums)
+                            pitch = self._get_pitch_from_index(pitch_index)
+
+                            # 随机决定是否移动八度
+                            if random.random() < 0.3:  # 30%的概率移动八度
+                                if random.choice([True, False]):
+                                    pitch = f"{pitch[:-1]}{int(pitch[-1]) + 1}"
+                                else:
+                                    pitch = f"{pitch[:-1]}{int(pitch[-1]) - 1}"
+
+                            notes.append(RhythmNote(
+                                duration=duration,
+                                pitch=pitch,
+                                is_rest=False
+                            ))
+                        measures_sub.append(RhythmMeasure(notes=notes))
+                    measures.append(measures_sub)
+                    wrong_rhythm.measures = measures
+
+                return wrong_rhythm
         except Exception as e:
-            # 如果变化失败，至少确保返回一个不同的节奏
+            logger.error(f"Error generating wrong melody: {str(e)}")
+            # 如果变化失败，至少确保返回一个不同的旋律
             if len(wrong_rhythm.measures) > 0 and len(wrong_rhythm.measures[0]) > 0:
                 measure = wrong_rhythm.measures[0][0]
                 if len(measure.notes) > 0:
                     measure.notes[0].is_rest = True
+            return wrong_rhythm
 
-        return wrong_rhythm
+    def get_pitch_list(self, tonality:int, tonality_choice: int, difficulty: RhythmDifficulty):
+        t = Tonality(tonality)
+        choice = TonalityChoice(tonality_choice)
+        root_note = t.get_root_note()
+        interval_nums = choice.get_interval_nums()
+        pitch_list = []
+        for interval_num in interval_nums:
+            pitch_name = f'{root_note}4'#TODO
+            pitch = pitch_service.get_pitch_by_name(pitch_name)
+            pitch = pitch_service.get_pitch_by_number(pitch.number+interval_num)
+            pitch_list.append(pitch)
+
+        if difficulty == RhythmDifficulty.MEDIUM:
+            point = random.randint(1, len(pitch_list)-1)
+            pitch_list = pitch_list[point:] + pitch_list[:point]
+
+        elif difficulty == RhythmDifficulty.HIGH:
+            pitch_list = random.sample(pitch_list, len(pitch_list))
+
+
+        return pitch_list
+
+
 
     def _is_unique_rhythm(self, new_rhythm: RhythmScore, existing_rhythms: List[RhythmScore]) -> bool:
         """检查新生成的节奏是否与现有的错误答案不同"""
