@@ -186,12 +186,14 @@ class TunerService:
         target_hz = librosa.note_to_hz(nearest_pitch.name)
         cents_diff = 1200 * np.log2(main_frequency / target_hz)
         
+        # 初始化最佳匹配音高
+        best_pitch = nearest_pitch
+        best_cents_diff = abs(cents_diff)
+        
         # 对于低音区（C1及以下），使用更严格的判断标准
         if nearest_pitch.pitch_number <= 3:  # C1及以下
             # 检查是否是倍频错误
             possible_octaves = [-1, 0, 1]  # 可能的八度偏移
-            best_cents_diff = abs(cents_diff)
-            best_pitch = nearest_pitch
             
             for octave_offset in possible_octaves:
                 # 计算可能的正确音高

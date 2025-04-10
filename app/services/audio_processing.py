@@ -71,6 +71,7 @@ class AudioProcessor:
         audio_data = librosa.effects.preemphasis(audio_data)
         
         # 2. 应用汉宁窗减少频谱泄漏
+        # 确保窗口大小与音频数据长度匹配
         window = np.hanning(len(audio_data))
         audio_data = audio_data * window
         
@@ -79,74 +80,90 @@ class AudioProcessor:
         
         # 方法1：使用改进的YIN算法
         # 对于低音区，增加帧长度和降低fmin
-        f0_yin, voiced_flag, voiced_probs = librosa.pyin(
-            audio_data,
-            fmin=16.35,  # C0的频率
-            fmax=4186.01,  # C8的频率
-            sr=sample_rate,
-            frame_length=8192,  # 增加帧长度以提高低音区准确性
-            hop_length=1024,
-            fill_na=np.nan,
-            center=True,
-            pad_mode='reflect'
-        )
-        valid_pitches = f0_yin[~np.isnan(f0_yin)]
-        if len(valid_pitches) > 0:
-            pitches.extend(valid_pitches)
+        try:
+            f0_yin, voiced_flag, voiced_probs = librosa.pyin(
+                audio_data,
+                fmin=16.35,  # C0的频率
+                fmax=4186.01,  # C8的频率
+                sr=sample_rate,
+                frame_length=min(8192, len(audio_data)),  # 确保帧长度不超过音频长度
+                hop_length=1024,
+                fill_na=np.nan,
+                center=True,
+                pad_mode='reflect'
+            )
+            valid_pitches = f0_yin[~np.isnan(f0_yin)]
+            if len(valid_pitches) > 0:
+                pitches.extend(valid_pitches)
+        except Exception as e:
+            print(f"YIN algorithm failed: {str(e)}")
         
         # 方法2：使用自相关函数（针对低音区优化）
-        # 增加自相关窗口长度
-        autocorr = np.correlate(audio_data, audio_data, mode='full')
-        autocorr = autocorr[len(autocorr)//2:]
-        
-        # 使用改进的峰值检测
-        peaks, _ = find_peaks(
-            autocorr,
-            distance=int(sample_rate/self.max_frequency),
-            prominence=0.1*np.max(autocorr)
-        )
-        
-        if len(peaks) > 0:
-            # 计算基频
-            peak = peaks[0]
-            if peak > 0:
-                freq = sample_rate / peak
-                if self.min_frequency <= freq <= self.max_frequency:
-                    pitches.append(freq)
+        try:
+            # 增加自相关窗口长度
+            autocorr = np.correlate(audio_data, audio_data, mode='full')
+            autocorr = autocorr[len(autocorr)//2:]
+            
+            # 使用改进的峰值检测
+            peaks, _ = find_peaks(
+                autocorr,
+                distance=int(sample_rate/self.max_frequency),
+                prominence=0.1*np.max(autocorr)
+            )
+            
+            if len(peaks) > 0:
+                # 计算基频
+                peak = peaks[0]
+                if peak > 0:
+                    freq = sample_rate / peak
+                    if self.min_frequency <= freq <= self.max_frequency:
+                        pitches.append(freq)
+        except Exception as e:
+            print(f"Autocorrelation failed: {str(e)}")
         
         # 方法3：使用改进的频谱分析
-        # 增加FFT点数以提高频率分辨率
-        n_fft = 16384  # 增加FFT点数
-        D = librosa.stft(audio_data, n_fft=n_fft, hop_length=1024)
-        S = np.abs(D)
-        
-        # 计算频率轴
-        freqs = librosa.fft_frequencies(sr=sample_rate, n_fft=n_fft)
-        
-        # 使用谐波积谱（HPS）方法
-        # 这种方法对低音区特别有效
-        hps = np.ones_like(S[0])
-        for i in range(1, 6):  # 考虑前5个谐波
-            hps *= S[::i, :].mean(axis=1)
-        
-        # 找到HPS中的峰值
-        peak_idx = np.argmax(hps)
-        peak_freq = freqs[peak_idx]
-        if self.min_frequency <= peak_freq <= self.max_frequency:
-            pitches.append(peak_freq)
+        try:
+            # 增加FFT点数以提高频率分辨率
+            n_fft = min(16384, len(audio_data))  # 确保FFT点数不超过音频长度
+            D = librosa.stft(audio_data, n_fft=n_fft, hop_length=1024)
+            S = np.abs(D)
+            
+            # 计算频率轴
+            freqs = librosa.fft_frequencies(sr=sample_rate, n_fft=n_fft)
+            
+            # 使用谐波积谱（HPS）方法
+            # 修正HPS计算，确保数组形状匹配
+            hps = np.ones_like(S[0])
+            for i in range(1, 6):  # 考虑前5个谐波
+                # 对每个谐波进行下采样
+                downsampled = S[::i, :].mean(axis=1)
+                # 确保形状匹配
+                if len(downsampled) == len(hps):
+                    hps *= downsampled
+            
+            # 找到HPS中的峰值
+            peak_idx = np.argmax(hps)
+            peak_freq = freqs[peak_idx]
+            if self.min_frequency <= peak_freq <= self.max_frequency:
+                pitches.append(peak_freq)
+        except Exception as e:
+            print(f"Spectral analysis failed: {str(e)}")
         
         # 方法4：使用倒谱分析（cepstral analysis）
-        # 这种方法对基频检测特别有效
-        cepstrum = np.fft.ifft(np.log(np.abs(D) + 1e-10))
-        cepstrum = np.abs(cepstrum)
-        
-        # 在倒谱中找到峰值
-        quefrency = np.arange(len(cepstrum)) / sample_rate
-        valid_quefrency = (quefrency > 1/self.max_frequency) & (quefrency < 1/self.min_frequency)
-        peak_idx = np.argmax(cepstrum[valid_quefrency])
-        cepstral_freq = 1 / quefrency[valid_quefrency][peak_idx]
-        if self.min_frequency <= cepstral_freq <= self.max_frequency:
-            pitches.append(cepstral_freq)
+        try:
+            # 这种方法对基频检测特别有效
+            cepstrum = np.fft.ifft(np.log(np.abs(D) + 1e-10))
+            cepstrum = np.abs(cepstrum)
+            
+            # 在倒谱中找到峰值
+            quefrency = np.arange(len(cepstrum)) / sample_rate
+            valid_quefrency = (quefrency > 1/self.max_frequency) & (quefrency < 1/self.min_frequency)
+            peak_idx = np.argmax(cepstrum[valid_quefrency])
+            cepstral_freq = 1 / quefrency[valid_quefrency][peak_idx]
+            if self.min_frequency <= cepstral_freq <= self.max_frequency:
+                pitches.append(cepstral_freq)
+        except Exception as e:
+            print(f"Cepstral analysis failed: {str(e)}")
         
         # 对检测到的频率进行后处理
         if pitches:
