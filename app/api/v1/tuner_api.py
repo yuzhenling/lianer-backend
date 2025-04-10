@@ -6,10 +6,8 @@ from app.api.v1.auth_api import get_current_user
 from app.core.logger import logger
 from app.services.tuner_service import TunerService, tuner_service
 from app.services.audio_processing import AudioProcessor, audio_processor
-import numpy as np
 from typing import Dict, Any, List, Callable, Optional
 import json
-import asyncio
 
 from app.models.user import User
 

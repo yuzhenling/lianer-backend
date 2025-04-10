@@ -172,21 +172,43 @@ class TunerService:
             Tuple[Optional[str], float, float]: (最接近的音符名称, 频率, 音分偏差)
         """
         # 检测基频
-        pitches = self.audio_processor.detect_pitch(audio_data)
+        pitches = self.audio_processor.detect_pitch(audio_data, sample_rate)
         if len(pitches) == 0:
             return None, 0.0, 0.0
             
-        # 取平均值作为主要频率
-        main_frequency = np.mean(pitches)
+        # 获取检测到的主频率
+        main_frequency = pitches[0]
         
-        # 将频率转换为音符名称
-        note_name = self.audio_processor.hz_to_note(main_frequency)
+        # 获取最接近的钢琴音高
+        nearest_pitch, min_cents_diff = self.get_nearest_piano_pitch(main_frequency)
         
-        # 计算音分偏差
-        target_hz = librosa.note_to_hz(note_name)
+        # 计算与最接近钢琴音高的音分偏差
+        target_hz = librosa.note_to_hz(nearest_pitch.name)
         cents_diff = 1200 * np.log2(main_frequency / target_hz)
         
-        return note_name, main_frequency, cents_diff
+        # 对于低音区（C1及以下），使用更严格的判断标准
+        if nearest_pitch.pitch_number <= 3:  # C1及以下
+            # 检查是否是倍频错误
+            possible_octaves = [-1, 0, 1]  # 可能的八度偏移
+            best_cents_diff = abs(cents_diff)
+            best_pitch = nearest_pitch
+            
+            for octave_offset in possible_octaves:
+                # 计算可能的正确音高
+                possible_pitch_number = nearest_pitch.pitch_number + (12 * octave_offset)
+                if 0 <= possible_pitch_number <= 88:  # 确保在钢琴音域内
+                    possible_pitch = pitch_service.get_pitch_by_number(possible_pitch_number)
+                    if possible_pitch:
+                        possible_target_hz = librosa.note_to_hz(possible_pitch.name)
+                        possible_cents_diff = 1200 * np.log2(main_frequency / possible_target_hz)
+                        
+                        # 如果这个音高更接近，更新最佳匹配
+                        if abs(possible_cents_diff) < best_cents_diff:
+                            best_cents_diff = abs(possible_cents_diff)
+                            best_pitch = possible_pitch
+                            cents_diff = possible_cents_diff
+        
+        return best_pitch.name, main_frequency, cents_diff
     
     def get_nearest_piano_pitch(self, frequency: float) -> Tuple[Pitch, float]:
         """获取最接近的钢琴音高
