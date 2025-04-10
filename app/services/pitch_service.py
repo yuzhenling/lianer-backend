@@ -211,7 +211,7 @@ class PitchService:
         for chord_type in chord_types:
             self.PITCH_CHORD_TYPE_CACHE[chord_type.id] = chord_type
 
-    async def get_all_pitch(self) -> List[Pitch]:
+    def get_all_pitch(self) -> List[Pitch]:
         try:
             return list(self.PITCH_CACHE.values())
         except Exception as e:

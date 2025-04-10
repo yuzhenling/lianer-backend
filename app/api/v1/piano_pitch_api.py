@@ -32,7 +32,7 @@ async def get_all_pitches(
     lang = get_language(request)
     try:
         """获取所有信息"""
-        pitches = await pitch_service.get_all_pitch()
+        pitches = pitch_service.get_all_pitch()
         if not pitches:
             return []
         return [PitchResponse.model_validate(pitch) for pitch in pitches]

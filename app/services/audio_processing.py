@@ -3,6 +3,7 @@ import numpy as np
 from typing import List, Tuple, Optional
 import soundfile as sf
 from pathlib import Path
+import io
 
 
 class AudioProcessor:
@@ -14,26 +15,75 @@ class AudioProcessor:
         y, sr = librosa.load(file_path, sr=self.sample_rate)
         return y, sr
     
-    def detect_pitch(self, audio: np.ndarray) -> np.ndarray:
-        """检测音频的基频（音高）"""
+    def read_audio_file(self, audio_bytes: bytes) -> Tuple[np.ndarray, int]:
+        """读取音频文件数据
+        
+        Args:
+            audio_bytes: 音频文件的字节数据
+            
+        Returns:
+            Tuple[np.ndarray, int]: (音频数据数组, 采样率)
+        """
+        try:
+            # 使用soundfile读取音频数据
+            with io.BytesIO(audio_bytes) as audio_file:
+                audio_data, sample_rate = sf.read(audio_file)
+                
+                # 如果是立体声，转换为单声道
+                if len(audio_data.shape) > 1:
+                    audio_data = np.mean(audio_data, axis=1)
+                    
+                # 确保数据类型为float32
+                audio_data = audio_data.astype(np.float32)
+                
+                return audio_data, sample_rate
+                
+        except Exception as e:
+            raise ValueError(f"Failed to read audio file: {str(e)}")
+    
+    def detect_pitch(self, audio_data: np.ndarray, sample_rate: int = None) -> List[float]:
+        """检测音频中的基频
+        
+        Args:
+            audio_data: 音频数据
+            sample_rate: 采样率，如果为None则使用默认值
+            
+        Returns:
+            List[float]: 检测到的基频列表
+        """
+        if sample_rate is None:
+            sample_rate = self.sample_rate
+            
+        # 使用librosa的YIN算法检测基频
         pitches, magnitudes = librosa.piptrack(
-            y=audio,
-            sr=self.sample_rate,
-            fmin=librosa.note_to_hz('C2'),
-            fmax=librosa.note_to_hz('C7')
+            y=audio_data,
+            sr=sample_rate,
+            fmin=librosa.note_to_hz('C0'),  # 最低音高
+            fmax=librosa.note_to_hz('C8')   # 最高音高
         )
         
-        # 获取每帧最强音高
-        pitch_values = []
+        # 获取有效的基频
+        valid_pitches = []
         for i in range(pitches.shape[1]):
             index = magnitudes[:, i].argmax()
-            pitch_values.append(pitches[index, i])
-            
-        return np.array(pitch_values)
+            pitch = pitches[index, i]
+            if pitch > 0:  # 只保留有效的基频
+                valid_pitches.append(pitch)
+                
+        return valid_pitches
     
     def hz_to_note(self, frequency: float) -> str:
-        """将频率转换为音符名称"""
-        return librosa.hz_to_note(frequency)
+        """将频率转换为音符名称
+        
+        Args:
+            frequency: 频率值
+            
+        Returns:
+            str: 音符名称
+        """
+        # 使用librosa将频率转换为音符名称
+        note = librosa.hz_to_note(frequency)
+        return note
     
     def compare_pitch_accuracy(self, target_note: str, recorded_pitch: float) -> float:
         """比较目标音高和实际音高的准确度"""
@@ -81,4 +131,6 @@ class AudioProcessor:
     def save_audio(self, audio: np.ndarray, file_path: str) -> None:
         """保存音频文件"""
         Path(file_path).parent.mkdir(parents=True, exist_ok=True)
-        sf.write(file_path, audio, self.sample_rate) 
+        sf.write(file_path, audio, self.sample_rate)
+
+audio_processor = AudioProcessor()
