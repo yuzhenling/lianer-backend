@@ -18,22 +18,6 @@ class CreatePaymentRequest(BaseModel):
     payment_id: int
     openid: str
 
-@router.post("/order")
-async def create_order(
-    request: CreateOrderRequest,
-    db: Session = Depends(get_db)
-):
-    """创建订单"""
-    try:
-        result = payment_service.create_order(
-            db=db,
-            user_id=request.user_id,
-            amount=request.amount,
-            description=request.description
-        )
-        return {"code": 0, "message": "success", "data": result}
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
 
 @router.post("/add")
 async def create_payment(
