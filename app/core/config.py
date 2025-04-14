@@ -37,6 +37,7 @@ class Settings(BaseSettings):
     WECHAT_PAY_KEY: str = ""  # API v3密钥
     WECHAT_PAY_CERT_PATH: str = "cert/apiclient_cert.pem"  # 商户证书路径
     WECHAT_PAY_KEY_PATH: str = "cert/apiclient_key.pem"  # 商户私钥路径
+    WECHAT_NOTIFY_URL: str = "http://127.0.0.1:8000/api/v1/pay"
     
     # 音频处理配置
     AUDIO_UPLOAD_DIR: str = "uploads/audio"

@@ -63,9 +63,9 @@ class OrderService:
             }
             
             # TODO: 实现微信支付签名和认证
-            # headers = self._get_wechat_pay_headers()
-            # response = requests.post(url, json=data, headers=headers)
-            # result = response.json()
+            headers = self._get_wechat_pay_headers()
+            response = requests.post(url, json=data, headers=headers)
+            result = response.json()
             
             # 开发测试时模拟返回支付参数
             result = {
