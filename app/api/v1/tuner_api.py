@@ -3,6 +3,7 @@ import time
 from fastapi import APIRouter, UploadFile, File, HTTPException, WebSocket, WebSocketDisconnect, Depends
 
 from app.api.v1.auth_api import get_current_user
+from app.api.v1.schemas.response.pitch_response import PitchAnalysisResult
 from app.core.logger import logger
 from app.services.tuner_service import TunerService, tuner_service
 from app.services.audio_processing import AudioProcessor, audio_processor
@@ -10,6 +11,8 @@ from typing import Dict, Any, List, Callable, Optional
 import json
 
 from app.models.user import User
+from app.services.fast_tuner_service import fast_tuner_service
+from app.services.fast_audio_processing import fast_audio_processor
 
 router = APIRouter(prefix="/tuner", tags=["tuner"])
 
@@ -80,6 +83,52 @@ async def analyze_pitch(file: UploadFile = File(...), current_user: User = Depen
         
     except Exception as e:
         logger.error(f"Error in analyze_pitch: {str(e)}\nTraceback: {traceback.format_exc()}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/analyze/c")
+async def analyze_pitch_c(
+    file: UploadFile = File(...),
+    current_user: User = Depends(get_current_user)
+) -> PitchAnalysisResult:
+    """快速音高检测API
+    
+    使用pYIN C++绑定进行快速音高检测，适合实时应用。
+    
+    Args:
+        file: 音频文件
+        current_user: 当前用户
+        
+    Returns:
+        PitchAnalysisResult: 包含检测结果的字典
+    """
+    try:
+        # 分析音高
+        note_name, frequency, cents_diff = fast_tuner_service.analyze_pitch_from_bytes(await file.read())
+        
+        if note_name is None:
+            return {
+                "code": 1,
+                "message": "No pitch detected",
+                "timestamp": time.time()
+            }
+            
+        # 获取最接近的钢琴音高
+        nearest_pitch, min_cents_diff = fast_tuner_service.get_nearest_piano_pitch(frequency)
+        
+        # 获取调音状态和方向
+        tuning_status = fast_tuner_service.get_tuning_status(frequency)
+        tuning_direction = fast_tuner_service.get_tuning_direction(frequency)
+        
+        return PitchAnalysisResult(
+            frequency=float(frequency),
+            note=note_name,
+            cents_difference=float(cents_diff),
+            nearest_piano_pitch= nearest_pitch,
+            tuning_status=tuning_status,
+            tuning_direction=tuning_direction
+        )
+    except Exception as e:
+        logger.error(f"Error in analyze_pitch_c: {str(e)}\nTraceback: {traceback.format_exc()}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.websocket("/ws/analyze")

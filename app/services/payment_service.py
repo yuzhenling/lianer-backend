@@ -3,8 +3,10 @@ import time
 import xml.etree.ElementTree as ET
 import requests
 from typing import Optional, Dict, Any
+
+from app.api.v1.auth_api import get_db
 from app.models.payment import Payment, Order, PaymentStatus, PaymentType
-from app.db.session import get_db
+
 from sqlalchemy.orm import Session
 import logging
 from datetime import datetime

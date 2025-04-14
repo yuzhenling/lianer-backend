@@ -17,7 +17,7 @@ from app.core.i18n import i18n, get_language
 from app.core.logger import logger
 from app.services.vip_service import vip_service
 
-router = APIRouter()
+router = APIRouter(prefix="/order", tags=["order"])
 order_service = OrderService()
 
 class OrderCreate(BaseModel):
@@ -57,7 +57,7 @@ class WeChatPaymentResponse(BaseModel):
     paySign: str
 
 
-@router.post("/orders/vip", response_model=OrderResponse)
+@router.post("/vip", response_model=OrderResponse)
 async def create_vip_order(
     request: Request,
     order_data: OrderCreate,
@@ -102,7 +102,7 @@ async def create_vip_order(
         )
 
 
-@router.post("/orders/{order_id}/pay", response_model=WeChatPaymentResponse)
+@router.post("/{order_id}/pay", response_model=WeChatPaymentResponse)
 async def create_payment(
     request: Request,
     order_id: int,
@@ -151,7 +151,7 @@ async def create_payment(
         )
 
 
-@router.post("/orders/wechat-notify")
+@router.post("/wechat-notify")
 async def wechat_payment_notify(
     request: Request,
     db: Session = Depends(get_db)

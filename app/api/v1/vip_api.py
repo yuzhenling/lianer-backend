@@ -15,7 +15,7 @@ from app.models.user import User
 
 from app.core.i18n import i18n, get_language
 
-router = APIRouter()
+router = APIRouter(prefix="/vip", tags=["vip"])
 
 class VipBase(BaseModel):
     level: VipLevel
@@ -54,7 +54,7 @@ class VipResponse(VipBase):
     }
 
 
-@router.get("/vips", response_model=List[VipResponse])
+@router.get("", response_model=List[VipResponse])
 async def get_all_vips(
     request: Request,
     current_user: User = Depends(get_current_user)
@@ -74,7 +74,7 @@ async def get_all_vips(
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
 
-@router.get("/vips/{vip_id}", response_model=VipResponse)
+@router.get("/{vip_id}", response_model=VipResponse)
 async def get_vip_by_id(
     request: Request,
     vip_id: int,
@@ -100,7 +100,7 @@ async def get_vip_by_id(
         )
 
 
-@router.post("/vips", response_model=VipResponse)
+@router.post("", response_model=VipResponse)
 async def create_vip(
     request: Request,
     vip_data: VipCreate,
@@ -142,7 +142,7 @@ async def create_vip(
         )
 
 
-@router.put("/vips/{vip_id}", response_model=VipResponse)
+@router.put("/{vip_id}", response_model=VipResponse)
 async def update_vip(
     request: Request,
     vip_id: int,
@@ -192,7 +192,7 @@ async def update_vip(
         )
 
 
-@router.delete("/vips/{vip_id}")
+@router.delete("/{vip_id}")
 async def delete_vip(
     request: Request,
     vip_id: int,

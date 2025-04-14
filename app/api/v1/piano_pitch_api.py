@@ -20,11 +20,11 @@ from app.services.pitch_service import pitch_service
 from app.models.user import User
 from app.services.pitch_settings_service import pitch_settings_service
 
-router = APIRouter()
+router = APIRouter(prefix="/piano", tags=["piano"])
 
 
 
-@router.get("/piano/pitch/info", response_model=List[PitchResponse])
+@router.get("/pitch/info", response_model=List[PitchResponse])
 async def get_all_pitches(
         request: Request,
         current_user: User = Depends(get_current_user)
@@ -44,7 +44,7 @@ async def get_all_pitches(
         )
 
 
-@router.get("/piano/pitch/info/{pitch_number}", response_model=PitchResponse)
+@router.get("/pitch/info/{pitch_number}", response_model=PitchResponse)
 async def get_pitch_by_id(
     pitch_number: int,
     request: Request,
@@ -69,7 +69,7 @@ async def get_pitch_by_id(
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
 
-@router.get("/piano/pitch/name/{name}", response_model=PitchResponse)
+@router.get("/pitch/name/{name}", response_model=PitchResponse)
 async def search_pitch_by_name(
     request: Request,
     name: str,
@@ -97,7 +97,7 @@ async def search_pitch_by_name(
 
 
 
-@router.get("/piano/pitch/audio/index/{index}")
+@router.get("/pitch/audio/index/{index}")
 async def get_wav_by_index(
     request: Request,
     index: int,
@@ -135,7 +135,7 @@ async def get_wav_by_index(
         )
 
 
-@router.get("/piano/pitch/audio/name/{name}")
+@router.get("/pitch/audio/name/{name}")
 async def get_wav_by_name(
     request: Request,
     name: str,
@@ -173,7 +173,7 @@ async def get_wav_by_name(
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
 
-@router.get("/piano/pitchgroup", response_model=List[PitchGroupResponse])
+@router.get("/pitchgroup", response_model=List[PitchGroupResponse])
 async def get_all_pitchgroups(
     request: Request,
     include_black_key: bool = True,
@@ -204,7 +204,7 @@ async def get_all_pitchgroups(
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
 
-@router.get("/piano/pitchinterval", response_model=List[PitchIntervalResponse])
+@router.get("/pitchinterval", response_model=List[PitchIntervalResponse])
 async def get_all_pitchinterval(
     request: Request,
     current_user: User = Depends(get_current_user),
@@ -228,7 +228,7 @@ async def get_all_pitchinterval(
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
 
-@router.get("/piano/pitchchord", response_model=List[PitchChordResponse])
+@router.get("/pitchchord", response_model=List[PitchChordResponse])
 async def get_all_pitchchord(
     request: Request,
     current_user: User = Depends(get_current_user),
@@ -253,7 +253,7 @@ async def get_all_pitchchord(
         )
 
 
-@router.get("/piano/pitch/single/setting", response_model=PitchSingleSettingResponse)
+@router.get("/pitch/single/setting", response_model=PitchSingleSettingResponse)
 async def get_pitch_single_setting(
     request: Request,
     current_user: User = Depends(get_current_user)
@@ -272,7 +272,7 @@ async def get_pitch_single_setting(
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
 
-@router.get("/piano/pitch/group/setting", response_model=PitchGroupSettingResponse)
+@router.get("/pitch/group/setting", response_model=PitchGroupSettingResponse)
 async def get_pitch_group_settings(
     request: Request,
     current_user: User = Depends(get_current_user)
@@ -291,7 +291,7 @@ async def get_pitch_group_settings(
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
 
-@router.post("/piano/pitch/single", response_model=List[PitchResponse])
+@router.post("/pitch/single", response_model=List[PitchResponse])
 async def get_pitch_listen_single(
     request: Request,
     pitch_setting: PitchSettingRequest,
@@ -318,7 +318,7 @@ async def get_pitch_listen_single(
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
 
-@router.post("/piano/pitch/single/exam")
+@router.post("/pitch/single/exam")
 async def get_pitch_listen_single_exam(
     request: Request,
     pitch_setting: PitchSettingRequest,
@@ -335,7 +335,7 @@ async def get_pitch_listen_single_exam(
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
 
-@router.post("/piano/pitch/group/exam")
+@router.post("/pitch/group/exam")
 async def get_pitch_listen_group_exam(
     request: Request,
     pitch_group_setting: PitchGroupSettingRequest,
@@ -358,7 +358,7 @@ async def get_pitch_listen_group_exam(
         )
 
 
-@router.get("/piano/pitch/interval/setting")
+@router.get("/pitch/interval/setting")
 async def get_pitch_interval_settings(
     request: Request,
     current_user: User = Depends(get_current_user)
@@ -377,7 +377,7 @@ async def get_pitch_interval_settings(
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
 
-@router.post("/piano/pitch/interval/exam")
+@router.post("/pitch/interval/exam")
 async def get_pitch_listen_interval_exam(
     request: Request,
     pitch_interval_setting: PitchIntervalSettingRequest,
@@ -394,7 +394,7 @@ async def get_pitch_listen_interval_exam(
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
 
-@router.get("/piano/pitch/chord/setting")
+@router.get("/pitch/chord/setting")
 async def get_pitch_chord_settings(
     request: Request,
     current_user: User = Depends(get_current_user)
@@ -413,7 +413,7 @@ async def get_pitch_chord_settings(
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
 
-@router.post("/piano/pitch/chord/exam")
+@router.post("/pitch/chord/exam")
 async def get_pitch_listen_chord_exam(
     request: Request,
     pitch_chord_setting: PitchChordSettingRequest,

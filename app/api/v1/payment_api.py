@@ -1,12 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException, Body
 from sqlalchemy.orm import Session
-from app.db.session import get_db
+
+from app.api.v1.auth_api import get_db
 from app.services.payment_service import payment_service
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
 
-router = APIRouter()
+router = APIRouter(prefix="/pay", tags=["pay"])
 
 class CreateOrderRequest(BaseModel):
     user_id: str
@@ -34,7 +35,7 @@ async def create_order(
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@router.post("/payment")
+@router.post("/add")
 async def create_payment(
     request: CreatePaymentRequest,
     db: Session = Depends(get_db)

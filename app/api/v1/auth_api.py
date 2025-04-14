@@ -14,7 +14,7 @@ from app.db.base import SessionLocal
 from app.core.i18n import i18n, get_language
 from app.core.logger import logger
 
-router = APIRouter()
+router = APIRouter(prefix="", tags=["auth"])
 auth_service = AuthService()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/auth/token")
 

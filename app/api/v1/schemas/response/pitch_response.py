@@ -2013,3 +2013,34 @@ class MelodyQuestionResponse(BaseModel):
 
         }
     }
+
+
+
+class PitchAnalysisResult(BaseModel):
+    frequency: float
+    note: str
+    cents_difference: float
+    nearest_piano_pitch: PitchResponse
+    tuning_status: str
+    tuning_direction: str
+    model_config = {
+        "from_attributes": True,
+        "arbitrary_types_allowed": True,
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "frequency": 32.69428253173828,
+                    "note": "C1",
+                    "cents_difference": -4500.471905526318,
+                    "nearest_piano_pitch": {
+                        "id": 4,
+                        "pitch_number": 4,
+                        "name": "C1",
+                        "alias": "null"
+                    },
+                    "tuning_status": "perfect",
+                    "tuning_direction": "lower"
+                }
+            ]
+        }
+    }

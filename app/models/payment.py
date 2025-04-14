@@ -1,8 +1,10 @@
 from sqlalchemy import Column, Integer, String, Float, DateTime, Enum, ForeignKey
 from sqlalchemy.orm import relationship
-from app.db.base_class import Base
 import enum
 from datetime import datetime
+
+from app.db.base import Base
+
 
 class PaymentStatus(enum.Enum):
     PENDING = "pending"  # 待支付
