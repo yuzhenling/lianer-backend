@@ -183,25 +183,17 @@ class RhythmService:
             request.tempo.value
         )
 
-        # 生成三个错误选项
-        wrong_options = []
-        max_attempts = 10  # 最大尝试次数，防止无限循环
-        
-        while len(wrong_options) < 3 and max_attempts > 0:
-            wrong_rhythm = self.generate_wrong_rhythm(
-                correct_rhythm,
-                request.difficulty,
-                request.time_signature
-            )
-            
-            # 检查新生成的错误答案是否与已有的不同
-            if self._is_unique_rhythm(wrong_rhythm, wrong_options):
-                wrong_options.append(wrong_rhythm)
-            
-            max_attempts -= 1
+        # 使用系统化方法生成错误选项
+        wrong_options = self._generate_wrong_options_systematic(correct_rhythm, count=3)
 
-        # 如果没有生成足够的错误答案，使用基本变化生成剩余的
-        while len(wrong_options) < 3:
+        # 确保每个错误选项都是唯一的
+        unique_wrong_options = []
+        for wrong_rhythm in wrong_options:
+            if self._is_unique_rhythm(wrong_rhythm, unique_wrong_options) and self._is_unique_rhythm(wrong_rhythm,[correct_rhythm]):
+                unique_wrong_options.append(wrong_rhythm)
+
+        # 如果生成的唯一错误选项不足3个，使用基本变化补充
+        while len(unique_wrong_options) < 3:
             basic_wrong = correct_rhythm.copy(deep=True)
             basic_wrong.is_correct = False
             # 将第一个音符改为休止符作为基本变化
@@ -209,10 +201,11 @@ class RhythmService:
                 len(basic_wrong.measures[0]) > 0 and 
                 len(basic_wrong.measures[0][0].notes) > 0):
                 basic_wrong.measures[0][0].notes[0].is_rest = True
-            wrong_options.append(basic_wrong)
+            if self._is_unique_rhythm(basic_wrong, unique_wrong_options):
+                unique_wrong_options.append(basic_wrong)
 
         # 随机排列选项
-        all_options = [correct_rhythm] + wrong_options
+        all_options = [correct_rhythm] + unique_wrong_options
         random.shuffle(all_options)
 
         # 找出正确答案的位置
@@ -492,5 +485,203 @@ class RhythmService:
                 combinations.add(combo_tuple)
                 
         return [list(combo) for combo in combinations]
+
+    def _generate_wrong_options_systematic(self, correct_rhythm: RhythmScore, count: int = 3) -> List[RhythmScore]:
+        """系统化生成错误选项
+        
+        Args:
+            correct_rhythm: 正确答案
+            count: 需要生成的错误选项数量
+            
+        Returns:
+            List[RhythmScore]: 生成的错误选项列表
+        """
+        wrong_options = []
+        
+        # 定义变化规则
+        variation_rules = [
+            # 规则1: 改变音符时值
+            lambda rhythm: self._apply_duration_change(rhythm),
+            # 规则2: 添加休止符
+            # lambda rhythm: self._apply_rest_addition(rhythm),
+            # 规则3: 添加附点
+            lambda rhythm: self._apply_dot_addition(rhythm),
+            # 规则4: 合并音符
+            lambda rhythm: self._apply_note_merge(rhythm),
+            # 规则5: 拆分音符
+            lambda rhythm: self._apply_note_split(rhythm),
+            # 规则6: 移动节奏位置
+            lambda rhythm: self._apply_rhythm_shift(rhythm),
+            # 规则7: 改变音符顺序
+            lambda rhythm: self._apply_note_reorder(rhythm),
+            # 规则8: 改变小节结构
+            lambda rhythm: self._apply_measure_structure_change(rhythm)
+        ]
+        
+        # 随机选择变化规则
+        selected_rules = random.sample(variation_rules, count)
+        
+        for rule in selected_rules:
+            wrong_rhythm = correct_rhythm.copy(deep=True)
+            wrong_rhythm.is_correct = False
+            rule(wrong_rhythm)
+            wrong_options.append(wrong_rhythm)
+        
+        return wrong_options
+
+    def _apply_duration_change(self, rhythm: RhythmScore) -> None:
+        """改变音符时值"""
+        measure_group_idx = random.randint(0, len(rhythm.measures) - 1)
+        measure_idx = random.randint(0, len(rhythm.measures[measure_group_idx]) - 1)
+        measure = rhythm.measures[measure_group_idx][measure_idx]
+        
+        if len(measure.notes) > 0:
+            note_idx = random.randint(0, len(measure.notes) - 1)
+            note = measure.notes[note_idx]
+            
+            # 根据当前时值选择合适的变化
+            if note.duration == 1.0:
+                note.duration = 0.5
+                measure.notes.insert(note_idx + 1, RhythmNote(duration=0.5))
+            elif note.duration == 0.5:
+                note.duration = 0.25
+                measure.notes.insert(note_idx + 1, RhythmNote(duration=0.25))
+
+    def _apply_rest_addition(self, rhythm: RhythmScore) -> None:
+        """添加休止符"""
+        measure_group_idx = random.randint(0, len(rhythm.measures) - 1)
+        measure_idx = random.randint(0, len(rhythm.measures[measure_group_idx]) - 1)
+        measure = rhythm.measures[measure_group_idx][measure_idx]
+        
+        if len(measure.notes) > 0:
+            note_idx = random.randint(0, len(measure.notes) - 1)
+            measure.notes[note_idx].is_rest = True
+
+    def _apply_dot_addition(self, rhythm: RhythmScore) -> None:
+        """添加附点"""
+        measure_group_idx = random.randint(0, len(rhythm.measures) - 1)
+        measure_idx = random.randint(0, len(rhythm.measures[measure_group_idx]) - 1)
+        measure = rhythm.measures[measure_group_idx][measure_idx]
+        
+        if len(measure.notes) > 1:
+            note_idx = random.randint(0, len(measure.notes) - 2)
+            note = measure.notes[note_idx]
+            next_note = measure.notes[note_idx + 1]
+            
+            if note.duration == 1.0 and next_note.duration >= 0.5:
+                note.duration = 1.5
+                note.is_dotted = True
+                next_note.duration = 0.5
+
+    def _apply_note_merge(self, rhythm: RhythmScore) -> None:
+        """合并音符"""
+        measure_group_idx = random.randint(0, len(rhythm.measures) - 1)
+        measure_idx = random.randint(0, len(rhythm.measures[measure_group_idx]) - 1)
+        measure = rhythm.measures[measure_group_idx][measure_idx]
+        
+        if len(measure.notes) > 1:
+            note_idx = random.randint(0, len(measure.notes) - 2)
+            note1 = measure.notes[note_idx]
+            note2 = measure.notes[note_idx + 1]
+            
+            note1.duration = note1.duration + note2.duration
+            measure.notes.pop(note_idx + 1)
+
+    def _apply_note_split(self, rhythm: RhythmScore) -> None:
+        """拆分音符"""
+        measure_group_idx = random.randint(0, len(rhythm.measures) - 1)
+        measure_idx = random.randint(0, len(rhythm.measures[measure_group_idx]) - 1)
+        measure = rhythm.measures[measure_group_idx][measure_idx]
+        
+        if len(measure.notes) > 0:
+            note_idx = random.randint(0, len(measure.notes) - 1)
+            note = measure.notes[note_idx]
+            
+            if note.duration >= 1.0:
+                original_duration = note.duration
+                note.duration = original_duration / 2
+                measure.notes.insert(note_idx + 1, RhythmNote(duration=original_duration / 2))
+
+    def _apply_rhythm_shift(self, rhythm: RhythmScore) -> None:
+        """移动节奏位置"""
+        measure_group_idx = random.randint(0, len(rhythm.measures) - 1)
+        measure_group = rhythm.measures[measure_group_idx]
+        
+        if len(measure_group) >= 2:
+            measure_idx = random.randint(0, len(measure_group) - 2)
+            measure1 = measure_group[measure_idx]
+            measure2 = measure_group[measure_idx + 1]
+            
+            if (len(measure1.notes) > 0 and len(measure2.notes) > 0 and
+                measure1.notes[-1].duration == measure2.notes[0].duration):
+                measure1.notes[-1], measure2.notes[0] = measure2.notes[0], measure1.notes[-1]
+
+    def _apply_note_reorder(self, rhythm: RhythmScore) -> None:
+        """改变音符顺序，只交换不同时值的音符
+        
+        Args:
+            rhythm: 要修改的节奏
+        """
+        measure_group_idx = random.randint(0, len(rhythm.measures) - 1)
+        measure_idx = random.randint(0, len(rhythm.measures[measure_group_idx]) - 1)
+        measure = rhythm.measures[measure_group_idx][measure_idx]
+        
+        if len(measure.notes) > 1:
+            # 找出所有不同时值的音符对
+            different_duration_pairs = []
+            for i in range(len(measure.notes)):
+                for j in range(i + 1, len(measure.notes)):
+                    if measure.notes[i].duration != measure.notes[j].duration:
+                        different_duration_pairs.append((i, j))
+            
+            # 如果有不同时值的音符对，随机选择一对进行交换
+            if different_duration_pairs:
+                idx1, idx2 = random.choice(different_duration_pairs)
+                measure.notes[idx1], measure.notes[idx2] = measure.notes[idx2], measure.notes[idx1]
+
+    def _apply_measure_structure_change(self, rhythm: RhythmScore) -> None:
+        """改变小节结构，只交换不同的小节
+        
+        Args:
+            rhythm: 要修改的节奏
+        """
+        if len(rhythm.measures) > 1:
+            # 找出所有不同的小节对
+            different_measure_pairs = []
+            for i in range(len(rhythm.measures)):
+                for j in range(i + 1, len(rhythm.measures)):
+                    # 检查两个小节是否不同
+                    if not self._are_measures_similar(rhythm.measures[i], rhythm.measures[j]):
+                        different_measure_pairs.append((i, j))
+            
+            # 如果有不同的小节对，随机选择一对进行交换
+            if different_measure_pairs:
+                idx1, idx2 = random.choice(different_measure_pairs)
+                rhythm.measures[idx1], rhythm.measures[idx2] = rhythm.measures[idx2], rhythm.measures[idx1]
+
+    def _are_measures_similar(self, measure1: List[RhythmMeasure], measure2: List[RhythmMeasure]) -> bool:
+        """比较两个小节是否相似
+        
+        Args:
+            measure1: 第一个小节
+            measure2: 第二个小节
+            
+        Returns:
+            bool: 如果小节相似返回True，否则返回False
+        """
+        if len(measure1) != len(measure2):
+            return False
+            
+        for m1, m2 in zip(measure1, measure2):
+            if len(m1.notes) != len(m2.notes):
+                return False
+                
+            for n1, n2 in zip(m1.notes, m2.notes):
+                if (n1.duration != n2.duration or
+                    n1.is_rest != n2.is_rest or
+                    n1.is_dotted != n2.is_dotted):
+                    return False
+                    
+        return True
 
 rhythm_service = RhythmService()
