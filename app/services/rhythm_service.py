@@ -21,7 +21,6 @@ class RhythmService:
         self.rhythm_patterns = {
             RhythmDifficulty.LOW: {
                 TimeSignature.TWO_FOUR: self._generate_rhythm_combinations(2, [1, 0.5]),
-
                 TimeSignature.THREE_FOUR: self._generate_rhythm_combinations(3, [1, 0.5]),
                 TimeSignature.FOUR_FOUR: self._generate_rhythm_combinations(4, [1, 0.5]),
             },
@@ -31,9 +30,9 @@ class RhythmService:
                 TimeSignature.FOUR_FOUR: self._generate_rhythm_combinations(4, [1, 0.5, 0.25, 1.5], 10000),
             },
             RhythmDifficulty.HIGH: {
-                TimeSignature.TWO_FOUR: self._generate_rhythm_combinations(2, [1, 0.5, 0.25, 0.125, 1.5, 0.75], 50000),
-                TimeSignature.THREE_FOUR: self._generate_rhythm_combinations(3, [1, 0.5, 0.25, 0.125, 1.5, 0.75], 1000000),
-                TimeSignature.FOUR_FOUR: self._generate_rhythm_combinations(4, [1, 0.5, 0.25, 0.125, 1.5, 0.75], 10000000),
+                TimeSignature.TWO_FOUR: self._generate_rhythm_combinations(2, [1, 0.5, 0.25, 0.125, 1.5, 0.75], 1),
+                TimeSignature.THREE_FOUR: self._generate_rhythm_combinations(3, [1, 0.5, 0.25, 0.125, 1.5, 0.75], 1),
+                TimeSignature.FOUR_FOUR: self._generate_rhythm_combinations(4, [1, 0.5, 0.25, 0.125, 1.5, 0.75], 1),
             },
         }
 
@@ -78,6 +77,66 @@ class RhythmService:
         
         print(len(combinations))
         print(combinations[len(combinations)-1])
+        return combinations
+
+    def _generate_random_rhythm_combination(self, beats: int, durations: List[float]) -> List[float]:
+        """随机生成一个符合拍数要求的节奏组合
+
+        Args:
+            beats: 小节拍数（如2/4拍为2，3/4拍为3，4/4拍为4）
+            durations: 可用的音符时值列表
+            max_notes: 最大音符数量限制
+
+        Returns:
+            List[float]: 随机生成的节奏组合
+        """
+        combination = []
+        remaining = beats
+
+        # 随机选择音符数量，但不超过max_notes
+        num_notes = int(beats / min(durations))
+
+        for _ in range(num_notes - 1):
+            # 计算剩余可用的时值
+            available_durations = [d for d in durations if d <= remaining]
+            if not available_durations:
+                break
+
+            # 随机选择一个时值
+            duration = random.choice(available_durations)
+            combination.append(duration)
+            remaining -= duration
+
+            # 如果剩余拍数小于最小音符时值，结束生成
+            if remaining < min(durations):
+                break
+
+        # 添加最后一个音符，确保总拍数正确
+        if abs(remaining) > 0.001:  # 处理浮点数精度问题
+            combination.append(remaining)
+
+        # 随机打乱音符顺序
+        random.shuffle(combination)
+
+        return combination
+
+    def _generate_random_rhythm_combinations(self, beats: int, durations: List[float], count: int = 8) -> List[List[float]]:
+        """生成指定数量的随机节奏组合
+
+        Args:
+            beats: 小节拍数
+            durations: 可用的音符时值列表
+            count: 需要生成的组合数量
+
+        Returns:
+            List[List[float]]: 随机生成的节奏组合列表
+        """
+        combinations = []
+
+        while len(combinations) < count:
+            combo = self._generate_random_rhythm_combination(beats, durations)
+            combinations.add(combo)
+
         return combinations
 
     def _filter_rhythm_combinations(self, combinations: List[List[float]], difficulty: RhythmDifficulty) -> List[List[float]]:
@@ -179,6 +238,16 @@ class RhythmService:
         measures = []
         measures_sub = []
         patterns = self.rhythm_patterns[difficulty][time_signature]
+        if difficulty == RhythmDifficulty.HIGH:
+            beats = 0
+            duration = [1, 0.5, 0.25, 0.125, 1.5, 0.75]
+            if time_signature == TimeSignature.TWO_FOUR :
+                beats = 2
+            elif time_signature == TimeSignature.THREE_FOUR:
+                beats = 3
+            elif time_signature == TimeSignature.FOUR_FOUR:
+                beats = 4
+            patterns = self._generate_random_rhythm_combinations(beats, duration, measures_count*2)
 
         pattern_selected = random.choices(patterns, k=measures_count)
         for pattern in pattern_selected:
@@ -360,5 +429,68 @@ class RhythmService:
                         return False
                     
         return True
+
+    def _generate_random_rhythm_combination(self, beats: int, durations: List[float], max_notes: int = 8) -> List[float]:
+        """随机生成一个符合拍数要求的节奏组合
+        
+        Args:
+            beats: 小节拍数（如2/4拍为2，3/4拍为3，4/4拍为4）
+            durations: 可用的音符时值列表
+            max_notes: 最大音符数量限制
+            
+        Returns:
+            List[float]: 随机生成的节奏组合
+        """
+        combination = []
+        remaining = beats
+        
+        # 随机选择音符数量，但不超过max_notes
+        num_notes = random.randint(1, min(max_notes, int(beats / min(durations))))
+        
+        for _ in range(num_notes - 1):
+            # 计算剩余可用的时值
+            available_durations = [d for d in durations if d <= remaining]
+            if not available_durations:
+                break
+                
+            # 随机选择一个时值
+            duration = random.choice(available_durations)
+            combination.append(duration)
+            remaining -= duration
+            
+            # 如果剩余拍数小于最小音符时值，结束生成
+            if remaining < min(durations):
+                break
+        
+        # 添加最后一个音符，确保总拍数正确
+        if abs(remaining) > 0.001:  # 处理浮点数精度问题
+            combination.append(remaining)
+            
+        # 随机打乱音符顺序
+        random.shuffle(combination)
+        
+        return combination
+
+    def _generate_random_rhythm_combinations(self, beats: int, durations: List[float], count: int = 1000) -> List[List[float]]:
+        """生成指定数量的随机节奏组合
+        
+        Args:
+            beats: 小节拍数
+            durations: 可用的音符时值列表
+            count: 需要生成的组合数量
+            
+        Returns:
+            List[List[float]]: 随机生成的节奏组合列表
+        """
+        combinations = set()
+        
+        while len(combinations) < count:
+            combo = self._generate_random_rhythm_combination(beats, durations)
+            # 将组合转换为元组以便去重
+            combo_tuple = tuple(combo)
+            if combo_tuple not in combinations:
+                combinations.add(combo_tuple)
+                
+        return [list(combo) for combo in combinations]
 
 rhythm_service = RhythmService()
