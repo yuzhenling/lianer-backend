@@ -91,5 +91,5 @@ class MelodyQuestionRequest(BaseModel):
     time_signature: TimeSignature = TimeSignature.TWO_FOUR
     measures_count: MeasureCount = MeasureCount.FOUR
     tempo: Tempo = Tempo.EIGHTY
-    tonality: int = 1
-    tonality_choice: int = 1
+    tonality: int = 1 # 调式 eg: C大调
+    tonality_choice: int = 1 # 自然 旋律 和声

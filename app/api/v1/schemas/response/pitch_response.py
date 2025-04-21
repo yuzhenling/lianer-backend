@@ -2000,7 +2000,7 @@ class MelodyScorePitch(BaseModel):
     is_correct: bool  # 标记是否是正确答案
 
 class MelodyQuestionResponse(BaseModel):
-    correct_answer: MelodyScorePitch
+    correct_answer: str
     options: List[MelodyScorePitch]
     tempo: int
     time_signature: TimeSignature
