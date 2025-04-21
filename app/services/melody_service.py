@@ -159,115 +159,117 @@ class MelodyService:
         return wrong_options
 
     def _apply_scale_change(self, melody: MelodyScorePitch, request: MelodyQuestionRequest) -> None:
-        """改变音阶类型"""
+        """改变音阶类型，确保生成不同的音高序列"""
         # 获取所有可用的调式选择类型
         available_choices = [
             t for t in TonalityChoice
             if t != self.get_tonality_choice(request.tonality_choice)
         ]
         if available_choices:
-            new_choice = random.choice(available_choices)
-            pitch_list = self.get_pitch_list(
-                request.tonality,
-                new_choice.get_index(),
-                request.difficulty
-            )
-            self._update_melody_pitches(melody, pitch_list)
+            # 尝试不同的调式选择类型，直到找到生成不同音高序列的
+            for _ in range(3):  # 最多尝试3次
+                new_choice = random.choice(available_choices)
+                pitch_list = self.get_pitch_list(
+                    request.tonality,
+                    new_choice.get_index(),
+                    request.difficulty
+                )
+                # 检查新生成的音高序列是否与原始旋律不同
+                if not self._are_pitch_sequences_similar(melody, pitch_list):
+                    self._update_melody_pitches(melody, pitch_list)
+                    return
 
     def _apply_tonality_change(self, melody: MelodyScorePitch, request: MelodyQuestionRequest) -> None:
-        """改变调式"""
+        """改变调式，确保生成不同的音高序列"""
         # 获取所有可用的调式
         available_tonalities = [
             t for t in Tonality
             if t != self.get_tonality(request.tonality)
         ]
         if available_tonalities:
-            new_tonality = random.choice(available_tonalities)
-            pitch_list = self.get_pitch_list(
-                new_tonality.get_index(),
-                request.tonality_choice,
-                request.difficulty
-            )
-            self._update_melody_pitches(melody, pitch_list)
+            # 尝试不同的调式，直到找到生成不同音高序列的
+            for _ in range(3):  # 最多尝试3次
+                new_tonality = random.choice(available_tonalities)
+                pitch_list = self.get_pitch_list(
+                    new_tonality.get_index(),
+                    request.tonality_choice,
+                    request.difficulty
+                )
+                # 检查新生成的音高序列是否与原始旋律不同
+                if not self._are_pitch_sequences_similar(melody, pitch_list):
+                    self._update_melody_pitches(melody, pitch_list)
+                    return
 
     def _apply_accidental_change(self, melody: MelodyScorePitch) -> None:
-        """添加变化音"""
+        """添加变化音，确保至少改变一个音符"""
+        changed = False
         for measure_group in melody.measures:
             for measure in measure_group:
                 for note in measure.notes:
-                    if random.random() < 0.3:  # 30%的概率添加变化音
-                        note.pitch = self._get_variant_pitch(note.pitch)
+                    if not note.is_rest and random.random() < 0.3:  # 30%的概率改变音符
+                        new_pitch = self._get_variant_pitch(note.pitch)
+                        if new_pitch and new_pitch.pitch_number != note.pitch.pitch_number:
+                            note.pitch = new_pitch
+                            changed = True
+                            break
+                if changed:
+                    break
+            if changed:
+                break
 
     def _apply_octave_shift(self, melody: MelodyScorePitch) -> None:
-        """移动八度"""
+        """移动八度，确保至少改变一个音符"""
+        changed = False
         for measure_group in melody.measures:
             for measure in measure_group:
                 for note in measure.notes:
-                    if random.random() < 0.5:  # 50%的概率移动八度
-                        if random.choice([True, False]):
-                            pitch_num = 88 if note.pitch.pitch_number + 12 > 88 else note.pitch.pitch_number + 12
-                        else:
-                            pitch_num = 0 if note.pitch.pitch_number - 12 < 0 else note.pitch.pitch_number - 12
-                        note.pitch = pitch_service.get_pitch_by_number(pitch_num)
+                    if not note.is_rest and random.random() < 0.3:  # 30%的概率改变音符
+                        # 随机选择向上或向下移动八度
+                        shift = 12 if random.random() < 0.5 else -12
+                        new_pitch_num = note.pitch.pitch_number + shift
+                        if 0 <= new_pitch_num <= 88:
+                            new_pitch = pitch_service.get_pitch_by_number(new_pitch_num)
+                            if new_pitch:
+                                note.pitch = new_pitch
+                                changed = True
+                                break
+                if changed:
+                    break
+            if changed:
+                break
 
     def _apply_note_reorder(self, melody: MelodyScorePitch) -> None:
-        """改变音符顺序"""
-        measure_group_idx = random.randint(0, len(melody.measures) - 1)
-        measure_idx = random.randint(0, len(melody.measures[measure_group_idx]) - 1)
-        measure = melody.measures[measure_group_idx][measure_idx]
-        
-        if len(measure.notes) > 1:
-            # 找出所有不同音高的音符对
-            different_pitch_pairs = []
-            for i in range(len(measure.notes)):
-                for j in range(i + 1, len(measure.notes)):
-                    if measure.notes[i].pitch.pitch_number != measure.notes[j].pitch.pitch_number:
-                        different_pitch_pairs.append((i, j))
-            
-            # 如果有不同音高的音符对，随机选择一对进行交换
-            if different_pitch_pairs:
-                idx1, idx2 = random.choice(different_pitch_pairs)
-                measure.notes[idx1], measure.notes[idx2] = measure.notes[idx2], measure.notes[idx1]
+        """改变音符顺序，确保至少改变一个小节的音符顺序"""
+        for measure_group in melody.measures:
+            for measure in measure_group:
+                # 只处理非休止符的音符
+                notes = [note for note in measure.notes if not note.is_rest]
+                if len(notes) > 1:
+                    # 随机选择两个不同的音符交换位置
+                    idx1, idx2 = random.sample(range(len(notes)), 2)
+                    notes[idx1], notes[idx2] = notes[idx2], notes[idx1]
+                    return
 
     def _apply_measure_structure_change(self, melody: MelodyScorePitch) -> None:
-        """改变小节结构"""
-        if len(melody.measures) > 1:
-            # 找出所有不同的小节对
-            different_measure_pairs = []
-            for i in range(len(melody.measures)):
-                for j in range(i + 1, len(melody.measures)):
-                    if not self._are_measures_similar(melody.measures[i], melody.measures[j]):
-                        different_measure_pairs.append((i, j))
-            
-            # 如果有不同的小节对，随机选择一对进行交换
-            if different_measure_pairs:
-                idx1, idx2 = random.choice(different_measure_pairs)
-                melody.measures[idx1], melody.measures[idx2] = melody.measures[idx2], melody.measures[idx1]
+        """改变小节结构，确保至少改变一个小节的结构"""
+        for measure_group in melody.measures:
+            if len(measure_group) > 1:
+                # 随机选择两个不同的小节交换位置
+                idx1, idx2 = random.sample(range(len(measure_group)), 2)
+                measure_group[idx1], measure_group[idx2] = measure_group[idx2], measure_group[idx1]
+                return
 
     def _apply_rhythm_shift(self, melody: MelodyScorePitch) -> None:
-        """移动节奏位置"""
-        measure_group_idx = random.randint(0, len(melody.measures) - 1)
-        measure_group = melody.measures[measure_group_idx]
-        
-        if len(measure_group) >= 2:
-            # 找出所有可以交换的相邻小节对
-            valid_pairs = []
-            for i in range(len(measure_group) - 1):
-                measure1 = measure_group[i]
-                measure2 = measure_group[i + 1]
-                
-                if (len(measure1.notes) > 0 and len(measure2.notes) > 0 and
-                    # 检查两个音符是否不同
-                    (measure1.notes[-1].pitch.pitch_number != measure2.notes[0].pitch.pitch_number or
-                     measure1.notes[-1].duration != measure2.notes[0].duration)):
-                    valid_pairs.append(i)
-            
-            # 如果有可以交换的小节对，随机选择一对进行交换
-            if valid_pairs:
-                pair_idx = random.choice(valid_pairs)
-                measure1 = measure_group[pair_idx]
-                measure2 = measure_group[pair_idx + 1]
-                measure1.notes[-1], measure2.notes[0] = measure2.notes[0], measure1.notes[-1]
+        """移动节奏位置，确保至少改变一个音符的节奏"""
+        for measure_group in melody.measures:
+            for measure in measure_group:
+                for note in measure.notes:
+                    if not note.is_rest and random.random() < 0.3:  # 30%的概率改变音符
+                        # 随机改变音符的时值
+                        new_duration = random.choice([0.25, 0.5, 1.0, 2.0])
+                        if new_duration != note.duration:
+                            note.duration = new_duration
+                            return
 
     def _update_melody_pitches(self, melody: MelodyScorePitch, pitch_list: List[Pitch]) -> None:
         """更新旋律中的音高"""
