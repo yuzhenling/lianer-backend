@@ -12,37 +12,107 @@ from app.models.rhythm_settings import RhythmDifficulty, TimeSignature
 class RhythmService:
     def __init__(self):
         # 定义不同难度的节奏模板
+        #1.5    附点四分音符
+        #1      四分音符
+        #0.75   附点八分
+        #0.5    八分音符
+        #0.25   十六分音符
+        #0.125  三十二分音符
         self.rhythm_patterns = {
             RhythmDifficulty.LOW: {
-                TimeSignature.TWO_FOUR: [
-                    [1, 1],  # 四分音符
-                    [2],  # 二分音符
-                ],
-                TimeSignature.THREE_FOUR: [
-                    [1, 1, 1],
-                    [2, 1],
-                ],
-                TimeSignature.FOUR_FOUR: [
-                    [1, 1, 1, 1],
-                    [2, 2],
-                    [2, 1, 1],
-                ],
+                TimeSignature.TWO_FOUR: self._generate_rhythm_combinations(2, [1, 0.5]),
+
+                TimeSignature.THREE_FOUR: self._generate_rhythm_combinations(3, [1, 0.5]),
+                TimeSignature.FOUR_FOUR: self._generate_rhythm_combinations(4, [1, 0.5]),
             },
             RhythmDifficulty.MEDIUM: {
-                TimeSignature.TWO_FOUR: [
-                    [0.5, 0.5, 1],  # 两个八分音符+四分音符
-                    [1, 0.5, 0.5],
-                ],
-                # ... 其他拍号的模板
+                TimeSignature.TWO_FOUR: self._generate_rhythm_combinations(2, [1, 0.5, 0.25, 1.5]),
+                TimeSignature.THREE_FOUR: self._generate_rhythm_combinations(3, [1, 0.5, 0.25, 1.5]),
+                TimeSignature.FOUR_FOUR: self._generate_rhythm_combinations(4, [1, 0.5, 0.25, 1.5], 10000),
             },
             RhythmDifficulty.HIGH: {
-                TimeSignature.TWO_FOUR: [
-                    [0.25, 0.25, 0.5, 1],  # 包含十六分音符
-                    [1.5, 0.5],  # 符点四分音符
-                ],
-                # ... 其他拍号的模板
+                TimeSignature.TWO_FOUR: self._generate_rhythm_combinations(2, [1, 0.5, 0.25, 0.125, 1.5, 0.75], 50000),
+                TimeSignature.THREE_FOUR: self._generate_rhythm_combinations(3, [1, 0.5, 0.25, 0.125, 1.5, 0.75], 1000000),
+                TimeSignature.FOUR_FOUR: self._generate_rhythm_combinations(4, [1, 0.5, 0.25, 0.125, 1.5, 0.75], 10000000),
             },
         }
+
+    def _generate_rhythm_combinations(self, beats: int, durations: List[float], max_combinations: int = 1000) -> List[List[float]]:
+        """生成所有可能的节奏组合，包括不同的元素和不同的顺序
+        
+        Args:
+            beats: 小节拍数（如2/4拍为2，3/4拍为3，4/4拍为4）
+            durations: 可用的音符时值列表
+            max_combinations: 最大组合数限制
+            
+        Returns:
+            List[List[float]]: 所有可能的节奏组合
+        """
+        combinations = []
+        print(beats, durations, max_combinations)
+        
+        def backtrack(current: List[float], remaining: float):
+            # 如果已经达到最大组合数，直接返回
+            if len(combinations) >= max_combinations:
+                return
+                
+            if abs(remaining) < 0.001:  # 处理浮点数精度问题
+                combinations.append(current.copy())
+                return
+            
+            if remaining < 0:
+                return
+            
+            # 尝试所有可能的时值
+            for duration in durations:
+                if duration <= remaining:
+                    current.append(duration)
+                    backtrack(current, remaining - duration)
+                    # 如果已经达到最大组合数，直接返回
+                    if len(combinations) >= max_combinations:
+                        return
+                    current.pop()
+        
+        # 生成所有排列组合
+        backtrack([], beats)
+        
+        print(len(combinations))
+        print(combinations[len(combinations)-1])
+        return combinations
+
+    def _filter_rhythm_combinations(self, combinations: List[List[float]], difficulty: RhythmDifficulty) -> List[List[float]]:
+        """根据难度过滤节奏组合
+        
+        Args:
+            combinations: 所有可能的节奏组合
+            difficulty: 难度级别
+            
+        Returns:
+            List[List[float]]: 过滤后的节奏组合
+        """
+        filtered = []
+        
+        # 定义每个难度级别的允许时值
+        allowed_durations = {
+            RhythmDifficulty.LOW: {1.0, 0.5},  # 四分音符和八分音符
+            RhythmDifficulty.MEDIUM: {1.0, 0.5, 0.25, 1.5},  # 四分音符、八分音符、十六分音符和附点四分音符
+            RhythmDifficulty.HIGH: {1.0, 0.5, 0.25, 0.125, 1.5, 0.75}  # 所有时值
+        }
+        
+        allowed = allowed_durations[difficulty]
+        
+        for combo in combinations:
+            # 检查组合中的所有时值是否都在允许范围内
+            if all(d in allowed for d in combo):
+                filtered.append(combo)
+        
+        # 如果过滤后组合太多，随机选择一部分
+        max_filtered = 50  # 设置最大过滤后组合数
+        if len(filtered) > max_filtered:
+            import random
+            filtered = random.sample(filtered, max_filtered)
+        
+        return filtered
 
     def generate_question(self, request: RhythmQuestionRequest) -> RhythmQuestionResponse:
         """生成一个完整的节奏听写题"""
