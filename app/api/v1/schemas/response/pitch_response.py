@@ -2010,7 +2010,922 @@ class MelodyQuestionResponse(BaseModel):
         "from_attributes": True,
         "arbitrary_types_allowed": True,
         "json_schema_extra": {
-
+            "examples": [
+                {
+                    "correct_answer": "D",
+                    "options": [
+                        {
+                            "measures": [
+                                [
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 16,
+                                                    "pitch_number": 16,
+                                                    "alias": "null",
+                                                    "name": "C2"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 18,
+                                                    "pitch_number": 18,
+                                                    "alias": "null",
+                                                    "name": "D2"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 20,
+                                                    "pitch_number": 20,
+                                                    "alias": "null",
+                                                    "name": "E2"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 21,
+                                                    "pitch_number": 21,
+                                                    "alias": "null",
+                                                    "name": "F2"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 23,
+                                                    "pitch_number": 23,
+                                                    "alias": "null",
+                                                    "name": "G2"
+                                                }
+                                            },
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 24,
+                                                    "pitch_number": 24,
+                                                    "alias": "Ab2",
+                                                    "name": "G#2"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 27,
+                                                    "pitch_number": 27,
+                                                    "alias": "null",
+                                                    "name": "B2"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 16,
+                                                    "pitch_number": 16,
+                                                    "alias": "null",
+                                                    "name": "C2"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 18,
+                                                    "pitch_number": 18,
+                                                    "alias": "null",
+                                                    "name": "D2"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 20,
+                                                    "pitch_number": 20,
+                                                    "alias": "null",
+                                                    "name": "E2"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 21,
+                                                    "pitch_number": 21,
+                                                    "alias": "null",
+                                                    "name": "F2"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 23,
+                                                    "pitch_number": 23,
+                                                    "alias": "null",
+                                                    "name": "G2"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 24,
+                                                    "pitch_number": 24,
+                                                    "alias": "Ab2",
+                                                    "name": "G#2"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            ],
+                            "time_signature": "2/4",
+                            "tempo": 80,
+                            "is_correct": "false"
+                        },
+                        {
+                            "measures": [
+                                [
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 40,
+                                                    "pitch_number": 40,
+                                                    "alias": "null",
+                                                    "name": "C4"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 42,
+                                                    "pitch_number": 42,
+                                                    "alias": "null",
+                                                    "name": "D4"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 44,
+                                                    "pitch_number": 44,
+                                                    "alias": "null",
+                                                    "name": "E4"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 45,
+                                                    "pitch_number": 45,
+                                                    "alias": "null",
+                                                    "name": "F4"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 47,
+                                                    "pitch_number": 47,
+                                                    "alias": "null",
+                                                    "name": "G4"
+                                                }
+                                            },
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 48,
+                                                    "pitch_number": 48,
+                                                    "alias": "Ab4",
+                                                    "name": "G#4"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 51,
+                                                    "pitch_number": 51,
+                                                    "alias": "null",
+                                                    "name": "B4"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 40,
+                                                    "pitch_number": 40,
+                                                    "alias": "null",
+                                                    "name": "C4"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 42,
+                                                    "pitch_number": 42,
+                                                    "alias": "null",
+                                                    "name": "D4"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 44,
+                                                    "pitch_number": 44,
+                                                    "alias": "null",
+                                                    "name": "E4"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 45,
+                                                    "pitch_number": 45,
+                                                    "alias": "null",
+                                                    "name": "F4"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 47,
+                                                    "pitch_number": 47,
+                                                    "alias": "null",
+                                                    "name": "G4"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 48,
+                                                    "pitch_number": 48,
+                                                    "alias": "Ab4",
+                                                    "name": "G#4"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            ],
+                            "time_signature": "2/4",
+                            "tempo": 80,
+                            "is_correct": "false"
+                        },
+                        {
+                            "measures": [
+                                [
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 4,
+                                                    "pitch_number": 4,
+                                                    "alias": "null",
+                                                    "name": "C1"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 6,
+                                                    "pitch_number": 6,
+                                                    "alias": "null",
+                                                    "name": "D1"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 7,
+                                                    "pitch_number": 7,
+                                                    "alias": "Eb1",
+                                                    "name": "D#1"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 9,
+                                                    "pitch_number": 9,
+                                                    "alias": "null",
+                                                    "name": "F1"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 11,
+                                                    "pitch_number": 11,
+                                                    "alias": "null",
+                                                    "name": "G1"
+                                                }
+                                            },
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 12,
+                                                    "pitch_number": 12,
+                                                    "alias": "Ab1",
+                                                    "name": "G#1"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 14,
+                                                    "pitch_number": 14,
+                                                    "alias": "Bb1",
+                                                    "name": "A#1"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 4,
+                                                    "pitch_number": 4,
+                                                    "alias": "null",
+                                                    "name": "C1"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 6,
+                                                    "pitch_number": 6,
+                                                    "alias": "null",
+                                                    "name": "D1"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 7,
+                                                    "pitch_number": 7,
+                                                    "alias": "Eb1",
+                                                    "name": "D#1"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 9,
+                                                    "pitch_number": 9,
+                                                    "alias": "null",
+                                                    "name": "F1"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 11,
+                                                    "pitch_number": 11,
+                                                    "alias": "null",
+                                                    "name": "G1"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 12,
+                                                    "pitch_number": 12,
+                                                    "alias": "Ab1",
+                                                    "name": "G#1"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            ],
+                            "time_signature": "2/4",
+                            "tempo": 80,
+                            "is_correct": "false"
+                        },
+                        {
+                            "measures": [
+                                [
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 28,
+                                                    "pitch_number": 28,
+                                                    "name": "C3",
+                                                    "alias": "null"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 30,
+                                                    "pitch_number": 30,
+                                                    "name": "D3",
+                                                    "alias": "null"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 32,
+                                                    "pitch_number": 32,
+                                                    "name": "E3",
+                                                    "alias": "null"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 33,
+                                                    "pitch_number": 33,
+                                                    "name": "F3",
+                                                    "alias": "null"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 35,
+                                                    "pitch_number": 35,
+                                                    "name": "G3",
+                                                    "alias": "null"
+                                                }
+                                            },
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 37,
+                                                    "pitch_number": 37,
+                                                    "name": "A3",
+                                                    "alias": "null"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 39,
+                                                    "pitch_number": 39,
+                                                    "name": "B3",
+                                                    "alias": "null"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 28,
+                                                    "pitch_number": 28,
+                                                    "name": "C3",
+                                                    "alias": "null"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 30,
+                                                    "pitch_number": 30,
+                                                    "name": "D3",
+                                                    "alias": "null"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 32,
+                                                    "pitch_number": 32,
+                                                    "name": "E3",
+                                                    "alias": "null"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 33,
+                                                    "pitch_number": 33,
+                                                    "name": "F3",
+                                                    "alias": "null"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 35,
+                                                    "pitch_number": 35,
+                                                    "name": "G3",
+                                                    "alias": "null"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 37,
+                                                    "pitch_number": 37,
+                                                    "name": "A3",
+                                                    "alias": "null"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            ],
+                            "time_signature": "2/4",
+                            "tempo": 80,
+                            "is_correct": "true"
+                        },
+                        {
+                            "measures": [
+                                [
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 28,
+                                                    "pitch_number": 28,
+                                                    "name": "C3",
+                                                    "alias": "null"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 30,
+                                                    "pitch_number": 30,
+                                                    "name": "D3",
+                                                    "alias": "null"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 32,
+                                                    "pitch_number": 32,
+                                                    "name": "E3",
+                                                    "alias": "null"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 33,
+                                                    "pitch_number": 33,
+                                                    "name": "F3",
+                                                    "alias": "null"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 28,
+                                                    "pitch_number": 28,
+                                                    "name": "C3",
+                                                    "alias": "null"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 30,
+                                                    "pitch_number": 30,
+                                                    "name": "D3",
+                                                    "alias": "null"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 32,
+                                                    "pitch_number": 32,
+                                                    "name": "E3",
+                                                    "alias": "null"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 35,
+                                                    "pitch_number": 35,
+                                                    "name": "G3",
+                                                    "alias": "null"
+                                                }
+                                            },
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 37,
+                                                    "pitch_number": 37,
+                                                    "name": "A3",
+                                                    "alias": "null"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 39,
+                                                    "pitch_number": 39,
+                                                    "name": "B3",
+                                                    "alias": "null"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notes": [
+                                            {
+                                                "duration": 1,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 33,
+                                                    "pitch_number": 33,
+                                                    "name": "F3",
+                                                    "alias": "null"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 35,
+                                                    "pitch_number": 35,
+                                                    "name": "G3",
+                                                    "alias": "null"
+                                                }
+                                            },
+                                            {
+                                                "duration": 0.5,
+                                                "is_rest": "false",
+                                                "is_dotted": "false",
+                                                "tied_to_next": "false",
+                                                "pitch": {
+                                                    "id": 37,
+                                                    "pitch_number": 37,
+                                                    "name": "A3",
+                                                    "alias": "null"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            ],
+                            "time_signature": "2/4",
+                            "tempo": 80,
+                            "is_correct": "false"
+                        }
+                    ],
+                    "tempo": 80,
+                    "time_signature": "2/4",
+                    "measures_count": 4,
+                    "difficulty": "low"
+                }
+            ]
         }
     }
 

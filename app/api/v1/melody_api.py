@@ -46,7 +46,7 @@ async def generate_ai_melody_question(
 ):
     lang = get_language(request)
     try:
-        return await ai_melody_service.generate_melody_question(request)
+        return await ai_melody_service.generate_melody_question(melody_question_request)
         return response
     except Exception as e:
         logger.error(

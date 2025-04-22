@@ -107,7 +107,8 @@ class MelodyService:
                         duration=note.duration,
                         pitch=pitch_list[pitch_index % len(pitch_list)],
                         is_rest=note.is_rest,
-                        is_dotted=note.is_dotted
+                        is_dotted=note.is_dotted,
+                        tied_to_next=note.tied_to_next
                     )
                     notes.append(melody_note)
                     pitch_index += 1

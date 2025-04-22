@@ -5,12 +5,14 @@ from typing import List, Tuple
 
 from app.api.v1.schemas.request.pitch_request import RhythmQuestionRequest
 from app.api.v1.schemas.response.pitch_response import RhythmQuestionResponse, RhythmNote, RhythmMeasure, RhythmScore
+from app.core.logger import logger
 from app.models.rhythm import *
 from app.models.rhythm_settings import RhythmDifficulty, TimeSignature
 
 
 class RhythmService:
     def __init__(self):
+        logger.info("Initializing RhythmService")
         # 定义不同难度的节奏模板
         #1.5    附点四分音符
         #1      四分音符
@@ -18,7 +20,7 @@ class RhythmService:
         #0.5    八分音符
         #0.25   十六分音符
         #0.125  三十二分音符
-        self.rhythm_patterns = {
+        self.rhythm_patterns: dict = {
             RhythmDifficulty.LOW: {
                 TimeSignature.TWO_FOUR: self._generate_rhythm_combinations(2, [1, 0.5]),
                 TimeSignature.THREE_FOUR: self._generate_rhythm_combinations(3, [1, 0.5]),
@@ -34,8 +36,9 @@ class RhythmService:
                 TimeSignature.THREE_FOUR: self._generate_rhythm_combinations(3, [1, 0.5, 0.25, 0.125, 1.5, 0.75], 1),
                 TimeSignature.FOUR_FOUR: self._generate_rhythm_combinations(4, [1, 0.5, 0.25, 0.125, 1.5, 0.75], 1),
             },
-        },
-        self.durations = {
+        }
+        logger.info("Rhythm patterns initialized")
+        self.durations: dict = {
             RhythmDifficulty.LOW: {1.0, 0.5},  # 四分音符和八分音符
             RhythmDifficulty.MEDIUM: {1.0, 0.5, 0.25, 1.5},  # 四分音符、八分音符、十六分音符和附点四分音符
             RhythmDifficulty.HIGH: {1.0, 0.5, 0.25, 0.125, 1.5, 0.75}  # 所有时值
@@ -52,6 +55,7 @@ class RhythmService:
         Returns:
             List[List[float]]: 所有可能的节奏组合
         """
+        logger.info(f"Generating rhythm combinations for beats={beats}, durations={durations}, max_combinations={max_combinations}")
         combinations = []
         print(beats, durations, max_combinations)
         
@@ -82,6 +86,7 @@ class RhythmService:
         
         print(len(combinations))
         print(combinations[len(combinations)-1])
+        logger.info(f"Generated {len(combinations)} rhythm combinations")
         return combinations
 
     def _generate_random_rhythm_combination(self, beats: int, durations: List[float]) -> List[float]:
@@ -176,25 +181,34 @@ class RhythmService:
 
     def generate_question(self, request: RhythmQuestionRequest) -> RhythmQuestionResponse:
         """生成一个完整的节奏听写题"""
+        logger.info(f"Generating rhythm question with request: {request.dict()}")
+        
         # 生成正确答案
+        logger.info("Generating correct rhythm")
         correct_rhythm = self.generate_rhythm(
             request.difficulty,
             request.time_signature,
             request.measures_count.value,
             request.tempo.value
         )
+        logger.info("Correct rhythm generated")
 
         # 使用系统化方法生成错误选项
+        logger.info("Generating wrong options")
         wrong_options = self._generate_wrong_options_systematic(correct_rhythm, request.difficulty ,count=3)
+        logger.info(f"Generated {len(wrong_options)} wrong options")
 
         # 确保每个错误选项都是唯一的
+        logger.info("Checking uniqueness of wrong options")
         unique_wrong_options = []
         for wrong_rhythm in wrong_options:
             if self._is_unique_rhythm(wrong_rhythm, unique_wrong_options) and self._is_unique_rhythm(wrong_rhythm,[correct_rhythm]):
                 unique_wrong_options.append(wrong_rhythm)
+        logger.info(f"Found {len(unique_wrong_options)} unique wrong options")
 
         # 如果生成的唯一错误选项不足3个，使用基本变化补充
         while len(unique_wrong_options) < 3:
+            logger.info("Adding basic variations to reach 3 unique options")
             basic_wrong = correct_rhythm.copy(deep=True)
             basic_wrong.is_correct = False
             # 将第一个音符改为休止符作为基本变化
@@ -206,11 +220,13 @@ class RhythmService:
                 unique_wrong_options.append(basic_wrong)
 
         # 随机排列选项
+        logger.info("Randomizing options")
         all_options = [correct_rhythm] + unique_wrong_options
         random.shuffle(all_options)
 
         # 找出正确答案的位置
         correct_answer = chr(65 + all_options.index(correct_rhythm))  # A, B, C, or D
+        logger.info(f"Correct answer is option {correct_answer}")
 
         for rr in all_options:
             rr.measures
@@ -232,10 +248,14 @@ class RhythmService:
             tempo: int = 80,
     ) -> RhythmScore:
         """生成一个正确的节奏模式"""
+        logger.info(f"Generating rhythm with difficulty={difficulty}, time_signature={time_signature}, measures_count={measures_count}")
         measures = []
         measures_sub = []
         patterns = self.rhythm_patterns[difficulty][time_signature]
+        logger.info(f"Selected {len(patterns)} patterns for the given parameters")
+        
         if difficulty == RhythmDifficulty.HIGH:
+            logger.info("Generating high difficulty rhythm patterns")
             beats = 0
             duration = [1, 0.5, 0.25, 0.125, 1.5, 0.75]
             if time_signature == TimeSignature.TWO_FOUR :
@@ -245,8 +265,11 @@ class RhythmService:
             elif time_signature == TimeSignature.FOUR_FOUR:
                 beats = 4
             patterns = self._generate_random_rhythm_combinations(beats, duration, measures_count*2)
+            logger.info(f"Generated {len(patterns)} high difficulty patterns")
 
         pattern_selected = random.choices(patterns, k=measures_count)
+        logger.info(f"Selected {len(pattern_selected)} patterns for measures")
+        
         for pattern in pattern_selected:
             notes = [
                 RhythmNote(duration=duration)
@@ -255,6 +278,7 @@ class RhythmService:
             measures_sub.append(RhythmMeasure(notes=notes))
 
         measures.append(measures_sub)
+        logger.info("Successfully created rhythm measures")
 
         return RhythmScore(
             measures=measures,
@@ -488,7 +512,7 @@ class RhythmService:
                 
         return [list(combo) for combo in combinations]
 
-    def _generate_wrong_options_systematic(self, correct_rhythm: RhythmScore, difficulty: RhythmDifficulty  , count: int = 3) -> List[RhythmScore]:
+    def _generate_wrong_options_systematic(self, correct_rhythm: RhythmScore, difficulty: RhythmDifficulty, count: int = 3) -> List[RhythmScore]:
         """系统化生成错误选项
         
         Args:
@@ -543,10 +567,10 @@ class RhythmService:
         # 随机选择变化规则
         selected_rules = random.sample(variation_rules, count)
         
-        for rule in selected_rules:
+        for apply_rule in selected_rules:
             wrong_rhythm = correct_rhythm.copy(deep=True)
             wrong_rhythm.is_correct = False
-            rule(wrong_rhythm)
+            apply_rule(wrong_rhythm)
             wrong_options.append(wrong_rhythm)
         
         return wrong_options

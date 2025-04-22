@@ -49,7 +49,7 @@ class CustomJsonFormatter(logging.Formatter):
 
 # 创建logger
 logger = logging.getLogger("shengyibaodian")
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 # 控制台处理器
 console_handler = logging.StreamHandler(sys.stdout)
