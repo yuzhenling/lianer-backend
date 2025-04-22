@@ -11,6 +11,7 @@ from app.api.v1.schemas.response.pitch_response import MelodySettingResponse, Me
 from app.core.i18n import i18n, get_language
 from app.models.melody_settings import Tonality, TonalityChoice
 from app.models.user import User
+from app.services.ai_melody_service import ai_melody_service
 from app.services.melody_service import melody_service
 from app.models.rhythm import *
 from app.core.logger import logger
@@ -22,7 +23,6 @@ async def generate_melody_question(
         request: Request,
         melody_question_request: MelodyQuestionRequest,
         current_user: User = Depends(get_current_user),
-        db: Session = Depends(get_db)
 ):
     """生成节奏听写题"""
     lang = get_language(request)
@@ -32,6 +32,25 @@ async def generate_melody_question(
     except Exception as e:
         logger.error(
             f"Error in generate_melody_question : {str(e)}\nTraceback: {traceback.format_exc()}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
+        )
+
+
+@router.post("/generate/ai", response_model=MelodyQuestionResponse)
+async def generate_ai_melody_question(
+    request: Request,
+    melody_question_request: MelodyQuestionRequest,
+    current_user: User = Depends(get_current_user)
+):
+    lang = get_language(request)
+    try:
+        return await ai_melody_service.generate_melody_question(request)
+        return response
+    except Exception as e:
+        logger.error(
+            f"Error in generate_ai_melody_question : {str(e)}\nTraceback: {traceback.format_exc()}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)

@@ -44,6 +44,10 @@ class Settings(BaseSettings):
     MAX_AUDIO_SIZE: int = 10 * 1024 * 1024  # 10MB
     ALLOWED_AUDIO_TYPES: list = ["audio/wav", "audio/mp3", "audio/m4a"]
     
+    # DeepSeek API settings
+    DEEPSEEK_API_KEY: str = "sk-93590ae8cf3a4025a204afc8fa0f6082"
+    DEEPSEEK_API_URL: str = "https://api.deepseek.com/v1/chat/completions"
+    
     class Config:
         env_file = ".env"
         case_sensitive = True

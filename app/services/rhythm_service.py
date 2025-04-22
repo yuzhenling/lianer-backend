@@ -34,6 +34,11 @@ class RhythmService:
                 TimeSignature.THREE_FOUR: self._generate_rhythm_combinations(3, [1, 0.5, 0.25, 0.125, 1.5, 0.75], 1),
                 TimeSignature.FOUR_FOUR: self._generate_rhythm_combinations(4, [1, 0.5, 0.25, 0.125, 1.5, 0.75], 1),
             },
+        },
+        self.durations = {
+            RhythmDifficulty.LOW: {1.0, 0.5},  # 四分音符和八分音符
+            RhythmDifficulty.MEDIUM: {1.0, 0.5, 0.25, 1.5},  # 四分音符、八分音符、十六分音符和附点四分音符
+            RhythmDifficulty.HIGH: {1.0, 0.5, 0.25, 0.125, 1.5, 0.75}  # 所有时值
         }
 
     def _generate_rhythm_combinations(self, beats: int, durations: List[float], max_combinations: int = 1000) -> List[List[float]]:
@@ -152,13 +157,9 @@ class RhythmService:
         filtered = []
         
         # 定义每个难度级别的允许时值
-        allowed_durations = {
-            RhythmDifficulty.LOW: {1.0, 0.5},  # 四分音符和八分音符
-            RhythmDifficulty.MEDIUM: {1.0, 0.5, 0.25, 1.5},  # 四分音符、八分音符、十六分音符和附点四分音符
-            RhythmDifficulty.HIGH: {1.0, 0.5, 0.25, 0.125, 1.5, 0.75}  # 所有时值
-        }
+
         
-        allowed = allowed_durations[difficulty]
+        allowed = self.durations[difficulty]
         
         for combo in combinations:
             # 检查组合中的所有时值是否都在允许范围内
