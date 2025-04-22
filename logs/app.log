@@ -208,3 +208,22 @@
 {"timestamp": "2025-04-21T11:27:27.793957", "level": "INFO", "message": "Request started", "module": "logging", "function": "dispatch", "line": 21, "request_id": "b87b2f75-a859-4048-9092-46e5086d7340", "ip": "127.0.0.1", "path": "/api/v1/melody/generate", "method": "POST"}
 {"timestamp": "2025-04-21T11:27:27.796643", "level": "INFO", "message": "Request completed", "module": "logging", "function": "dispatch", "line": 38, "request_id": "b87b2f75-a859-4048-9092-46e5086d7340", "path": "/api/v1/melody/generate", "method": "POST"}
 {"timestamp": "2025-04-21T11:30:31.197087", "level": "INFO", "message": "Shutting down application...", "module": "main", "function": "lifespan", "line": 71}
+{"timestamp": "2025-04-22T02:23:32.400504", "level": "INFO", "message": "Creating database tables...", "module": "main", "function": "lifespan", "line": 33}
+{"timestamp": "2025-04-22T02:23:32.403796", "level": "INFO", "message": "Initializing database data...", "module": "main", "function": "lifespan", "line": 39}
+{"timestamp": "2025-04-22T02:23:32.413034", "level": "INFO", "message": "VIP levels already initialized, skipping...", "module": "init_data", "function": "init_vip_levels", "line": 21}
+{"timestamp": "2025-04-22T02:23:32.416154", "level": "INFO", "message": "Pitch already initialized, skipping...", "module": "init_data", "function": "init_pitches", "line": 75}
+{"timestamp": "2025-04-22T02:23:32.417314", "level": "INFO", "message": "PitchIntervalType already initialized, skipping...", "module": "init_data", "function": "init_interval_type", "line": 256}
+{"timestamp": "2025-04-22T02:23:32.418642", "level": "INFO", "message": "PitchConcordanceType already initialized, skipping...", "module": "init_data", "function": "init_concordance_type", "line": 272}
+{"timestamp": "2025-04-22T02:23:32.419929", "level": "INFO", "message": "PitchInterval already initialized, skipping...", "module": "init_data", "function": "init_intervals", "line": 123}
+{"timestamp": "2025-04-22T02:23:32.421547", "level": "INFO", "message": "PitchChordType already initialized, skipping...", "module": "init_data", "function": "init_pitch_chord_type", "line": 288}
+{"timestamp": "2025-04-22T02:23:32.423344", "level": "INFO", "message": "PitchChordTypeMapping already initialized, skipping...", "module": "init_data", "function": "init_pitch_chord", "line": 304}
+{"timestamp": "2025-04-22T02:23:32.423394", "level": "INFO", "message": "Loading VIP cache...", "module": "main", "function": "lifespan", "line": 48}
+{"timestamp": "2025-04-22T02:23:32.423723", "level": "INFO", "message": "Successfully loaded 4 VIP levels into cache", "module": "vip_service", "function": "load_vip_cache", "line": 42}
+{"timestamp": "2025-04-22T02:23:32.423758", "level": "INFO", "message": "Loading Pitch cache...", "module": "main", "function": "lifespan", "line": 51}
+{"timestamp": "2025-04-22T02:23:32.424689", "level": "INFO", "message": "Successfully loaded 88 Pitch into cache", "module": "pitch_service", "function": "load_pitch_cache", "line": 56}
+{"timestamp": "2025-04-22T02:23:32.424730", "level": "INFO", "message": "building Pitch Group cache...", "module": "main", "function": "lifespan", "line": 54}
+{"timestamp": "2025-04-22T02:23:32.424895", "level": "INFO", "message": "Successfully build Pitch Group into cache", "module": "pitch_service", "function": "build_pitch_group_cache", "line": 79}
+{"timestamp": "2025-04-22T02:23:32.424922", "level": "INFO", "message": "building Pitch Interval cache...", "module": "main", "function": "lifespan", "line": 57}
+{"timestamp": "2025-04-22T02:23:32.426712", "level": "INFO", "message": "Successfully built Pitch Interval cache with 26 intervals", "module": "pitch_service", "function": "build_pitch_interval_cache", "line": 142}
+{"timestamp": "2025-04-22T02:23:32.426765", "level": "INFO", "message": "building Pitch Chord cache...", "module": "main", "function": "lifespan", "line": 60}
+{"timestamp": "2025-04-22T02:23:32.427778", "level": "INFO", "message": "Successfully built Pitch chord cache with 11 intervals", "module": "pitch_service", "function": "build_pitch_chord_cache", "line": 203}

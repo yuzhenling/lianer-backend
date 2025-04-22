@@ -6,9 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="83c1f24d-9736-40eb-a780-45c9d33bfc91" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/v1/melody_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/melody_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/core/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/core/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/services/rhythm_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/rhythm_service.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -174,7 +171,7 @@
       <workItem from="1745201491914" duration="4424000" />
       <workItem from="1745213378273" duration="1180000" />
       <workItem from="1745225981542" duration="9265000" />
-      <workItem from="1745282118774" duration="4361000" />
+      <workItem from="1745282118774" duration="5620000" />
     </task>
     <servers />
   </component>
