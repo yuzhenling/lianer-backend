@@ -153,9 +153,9 @@ class AIMelodyService:
                         "notes": [ //notes代表一个小节的旋律，它里面包含小节中的时值、音高等信息 
                             {{
                                 "duration": 0.5,  // 时值：0.5表示八分音符，1表示四分音符，0.25表示十六分音符，0.125表示三十二分音符，0.75表示附点八分音符，1.5表示附点四分音符，
-                                "is_rest": false,  // 是否为休止符
-                                "is_dotted": false,  // 是否为附点音符
-                                "tied_to_next": false,  // 是否与下一个音符相连
+                                "is_rest": false,  // 是否为休止符,boolean类型 默认是false，如果是false 就不用返回这行值，如果是true才返回这行true值
+                                "is_dotted": false,  // 是否为附点音符,boolean类型  默认是false，如果是false 就不用返回这行值，如果是true才返回这行true值
+                                "tied_to_next": false,  // 是否与下一个音符相连,boolean类型  默认是false，如果是false 就不用返回这行值，如果是true才返回这行true值
                                 "pitch": "C2",  // 音高名称
                             }}
                         ]
@@ -194,7 +194,7 @@ class AIMelodyService:
             "top_p": 0.9,
         }
         
-        logger.debug(f"API request data: {json.dumps(data, ensure_ascii=False)}")
+        logger.debug(f"API request data: {data}")
         
         response = requests.post(
             self.deepseek_api_url,
@@ -216,6 +216,7 @@ class AIMelodyService:
             logger.info("Parsing AI response")
             # 解析AI返回的JSON
             content = response["choices"][0]["message"]["content"]
+            logger.info(f"content={content}")
             cleaned_content = content.strip().removeprefix('```json').removesuffix('```').strip()
             melody_data = json.loads(cleaned_content)
 #             data = """
@@ -361,9 +362,9 @@ class AIMelodyService:
                         melody_note = MelodyNotePitch(
                             duration=note_data["duration"],
                             pitch=pitch[0],
-                            is_rest=note_data["is_rest"],
-                            is_dotted=note_data["is_dotted"],
-                            tied_to_next=note_data["tied_to_next"],
+                            is_rest = note_data.get("is_rest", False),
+                            is_dotted= note_data.get("is_dotted", False),
+                            tied_to_next= note_data.get("tied_to_next", False),
                         )
                         notes.append(melody_note)
                     measures_sub.append(MelodyMeasurePitch(notes=notes))

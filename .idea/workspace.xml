@@ -6,12 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="83c1f24d-9736-40eb-a780-45c9d33bfc91" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/v1/melody_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/melody_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/v1/schemas/response/pitch_response.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/schemas/response/pitch_response.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/core/logger.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/core/logger.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/services/ai_melody_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/ai_melody_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/services/melody_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/melody_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/services/rhythm_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/rhythm_service.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/app.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/app.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/error.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/error.log" afterDir="false" />
     </list>
@@ -179,7 +174,7 @@
       <workItem from="1745201491914" duration="4424000" />
       <workItem from="1745213378273" duration="1180000" />
       <workItem from="1745225981542" duration="9265000" />
-      <workItem from="1745282118774" duration="19693000" />
+      <workItem from="1745282118774" duration="21593000" />
     </task>
     <servers />
   </component>
