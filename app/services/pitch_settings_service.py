@@ -30,7 +30,7 @@ class PitchSettingsService:
         pitch_range = PitchRange(
             min=default_group.get_min(),
             max=default_group.get_max(),
-            list=default_group.pitch_pairs
+            list=default_group.pitches
         )
 
         pitch_black_keys = [
@@ -67,7 +67,7 @@ class PitchSettingsService:
         pitch_range = PitchRange(
             min=default_group.get_min(),
             max=default_group.get_max(),
-            list=default_group.pitch_pairs
+            list=default_group.pitches
         )
 
         pitch_black_keys = [
