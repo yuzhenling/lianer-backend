@@ -5,7 +5,7 @@ from typing import List
 from fastapi import HTTPException
 from starlette import status
 
-from app.api.v1.schemas.request.pitch_request import MelodyQuestionRequest
+from app.api.v1.schemas.request.pitch_request import MelodySettingRequest
 from app.api.v1.schemas.response.pitch_response import (
     MelodyNotePitch, MelodyMeasurePitch, MelodyScorePitch, MelodyQuestionResponse,
     PitchResponse
@@ -23,7 +23,7 @@ class MelodyService:
     def __init__(self):
         pass
 
-    def generate_question(self, request: MelodyQuestionRequest) -> MelodyQuestionResponse:
+    async def generate_question(self, request: MelodySettingRequest) -> MelodyQuestionResponse:
         """生成一个完整的旋律听写题"""
         # 生成正确答案
         correct_melody = self.generate_melody(
@@ -122,7 +122,7 @@ class MelodyService:
             is_correct=True
         )
 
-    def _generate_wrong_options_systematic(self, correct_melody: MelodyScorePitch, request: MelodyQuestionRequest, count: int = 3) -> List[MelodyScorePitch]:
+    def _generate_wrong_options_systematic(self, correct_melody: MelodyScorePitch, request: MelodySettingRequest, count: int = 3) -> List[MelodyScorePitch]:
         """系统化生成错误选项
         
         Args:
@@ -159,7 +159,7 @@ class MelodyService:
 
         return wrong_options
 
-    def _apply_scale_change(self, melody: MelodyScorePitch, request: MelodyQuestionRequest) -> None:
+    def _apply_scale_change(self, melody: MelodyScorePitch, request: MelodySettingRequest) -> None:
         """改变音阶类型，确保生成不同的音高序列"""
         # 获取所有可用的调式选择类型
         available_choices = [
@@ -180,7 +180,7 @@ class MelodyService:
                     self._update_melody_pitches(melody, pitch_list)
                     return
 
-    def _apply_tonality_change(self, melody: MelodyScorePitch, request: MelodyQuestionRequest) -> None:
+    def _apply_tonality_change(self, melody: MelodyScorePitch, request: MelodySettingRequest) -> None:
         """改变调式，确保生成不同的音高序列"""
         # 获取所有可用的调式
         available_tonalities = [

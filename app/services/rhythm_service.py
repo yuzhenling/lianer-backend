@@ -3,7 +3,7 @@
 import random
 from typing import List, Tuple
 
-from app.api.v1.schemas.request.pitch_request import RhythmQuestionRequest
+from app.api.v1.schemas.request.pitch_request import RhythmSettingRequest
 from app.api.v1.schemas.response.pitch_response import RhythmQuestionResponse, RhythmNote, RhythmMeasure, RhythmScore
 from app.core.logger import logger
 from app.models.rhythm import *
@@ -179,7 +179,7 @@ class RhythmService:
         
         return filtered
 
-    def generate_question(self, request: RhythmQuestionRequest) -> RhythmQuestionResponse:
+    async def generate_question(self, request: RhythmSettingRequest) -> RhythmQuestionResponse:
         """生成一个完整的节奏听写题"""
         logger.info(f"Generating rhythm question with request: {request.dict()}")
         

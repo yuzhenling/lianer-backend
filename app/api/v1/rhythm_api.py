@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.api.v1.auth_api import get_current_user, get_db
-from app.api.v1.schemas.request.pitch_request import RhythmQuestionRequest
+from app.api.v1.schemas.request.pitch_request import RhythmSettingRequest
 from app.api.v1.schemas.response.pitch_response import RhythmQuestionResponse, RhythmSettingResponse
 from app.models.user import User
 from app.services.rhythm_service import rhythm_service
@@ -15,13 +15,13 @@ router = APIRouter(prefix="/rhythm", tags=["rhythm"])
 
 @router.post("/generate", response_model=RhythmQuestionResponse)
 async def generate_rhythm_question(
-        request: RhythmQuestionRequest,
+        request: RhythmSettingRequest,
         current_user: User = Depends(get_current_user),
         db: Session = Depends(get_db)
 ):
     """生成节奏听写题"""
     try:
-        response = rhythm_service.generate_question(request)
+        response = await rhythm_service.generate_question(request)
         return response
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

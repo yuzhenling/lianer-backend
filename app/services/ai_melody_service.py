@@ -3,7 +3,7 @@ from typing import List, Optional, Dict, Any
 import random
 import logging
 
-from app.api.v1.schemas.request.pitch_request import MelodyQuestionRequest
+from app.api.v1.schemas.request.pitch_request import MelodySettingRequest
 from app.api.v1.schemas.response.pitch_response import MelodyQuestionResponse, MelodyScorePitch, MelodyNotePitch, \
     MelodyMeasurePitch
 from app.core.logger import logger
@@ -33,7 +33,7 @@ class AIMelodyService:
         }
         logger.info("AIMelodyService initialized with DeepSeek API configuration")
 
-    async def generate_melody_question(self, request: MelodyQuestionRequest) -> MelodyQuestionResponse:
+    async def generate_melody_question(self, request: MelodySettingRequest) -> MelodyQuestionResponse:
         """生成旋律听写题，使用AI生成主旋律"""
         try:
             logger.info(f"Generating melody question with parameters: {request.dict()}")
@@ -93,7 +93,7 @@ class AIMelodyService:
             logger.error(f"Error generating AI melody question: {str(e)}", exc_info=True)
             raise
 
-    async def _generate_ai_melody(self, request: MelodyQuestionRequest) -> MelodyScorePitch:
+    async def _generate_ai_melody(self, request: MelodySettingRequest) -> MelodyScorePitch:
         """使用DeepSeek生成旋律"""
         try:
             logger.info("Starting AI melody generation")
@@ -116,7 +116,7 @@ class AIMelodyService:
             logger.error(f"Error generating AI melody: {str(e)}", exc_info=True)
             raise
 
-    def _build_melody_prompt(self, request: MelodyQuestionRequest) -> str:
+    def _build_melody_prompt(self, request: MelodySettingRequest) -> str:
         """构建提示词"""
         logger.debug("Building melody prompt")
         durations_desc = []
@@ -210,7 +210,7 @@ class AIMelodyService:
         return response.json()
 
 
-    def _parse_ai_response(self, response: Dict[str, Any], request: MelodyQuestionRequest) -> MelodyScorePitch:
+    def _parse_ai_response(self, response: Dict[str, Any], request: MelodySettingRequest) -> MelodyScorePitch:
         """解析AI响应并转换为MelodyScorePitch对象"""
         try:
             logger.info("Parsing AI response")

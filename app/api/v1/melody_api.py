@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from starlette import status
 
 from app.api.v1.auth_api import get_current_user, get_db
-from app.api.v1.schemas.request.pitch_request import MelodyQuestionRequest
+from app.api.v1.schemas.request.pitch_request import MelodySettingRequest
 from app.api.v1.schemas.response.pitch_response import MelodySettingResponse, MelodyQuestionResponse
 from app.core.i18n import i18n, get_language
 from app.models.melody_settings import Tonality, TonalityChoice
@@ -21,13 +21,13 @@ router = APIRouter(prefix="/melody", tags=["melody"])
 @router.post("/generate", response_model=MelodyQuestionResponse)
 async def generate_melody_question(
         request: Request,
-        melody_question_request: MelodyQuestionRequest,
+        melody_question_request: MelodySettingRequest,
         current_user: User = Depends(get_current_user),
 ):
     """生成节奏听写题"""
     lang = get_language(request)
     try:
-        response = melody_service.generate_question(melody_question_request)
+        response = await melody_service.generate_question(melody_question_request)
         return response
     except Exception as e:
         logger.error(
@@ -41,13 +41,12 @@ async def generate_melody_question(
 @router.post("/generate/ai", response_model=MelodyQuestionResponse)
 async def generate_ai_melody_question(
     request: Request,
-    melody_question_request: MelodyQuestionRequest,
+    melody_question_request: MelodySettingRequest,
     current_user: User = Depends(get_current_user)
 ):
     lang = get_language(request)
     try:
         return await ai_melody_service.generate_melody_question(melody_question_request)
-        return response
     except Exception as e:
         logger.error(
             f"Error in generate_ai_melody_question : {str(e)}\nTraceback: {traceback.format_exc()}")

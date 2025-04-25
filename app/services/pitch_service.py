@@ -283,25 +283,27 @@ class PitchService:
             logger.error("Failed to load Pitch cache", exc_info=True)
             raise e
 
-    async def generate_single_exam(self, min_pitch_number: int, max_pitch_number: int, pitch_black_keys: List[str]) -> SinglePitchExam:
+    async def generate_single_exam(self, min_pitch_number: int, max_pitch_number: int, pitch_black_keys: List[str], question_num:int = ExamType.SINGLE.question_num) -> SinglePitchExam:
         """根据设置生成考试题目"""
         # 获取指定音域范围内的所有可用音高
         available_pitches = await self.get_pitches_by_range_black(min_pitch_number, max_pitch_number, pitch_black_keys)
 
         # 生成指定数量的随机题目
-        questions = self.generate_single_questions(available_pitches, ExamType.SINGLE.question_num)
+        questions = self.generate_single_questions(available_pitches, question_num)
 
         # 创建考试对象
         exam = SinglePitchExam(
             id = 0,
             user_id = 0,
             exam_type= ExamType.SINGLE._value,
-            question_num=ExamType.SINGLE.question_num,
+            question_num=question_num,
             questions=questions,
             correct_number = 0,
             wrong_number = 0,
         )
         return exam
+
+
 
     def generate_single_questions(self, available_pitches: List[Pitch], question_num: int) -> List[Question]:
         """生成指定数量的随机题目"""

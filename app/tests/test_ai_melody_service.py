@@ -1,12 +1,12 @@
 import unittest
 from app.services.ai_melody_service import AIMelodyService
 from app.models.rhythm_settings import RhythmDifficulty, TimeSignature
-from app.api.v1.schemas.request.pitch_request import MelodyQuestionRequest
+from app.api.v1.schemas.request.pitch_request import MelodySettingRequest
 
 class TestAIMelodyService(unittest.TestCase):
     def setUp(self):
         self.ai_melody_service = AIMelodyService()
-        self.test_request = MelodyQuestionRequest(
+        self.test_request = MelodySettingRequest(
             difficulty=RhythmDifficulty.LOW,
             time_signature=TimeSignature.TWO_FOUR,
             measures_count=4,

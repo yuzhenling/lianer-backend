@@ -80,13 +80,13 @@ class PitchChordSettingRequest(BaseModel):
         }
     }
 
-class RhythmQuestionRequest(BaseModel):
+class RhythmSettingRequest(BaseModel):
     difficulty: RhythmDifficulty
     time_signature: TimeSignature = TimeSignature.TWO_FOUR
     measures_count: MeasureCount = MeasureCount.FOUR
     tempo: Tempo = Tempo.EIGHTY
 
-class MelodyQuestionRequest(BaseModel):
+class MelodySettingRequest(BaseModel):
     difficulty: RhythmDifficulty
     time_signature: TimeSignature = TimeSignature.TWO_FOUR
     measures_count: MeasureCount = MeasureCount.FOUR

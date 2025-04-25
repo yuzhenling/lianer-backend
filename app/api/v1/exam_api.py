@@ -6,7 +6,7 @@ from starlette import status
 
 from app.api.v1.auth_api import get_current_user
 from app.api.v1.schemas.request.exam_request import ExamRequest
-from app.api.v1.schemas.response.exam_response import ExamSettingResponse
+from app.api.v1.schemas.response.exam_response import ExamSettingResponse, ExamResponse
 from app.api.v1.schemas.response.pitch_response import MelodySettingResponse, MelodyQuestionResponse, \
     RhythmSettingResponse
 from app.core.i18n import i18n, get_language
@@ -15,12 +15,15 @@ from app.models.melody_settings import Tonality, TonalityChoice
 from app.models.user import User
 from app.models.rhythm import *
 from app.core.logger import logger
+from app.services.melody_service import melody_service
+from app.services.pitch_service import pitch_service
 from app.services.pitch_settings_service import pitch_settings_service
+from app.services.rhythm_service import rhythm_service
 
 router = APIRouter(prefix="/exam", tags=["exam"])
 
 
-@router.post("", response_model=MelodyQuestionResponse)
+@router.post("", response_model=ExamResponse)
 async def generate_exam(
         request: Request,
         exam_request: ExamRequest,
@@ -29,7 +32,35 @@ async def generate_exam(
     """生成节奏听写题"""
     lang = get_language(request)
     try:
-        return None
+        single = await pitch_service.generate_single_exam(exam_request.pitch_setting.pitch_range.pitch_number_min,
+                                                        exam_request.pitch_setting.pitch_range.pitch_number_max,
+                                                        exam_request.pitch_setting.pitch_black_keys,
+                                                        5)
+        group = await pitch_service.generate_group_exam(
+            exam_request.pitch_group_setting.pitch_range.pitch_number_min,
+            exam_request.pitch_group_setting.pitch_range.pitch_number_max,
+            exam_request.pitch_group_setting.pitch_black_keys,
+            exam_request.pitch_group_setting.count
+        )
+
+        interval = await pitch_service.generate_interval_exam(exam_request.pitch_interval_setting)
+
+        chord = await pitch_service.generate_chord_exam(exam_request.pitch_chord_setting)
+
+        rhythm = await rhythm_service.generate_question(exam_request.rhythm_setting)
+
+        melody = melody_service.generate_question(exam_request.melody_setting)
+
+        exam = ExamResponse(
+            single=single,
+            group=group,
+            interval=interval,
+            chord=chord,
+            rhythm=rhythm,
+            melody=melody,
+        )
+
+        return exam
     except Exception as e:
         logger.error(
             f"Error in generate_melody_question : {str(e)}\nTraceback: {traceback.format_exc()}")
@@ -89,7 +120,4 @@ async def get_exam_settings(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
-
-
-
     return settings
