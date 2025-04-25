@@ -1,0 +1,85 @@
+安装 OpenSSL（如果尚未安装）：
+sudo apt-get update
+sudo apt-get install openssl
+生成私钥：
+openssl genrsa -out private.key 2048
+生成证书签名请求 (CSR)：
+openssl req -new -key private.key -out certificate.csr
+在生成 CSR 时，需要填写以下信息：
+Country Name (C)
+State or Province Name (ST)
+Locality Name (L)
+Organization Name (O)
+Organizational Unit Name (OU)
+Common Name (CN) - 这里填写你的域名或 IP 地址
+Email Address
+生成自签名证书（用于开发环境）：
+openssl x509 -req -days 365 -in certificate.csr -signkey private.key -out certificate.crt
+将证书和私钥放在安全位置：
+mkdir -p /etc/ssl/private
+mkdir -p /etc/ssl/certs
+mv private.key /etc/ssl/private/
+mv certificate.crt /etc/ssl/certs/
+chmod 600 /etc/ssl/private/private.key
+chmod 644 /etc/ssl/certs/certificate.crt
+
+
+2. FastAPI 配置步骤
+安装 uvicorn 的 SSL 支持：
+pip install uvicorn[standard]
+启动 uvicorn 服务器时使用 SSL：
+uvicorn app.main:app --host 0.0.0.0 --port 443 --ssl-keyfile /etc/ssl/private/private.key --ssl-certfile /etc/ssl/certs/certificate.crt
+如果需要在 80 端口重定向到 HTTPS，可以添加以下代码到你的 FastAPI 应用：
+from fastapi import FastAPI
+from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
+
+app = FastAPI()
+app.add_middleware(HTTPSRedirectMiddleware)
+3. 生产环境建议
+使用 Let's Encrypt 获取免费证书：
+sudo apt-get install certbot
+sudo certbot certonly --standalone -d yourdomain.com
+自动续期证书：
+sudo certbot renew --dry-run
+使用 Nginx 作为反向代理（推荐）：
+server {
+    listen 80;
+    server_name yourdomain.com;
+    return 301 https://$server_name$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name yourdomain.com;
+
+    ssl_certificate /etc/letsencrypt/live/yourdomain.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/yourdomain.com/privkey.pem;
+
+    location / {
+        proxy_pass http://localhost:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+4. 安全建议
+证书文件权限：
+私钥文件应该只有 root 可读
+证书文件应该只有 root 可写
+定期更新证书：
+设置自动续期
+监控证书过期时间
+使用强密码：
+生成私钥时使用强密码
+定期更换密码
+监控和日志：
+设置 SSL 错误日志
+监控证书状态
+5. 测试 HTTPS 配置
+使用 curl 测试：
+Apply
+Run
+使用浏览器测试：
+访问 https://yourdomain.com
+检查证书信息
+确认没有混合内容警告
+使用 SSL 测试工具：

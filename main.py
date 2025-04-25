@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
+from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
 from starlette.staticfiles import StaticFiles
 
 from app.core.config import settings
@@ -93,6 +94,7 @@ app.add_middleware(
 
 # 添加日志中间件
 app.add_middleware(LoggingMiddleware)
+app.add_middleware(HTTPSRedirectMiddleware)
 
 # 注册路由
 app.include_router(auth_api.router, prefix=settings.API_V1_STR)
