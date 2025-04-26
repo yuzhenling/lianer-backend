@@ -26,7 +26,7 @@ class MelodyService:
     async def generate_question(self, request: MelodySettingRequest) -> MelodyQuestionResponse:
         """生成一个完整的旋律听写题"""
         # 生成正确答案
-        correct_melody = self.generate_melody(
+        correct_melody = await self.generate_melody(
             request.difficulty,
             request.time_signature,
             request.measures_count.value,
@@ -74,7 +74,7 @@ class MelodyService:
             difficulty=request.difficulty
         )
 
-    def generate_melody(
+    async def generate_melody(
             self,
             difficulty: RhythmDifficulty,
             time_signature: TimeSignature,
@@ -85,7 +85,7 @@ class MelodyService:
     ) -> MelodyScorePitch:
         """生成一个正确的旋律"""
         # 使用rhythm_service生成节奏
-        rhythm = rhythm_service.generate_rhythm(
+        rhythm = await rhythm_service.generate_rhythm(
             difficulty,
             time_signature,
             measures_count,

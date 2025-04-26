@@ -1,13 +1,12 @@
-from typing import List
+from dataclasses import dataclass
 
 from pydantic import BaseModel
 
 from app.api.v1.schemas.response.pitch_response import MelodySettingResponse, RhythmSettingResponse, \
     PitchSingleSettingResponse, PitchGroupSettingResponse, PitchIntervalSettingResponse, PitchChordSettingResponse, \
-    RhythmQuestionResponse, MelodyQuestionResponse
+    RhythmScore, MelodyScorePitch, SinglePitchExamResponse, PitchIntervalExamResponse, GroupPitchExamResponse, \
+    PitchChordExamResponse
 from app.models.exam import SinglePitchExam, PitchIntervalExam
-from app.models.pitch_setting import PitchSingleSetting, PitchGroupSetting, PitchIntervalSetting, \
-    PitchChordSetting
 
 
 
@@ -19,10 +18,12 @@ class ExamSettingResponse(BaseModel):
     rhythm_setting: RhythmSettingResponse
     melody_setting: MelodySettingResponse
 
+
+
 class ExamResponse(BaseModel):
-    single: SinglePitchExam
-    group: SinglePitchExam
-    interval: PitchIntervalExam
-    chord: PitchIntervalExam
-    rhythm: RhythmQuestionResponse
-    melody: MelodyQuestionResponse
+    single: SinglePitchExamResponse
+    group: GroupPitchExamResponse
+    interval: PitchIntervalExamResponse
+    chord: PitchChordExamResponse
+    rhythm: RhythmScore
+    melody: MelodyScorePitch

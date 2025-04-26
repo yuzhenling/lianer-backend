@@ -57,7 +57,7 @@ class PitchIntervalSettingRequest(BaseModel):
     interval_list: List[int]
     fix_mode_enabled: bool = False
     fix_mode:int = Field(..., ge=1, le=3)
-    fix_mode_vals: List[str]
+    fix_mode_val: str = ""
     black_key: bool = False
     model_config = {
         "from_attributes": True,

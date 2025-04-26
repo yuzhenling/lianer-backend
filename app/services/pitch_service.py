@@ -320,20 +320,20 @@ class PitchService:
 
         return questions
 
-    async def generate_group_exam(self, min_pitch_number: int, max_pitch_number: int, pitch_black_keys: List[str], count: int ) -> SinglePitchExam:
+    async def generate_group_exam(self, min_pitch_number: int, max_pitch_number: int, pitch_black_keys: List[str], count: int, question_num:int = ExamType.GROUP.question_num ) -> GroupPitchExam:
         """根据设置生成考试题目"""
         # 获取指定音域范围内的所有可用音高
         available_pitches = await self.get_pitches_by_range_black(min_pitch_number, max_pitch_number, pitch_black_keys)
 
         # 生成指定数量的随机题目
-        questions = self.generate_group_questions(available_pitches, ExamType.GROUP.question_num, count)
+        questions = self.generate_group_questions(available_pitches, question_num, count)
 
         # 创建考试对象
         exam = GroupPitchExam(
             id = 0,
             user_id = 0,
             exam_type= ExamType.GROUP._value,
-            question_num=ExamType.GROUP.question_num,
+            question_num=question_num,
             questions=questions,
             correct_number = 0,
             wrong_number = 0,
@@ -369,10 +369,9 @@ class PitchService:
         return available_pitches
 
 
-    async def generate_interval_exam(self, pitch_interval_setting: PitchIntervalSettingRequest) -> PitchIntervalExam:
+    async def generate_interval_exam(self, pitch_interval_setting: PitchIntervalSettingRequest, question_num:int = ExamType.INTERVAL.question_num ) -> PitchIntervalExam:
         answer_mode_id = pitch_interval_setting.answer_mode
         exam_type = ExamType.INTERVAL.display_value
-        question_num: int = ExamType.INTERVAL.question_num
         questions = []
         q= answer_mode_id
         if answer_mode_id == AnswerMode.CONCORDANCE.to_dict().get("index"):
@@ -381,7 +380,11 @@ class PitchService:
             interval_ids = self.generate_default_interval_choices()
             if pitch_interval_setting.interval_list:
                 interval_ids = pitch_interval_setting.interval_list
-            questions= self.generate_interval_exam_concordance(interval_ids, question_num)
+            questions = self.generate_interval_exam_concordance(interval_ids, question_num,
+                                                                pitch_interval_setting.play_mode,
+                                                                pitch_interval_setting.fix_mode_enabled,
+                                                                pitch_interval_setting.fix_mode,
+                                                                pitch_interval_setting.fix_mode_val)
 
         elif answer_mode_id == AnswerMode.QUALITY.to_dict().get("index"):
             interval_ids = self.generate_default_interval_choices()
@@ -399,7 +402,7 @@ class PitchService:
             id = 0,
             user_id = 0,
             exam_type = ExamType.INTERVAL._value,
-            question_num=ExamType.INTERVAL.question_num,
+            question_num=question_num,
             questions=questions,
             correct_number = 0,
             wrong_number = 0,
@@ -434,32 +437,32 @@ class PitchService:
 
         #filter mode
         if fix_mode_enabled :
-            if fix_mode == 1:
+            if fix_mode == 1: #根音
                 for pi in filtered_intervals:
                     pitch_pairs = pi.pitch_pairs
                     filter_pitch_pairs = []
                     for pitch_pair in pitch_pairs:
-                        if pitch_pair.first_contain_start_not_black():
+                        if pitch_pair.first_contain_start_not_black(self.getPitchNameStart(fix_mode_val)) :
                             filter_pitch_pairs.append(pitch_pair)
                     new_pi = replace(pi, pitch_pairs=filter_pitch_pairs)
                     filtered_intervals_mode.append(new_pi)
 
-            elif fix_mode == 2:
+            elif fix_mode == 2: #冠音
                 for pi in filtered_intervals:
                     pitch_pairs = pi.pitch_pairs
                     filter_pitch_pairs = []
                     for pitch_pair in pitch_pairs:
-                        if pitch_pair.second_contain_start_not_black():
+                        if pitch_pair.second_contain_start_not_black(self.getPitchNameStart(fix_mode_val)):
                             filter_pitch_pairs.append(pitch_pair)
                     new_pi = replace(pi, pitch_pairs=filter_pitch_pairs)
                     filtered_intervals_mode.append(new_pi)
 
-            else:
+            else: #随机
                 for pi in filtered_intervals:
                     pitch_pairs = pi.pitch_pairs
                     filter_pitch_pairs = []
                     for pitch_pair in pitch_pairs:
-                        if pitch_pair.contain_start_not_black():
+                        if pitch_pair.contain_start_not_black(self.getPitchNameStart(fix_mode_val)):
                             filter_pitch_pairs.append(pitch_pair)
                     new_pi = replace(pi, pitch_pairs=filter_pitch_pairs)
                     filtered_intervals_mode.append(new_pi)
@@ -499,7 +502,7 @@ class PitchService:
         if fix_mode_val == "Ti":
             return "B"
 
-    def generate_interval_exam_quality(self, interval_list: List[int], question_num: int) -> List[dict]:
+    def generate_interval_exam_quality(self, interval_list: List[int], question_num: int, play_mode: int, fix_mode_enabled: bool, fix_mode: int, fix_mode_val: str) -> List[dict]:
         questions = []
         # 从PITCH_INTERVAL_CACHE中获取所有可用的音程
         available_intervals = list(self.PITCH_INTERVAL_CACHE.keys())
@@ -514,6 +517,42 @@ class PitchService:
 
         if not filtered_intervals:
             raise ValueError("No valid intervals found in the cache")
+
+        filtered_intervals_mode = []
+
+        # filter mode
+        if fix_mode_enabled:
+            if fix_mode == 1:  # 根音
+                for pi in filtered_intervals:
+                    pitch_pairs = pi.pitch_pairs
+                    filter_pitch_pairs = []
+                    for pitch_pair in pitch_pairs:
+                        if pitch_pair.first_contain_start_not_black(self.getPitchNameStart(fix_mode_val)):
+                            filter_pitch_pairs.append(pitch_pair)
+                    new_pi = replace(pi, pitch_pairs=filter_pitch_pairs)
+                    filtered_intervals_mode.append(new_pi)
+
+            elif fix_mode == 2:  # 冠音
+                for pi in filtered_intervals:
+                    pitch_pairs = pi.pitch_pairs
+                    filter_pitch_pairs = []
+                    for pitch_pair in pitch_pairs:
+                        if pitch_pair.second_contain_start_not_black(self.getPitchNameStart(fix_mode_val)):
+                            filter_pitch_pairs.append(pitch_pair)
+                    new_pi = replace(pi, pitch_pairs=filter_pitch_pairs)
+                    filtered_intervals_mode.append(new_pi)
+
+            else:  # 随机
+                for pi in filtered_intervals:
+                    pitch_pairs = pi.pitch_pairs
+                    filter_pitch_pairs = []
+                    for pitch_pair in pitch_pairs:
+                        if pitch_pair.contain_start_not_black(self.getPitchNameStart(fix_mode_val)):
+                            filter_pitch_pairs.append(pitch_pair)
+                    new_pi = replace(pi, pitch_pairs=filter_pitch_pairs)
+                    filtered_intervals_mode.append(new_pi)
+
+            filtered_intervals = filtered_intervals_mode
 
         # 生成20道题目
         for i in range(question_num):
@@ -532,7 +571,7 @@ class PitchService:
 
         return questions
 
-    def generate_interval_exam_pitch(self, interval_list: List[int], question_num: int) -> List[dict]:
+    def generate_interval_exam_pitch(self, interval_list: List[int], question_num: int, play_mode: int, fix_mode_enabled: bool, fix_mode: int, fix_mode_val: str) -> List[dict]:
         questions = []
         # 从PITCH_INTERVAL_CACHE中获取所有可用的音程
         available_intervals = list(self.PITCH_INTERVAL_CACHE.keys())
@@ -548,6 +587,42 @@ class PitchService:
         if not filtered_intervals:
             raise ValueError("No valid intervals found in the cache")
 
+        filtered_intervals_mode = []
+
+        # filter mode
+        if fix_mode_enabled:
+            if fix_mode == 1:  # 根音
+                for pi in filtered_intervals:
+                    pitch_pairs = pi.pitch_pairs
+                    filter_pitch_pairs = []
+                    for pitch_pair in pitch_pairs:
+                        if pitch_pair.first_contain_start_not_black(self.getPitchNameStart(fix_mode_val)):
+                            filter_pitch_pairs.append(pitch_pair)
+                    new_pi = replace(pi, pitch_pairs=filter_pitch_pairs)
+                    filtered_intervals_mode.append(new_pi)
+
+            elif fix_mode == 2:  # 冠音
+                for pi in filtered_intervals:
+                    pitch_pairs = pi.pitch_pairs
+                    filter_pitch_pairs = []
+                    for pitch_pair in pitch_pairs:
+                        if pitch_pair.second_contain_start_not_black(self.getPitchNameStart(fix_mode_val)):
+                            filter_pitch_pairs.append(pitch_pair)
+                    new_pi = replace(pi, pitch_pairs=filter_pitch_pairs)
+                    filtered_intervals_mode.append(new_pi)
+
+            else:  # 随机
+                for pi in filtered_intervals:
+                    pitch_pairs = pi.pitch_pairs
+                    filter_pitch_pairs = []
+                    for pitch_pair in pitch_pairs:
+                        if pitch_pair.contain_start_not_black(self.getPitchNameStart(fix_mode_val)):
+                            filter_pitch_pairs.append(pitch_pair)
+                    new_pi = replace(pi, pitch_pairs=filter_pitch_pairs)
+                    filtered_intervals_mode.append(new_pi)
+
+            filtered_intervals = filtered_intervals_mode
+
         # 生成20道题目
         for i in range(question_num):
             # 选一个答案音程
@@ -557,9 +632,9 @@ class PitchService:
             # 创建题目
             question = IntervalQuestion(
                 id=i + 1,
-                answer_id=interval.concordance_id,
-                answer_name=interval.concordance_name,
-                question=pitch_pair,
+                answer_id=0,
+                answer_name="",
+                question=pitch_pair,#答案就是question
             )
             questions.append(question)
 
@@ -634,12 +709,11 @@ class PitchService:
 
         return questions
 
-    async def generate_chord_exam(self, pitch_chord_setting: PitchChordSettingRequest) -> PitchIntervalExam:
+    async def generate_chord_exam(self, pitch_chord_setting: PitchChordSettingRequest, question_num:int = ExamType.CHORD.question_num ) -> PitchChordExam:
         answer_mode_id = pitch_chord_setting.answer_mode
         play_mode = pitch_chord_setting.play_mode
         transfer_set = pitch_chord_setting.transfer_set
         exam_type = ExamType.CHORD.display_value
-        question_num: int = ExamType.CHORD.question_num
         answer_choices = pitch_chord_setting.chord_list
         questions = []
         q = answer_mode_id
@@ -655,7 +729,7 @@ class PitchService:
             id=0,
             user_id=0,
             exam_type=ExamType.CHORD._value,
-            question_num=ExamType.CHORD.question_num,
+            question_num=question_num,
             questions=questions,
             correct_number=0,
             wrong_number=0,

@@ -10,7 +10,7 @@ from app.api.v1.schemas.response.exam_response import ExamSettingResponse, ExamR
 from app.api.v1.schemas.response.pitch_response import MelodySettingResponse, MelodyQuestionResponse, \
     RhythmSettingResponse
 from app.core.i18n import i18n, get_language
-from app.models.exam_all import ExamSetting
+from app.models.exam_all import ExamSetting, ExamData
 from app.models.melody_settings import Tonality, TonalityChoice
 from app.models.user import User
 from app.models.rhythm import *
@@ -40,18 +40,31 @@ async def generate_exam(
             exam_request.pitch_group_setting.pitch_range.pitch_number_min,
             exam_request.pitch_group_setting.pitch_range.pitch_number_max,
             exam_request.pitch_group_setting.pitch_black_keys,
-            exam_request.pitch_group_setting.count
+            exam_request.pitch_group_setting.count,
+            5
         )
 
-        interval = await pitch_service.generate_interval_exam(exam_request.pitch_interval_setting)
+        interval = await pitch_service.generate_interval_exam(exam_request.pitch_interval_setting, 5)
 
-        chord = await pitch_service.generate_chord_exam(exam_request.pitch_chord_setting)
+        chord = await pitch_service.generate_chord_exam(exam_request.pitch_chord_setting, 5)
 
-        rhythm = await rhythm_service.generate_question(exam_request.rhythm_setting)
+        rhythm = await rhythm_service.generate_rhythm(
+            exam_request.rhythm_setting.difficulty,
+            exam_request.rhythm_setting.time_signature,
+            exam_request.rhythm_setting.measures_count.value,
+            exam_request.rhythm_setting.tempo.value
+        )
 
-        melody = melody_service.generate_question(exam_request.melody_setting)
+        melody = await melody_service.generate_melody(
+            exam_request.melody_setting.difficulty,
+            exam_request.melody_setting.time_signature,
+            exam_request.melody_setting.measures_count.value,
+            exam_request.melody_setting.tempo.value,
+            exam_request.melody_setting.tonality,
+            exam_request.melody_setting.tonality_choice,
+        )
 
-        exam = ExamResponse(
+        exam = ExamData(
             single=single,
             group=group,
             interval=interval,
@@ -63,7 +76,7 @@ async def generate_exam(
         return exam
     except Exception as e:
         logger.error(
-            f"Error in generate_melody_question : {str(e)}\nTraceback: {traceback.format_exc()}")
+            f"Error in generate_exam : {str(e)}\nTraceback: {traceback.format_exc()}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
