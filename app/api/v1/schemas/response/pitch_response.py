@@ -60,44 +60,62 @@ class PitchIntervalPairResponse(BaseModel):
         }
     }
 
+#
+# class PitchIntervalResponse(BaseModel):
+#     index: int
+#     interval: Interval
+#     semitones: int
+#     list: List[PitchIntervalPairResponse]
+#     count: int
+#     model_config = {
+#         "from_attributes": True,
+#         "arbitrary_types_allowed": True,
+#         "json_schema_extra": {
+#             "example": {
+#                 "index": 4,
+#                 "interval": "major_third",
+#                 "semitones": 4,
+#                 "list": [
+#                     {
+#                         "first": {
+#                             "id": 40,
+#                             "pitch_number": 40,
+#                             "name": "C4",
+#                             "alias": None,
+#                             "url": ""
+#                         },
+#                         "second": {
+#                             "id": 44,
+#                             "pitch_number": 44,
+#                             "name": "E4",
+#                             "alias": None,
+#                             "url": ""
+#                         }
+#                     }
+#                 ],
+#                 "count": 1
+#             }
+#         }
+#     }
 
-class PitchIntervalResponse(BaseModel):
-    index: int
-    interval: Interval
-    semitones: int
-    list: List[PitchIntervalPairResponse]
-    count: int
+
+class PitchIntervalWithPitchesResponse(BaseModel):
+    id: int
+    name: str
+    semitone_number: int
+    type_id: int
+    type_name: str
+    concordance_id: int
+    concordance_name: str
+    black: bool
+    pitch_pairs: List[PitchIntervalPairResponse]
     model_config = {
         "from_attributes": True,
         "arbitrary_types_allowed": True,
         "json_schema_extra": {
-            "example": {
-                "index": 4,
-                "interval": "major_third",
-                "semitones": 4,
-                "list": [
-                    {
-                        "first": {
-                            "id": 40,
-                            "pitch_number": 40,
-                            "name": "C4",
-                            "alias": None,
-                            "url": ""
-                        },
-                        "second": {
-                            "id": 44,
-                            "pitch_number": 44,
-                            "name": "E4",
-                            "alias": None,
-                            "url": ""
-                        }
-                    }
-                ],
-                "count": 1
-            }
+            "example":
         }
     }
-
 
 class PitchChordResponse(BaseModel):
     index: int

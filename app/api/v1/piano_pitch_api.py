@@ -11,9 +11,10 @@ from fastapi.responses import FileResponse
 from app.api.v1.auth_api import get_current_user, get_db
 from app.api.v1.schemas.request.pitch_request import PitchSettingRequest, PitchGroupSettingRequest, \
     PitchIntervalSettingRequest, PitchChordSettingRequest
-from app.api.v1.schemas.response.pitch_response import PitchSingleSettingResponse, PitchResponse, PitchIntervalResponse, \
+from app.api.v1.schemas.response.pitch_response import PitchSingleSettingResponse, PitchResponse, \
     PitchChordResponse, PitchGroupResponse, SinglePitchExamResponse, PitchGroupSettingResponse, GroupPitchExamResponse, \
-    PitchIntervalSettingResponse, PitchIntervalExamResponse, PitchChordSettingResponse, PitchChordExamResponse
+    PitchIntervalSettingResponse, PitchIntervalExamResponse, PitchChordSettingResponse, PitchChordExamResponse, \
+    PitchIntervalWithPitchesResponse
 from app.core.i18n import get_language, i18n
 from app.core.logger import logger
 from app.services.pitch_service import pitch_service
@@ -204,7 +205,7 @@ async def get_all_pitchgroups(
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
 
-@router.get("/pitchinterval", response_model=List[PitchIntervalResponse])
+@router.get("/pitchinterval", response_model=List[PitchIntervalWithPitchesResponse])
 async def get_all_pitchinterval(
     request: Request,
     current_user: User = Depends(get_current_user),

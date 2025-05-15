@@ -240,7 +240,7 @@ class PitchService:
             logger.error("Failed to load Pitch cache", exc_info=True)
             raise e
 
-    async def get_all_intervals(self) -> List[PitchInterval]:
+    async def get_all_intervals(self) -> List[PitchIntervalWithPitches]:
         """获取所有音程"""
         try:
             return list(self.PITCH_INTERVAL_CACHE.values())
