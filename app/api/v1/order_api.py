@@ -160,12 +160,12 @@ async def wechat_payment_notify(
     try:
         # 解析微信支付回调数据
         # TODO: 实现微信支付回调数据验证
-        # notification_data = await request.json()
+        notification_data = await request.json()
         # 开发测试时模拟支付成功
-        notification_data = {
-            "out_trade_no": "123",  # 订单ID
-            "trade_state": "SUCCESS"
-        }
+        # notification_data = {
+        #     "out_trade_no": "123",  # 订单ID
+        #     "trade_state": "SUCCESS"
+        # }
         
         order_id = int(notification_data["out_trade_no"])
         payment_success = notification_data["trade_state"] == "SUCCESS"

@@ -9,6 +9,7 @@ from app.models.vip import VipLevel, Vip
 from app.models.user import User
 from app.core.config import settings
 from app.core.logger import logger
+from app.services.vip_service import vip_service
 
 
 class OrderService:
@@ -100,6 +101,8 @@ class OrderService:
                 # 更新订单状态
                 order.is_paid = True
                 order.paid_date = datetime.now()
+                db.add(order)
+                db.commit()
                 
                 # 更新用户VIP状态
                 user = db.query(User).filter(User.id == order.user_id).first()
@@ -109,10 +112,12 @@ class OrderService:
                         user.is_vip = True
                         user.vip_start_date = datetime.now()
                         # 计算到期时间
-                        duration_days = self.vip_durations.get(vip.level, 0)
+                        duration_days = vip_service.getDaysById(order.vip_id)
                         user.vip_expire_date = datetime.now() + timedelta(days=duration_days)
-                
-                db.commit()
+                        db.add(user)
+                        db.commit()
+                        db.refresh(user)
+
                 logger.info(f"Successfully processed payment for order {order_id}")
                 return True
             else:
@@ -132,3 +137,4 @@ class OrderService:
             "Accept": "application/json",
             "Authorization": "签名信息"
         }
+

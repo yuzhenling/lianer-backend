@@ -183,6 +183,12 @@ class VipService:
         if vip_level == VipLevel.ONE_YEAR:
             return 365
 
+    def getDaysById(self, id: int) -> int:
+        vip = self._vip_cache.get(id, None)
+        if vip:
+            return self.getDaysByLevel(vip.level)
+        return 0
+
 # 创建全局VIP服务实例
 vip_service = VipService()
 
