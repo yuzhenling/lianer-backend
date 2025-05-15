@@ -109,7 +109,7 @@ class OrderService:
                         user.is_vip = True
                         user.vip_start_date = datetime.now()
                         # 计算到期时间
-                        duration_days = self.vip_durations.get(vip.vip_level, 0)
+                        duration_days = self.vip_durations.get(vip.level, 0)
                         user.vip_expire_date = datetime.now() + timedelta(days=duration_days)
                 
                 db.commit()

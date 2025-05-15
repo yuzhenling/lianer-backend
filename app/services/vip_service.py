@@ -122,15 +122,16 @@ class VipService:
                 return None
 
             # 更新描述
-            vip.vip_describe = update_data.get("describe")
+            vip.describe = update_data.get("describe")
             vip.price = update_data.get("price")
             vip.discount = update_data.get("discount")
+            db.add(vip)
             db.commit()
             db.refresh(vip)
 
             # 更新缓存
             self._vip_cache[vip.id] = vip
-            self._vip_level_cache[vip.vip_level] = vip
+            self._vip_level_cache[vip.level] = vip
 
             logger.info(f"Successfully updated VIP id: {vip_id}")
             return vip
