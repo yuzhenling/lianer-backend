@@ -6,11 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="83c1f24d-9736-40eb-a780-45c9d33bfc91" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/v1/piano_pitch_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/piano_pitch_api.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/api/v1/schemas/response/pitch_response.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/schemas/response/pitch_response.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/services/pitch_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/pitch_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/app.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/app.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/error.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/error.log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -235,7 +231,7 @@
       <workItem from="1745971301336" duration="2000" />
       <workItem from="1747284893208" duration="1488000" />
       <workItem from="1747292846450" duration="6981000" />
-      <workItem from="1747311358763" duration="3431000" />
+      <workItem from="1747311358763" duration="4182000" />
     </task>
     <servers />
   </component>

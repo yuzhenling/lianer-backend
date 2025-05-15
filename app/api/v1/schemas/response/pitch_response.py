@@ -113,7 +113,161 @@ class PitchIntervalWithPitchesResponse(BaseModel):
         "from_attributes": True,
         "arbitrary_types_allowed": True,
         "json_schema_extra": {
-            "example":
+            "example":[
+                {
+                    "id": 1,
+                    "name": "小二度",
+                    "semitone_number": 1,
+                    "type_id": 1,
+                    "type_name": "单音程",
+                    "concordance_id": 3,
+                    "concordance_name": "不协和",
+                    "black": "false",
+                    "pitch_pairs": [
+                        {
+                            "first": {
+                                "id": 1,
+                                "pitch_number": 1,
+                                "name": "A0",
+                                "alias": "null"
+                            },
+                            "second": {
+                                "id": 2,
+                                "pitch_number": 2,
+                                "name": "A#0",
+                                "alias": "Bb0"
+                            }
+                        },
+                        {
+                            "first": {
+                                "id": 2,
+                                "pitch_number": 2,
+                                "name": "A#0",
+                                "alias": "Bb0"
+                            },
+                            "second": {
+                                "id": 3,
+                                "pitch_number": 3,
+                                "name": "B0",
+                                "alias": "null"
+                            }
+                        },
+                        {
+                            "first": {
+                                "id": 3,
+                                "pitch_number": 3,
+                                "name": "B0",
+                                "alias": "null"
+                            },
+                            "second": {
+                                "id": 4,
+                                "pitch_number": 4,
+                                "name": "C1",
+                                "alias": "null"
+                            }
+                        },
+                        {
+                            "first": {
+                                "id": 4,
+                                "pitch_number": 4,
+                                "name": "C1",
+                                "alias": "null"
+                            },
+                            "second": {
+                                "id": 5,
+                                "pitch_number": 5,
+                                "name": "C#1",
+                                "alias": "Db1"
+                            }
+                        },
+                        {
+                            "first": {
+                                "id": 5,
+                                "pitch_number": 5,
+                                "name": "C#1",
+                                "alias": "Db1"
+                            },
+                            "second": {
+                                "id": 6,
+                                "pitch_number": 6,
+                                "name": "D1",
+                                "alias": "null"
+                            }
+                        },
+                        {
+                            "first": {
+                                "id": 6,
+                                "pitch_number": 6,
+                                "name": "D1",
+                                "alias": "null"
+                            },
+                            "second": {
+                                "id": 7,
+                                "pitch_number": 7,
+                                "name": "D#1",
+                                "alias": "Eb1"
+                            }
+                        },
+                        {
+                            "first": {
+                                "id": 7,
+                                "pitch_number": 7,
+                                "name": "D#1",
+                                "alias": "Eb1"
+                            },
+                            "second": {
+                                "id": 8,
+                                "pitch_number": 8,
+                                "name": "E1",
+                                "alias": "null"
+                            }
+                        },
+                        {
+                            "first": {
+                                "id": 8,
+                                "pitch_number": 8,
+                                "name": "E1",
+                                "alias": "null"
+                            },
+                            "second": {
+                                "id": 9,
+                                "pitch_number": 9,
+                                "name": "F1",
+                                "alias": "null"
+                            }
+                        },
+                        {
+                            "first": {
+                                "id": 9,
+                                "pitch_number": 9,
+                                "name": "F1",
+                                "alias": "null"
+                            },
+                            "second": {
+                                "id": 10,
+                                "pitch_number": 10,
+                                "name": "F#1",
+                                "alias": "Gb1"
+                            }
+                        },
+                        {
+                            "first": {
+                                "id": 10,
+                                "pitch_number": 10,
+                                "name": "F#1",
+                                "alias": "Gb1"
+                            },
+                            "second": {
+                                "id": 11,
+                                "pitch_number": 11,
+                                "name": "G1",
+                                "alias": "null"
+                            }
+                        }
+
+                    ]
+                }
+            ]
         }
     }
 
