@@ -5,14 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="83c1f24d-9736-40eb-a780-45c9d33bfc91" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/doc/testdoc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/v1/exam_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/exam_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/v1/schemas/request/pitch_request.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/schemas/request/pitch_request.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/v1/schemas/response/exam_response.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/schemas/response/exam_response.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/exam_all.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/exam_all.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/services/melody_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/melody_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/services/pitch_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/pitch_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/services/rhythm_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/rhythm_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api/v1/vip_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/vip_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/services/vip_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/vip_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/tests/test_ai_melody_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/tests/test_ai_melody_service.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/app.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/app.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/error.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/error.log" afterDir="false" />
     </list>
@@ -45,26 +42,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "FastAPI.shengyibaodian.executor": "Run",
-    "Python.ptest.executor": "Debug",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "/home/yu/gitdev/shengyibaodian/app/api/v1",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.keymap",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;FastAPI.shengyibaodian.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ptest.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/yu/gitdev/shengyibaodian&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
       <console-settings module-name="shengyibaodian" is-module-sdk="true">
@@ -109,6 +106,46 @@
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
       <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="ptest" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="shengyibaodian" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/app/utils" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/app/utils/ptest.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="shengyibaodian" type="Python.FastAPI">
+      <option name="additionalOptions" value="--host 0.0.0.0 --port 9443 --ssl-keyfile $PROJECT_DIR$/etc/ssl/private/private.key --ssl-certfile $PROJECT_DIR$/etc/ssl/certs/certificate.crt" />
+      <option name="file" value="$PROJECT_DIR$/main.py" />
+      <module name="shengyibaodian" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="$USER_HOME$/dev/anaconda3/envs/shengyibaodian/bin/python" />
+      <option name="SDK_NAME" value="shengyibaodian" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="launchJavascriptDebuger" value="false" />
       <method v="2" />
     </configuration>
     <configuration name="shengyibaodian" type="Python.FastAPI">
@@ -190,6 +227,15 @@
       <workItem from="1745564785107" duration="3997000" />
       <workItem from="1745585738320" duration="3689000" />
       <workItem from="1745633044882" duration="8809000" />
+      <workItem from="1745748195044" duration="257000" />
+      <workItem from="1745822061677" duration="338000" />
+      <workItem from="1745822592346" duration="1822000" />
+      <workItem from="1745834261853" duration="3284000" />
+      <workItem from="1745847294001" duration="1216000" />
+      <workItem from="1745887533579" duration="1219000" />
+      <workItem from="1745971301336" duration="2000" />
+      <workItem from="1747284893208" duration="1488000" />
+      <workItem from="1747292846450" duration="3619000" />
     </task>
     <servers />
   </component>
@@ -244,7 +290,7 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/shengyibaodian$shengyibaodian.coverage" NAME="shengyibaodian 覆盖结果" MODIFIED="1745643331851" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/shengyibaodian$shengyibaodian.coverage" NAME="shengyibaodian 覆盖结果" MODIFIED="1747296510408" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/shengyibaodian$ptest.coverage" NAME="ptest 覆盖结果" MODIFIED="1743416046396" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/utils" />
   </component>
 </project>

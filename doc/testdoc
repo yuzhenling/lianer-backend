@@ -1,0 +1,15 @@
+# 运行所有测试
+python -m unittest discover app/tests
+
+# 运行特定测试文件
+python -m unittest app/tests/test_ai_melody_service.py
+python -m unittest app/tests/test_melody_service.py
+python -m unittest app/tests/test_rhythm_service.py
+
+# 运行特定测试类
+python -m unittest app.tests.test_ai_melody_service.TestAIMelodyService
+python -m unittest app.tests.test_melody_service.TestMelodyService
+python -m unittest app.tests.test_rhythm_service.TestRhythmService
+
+# 运行特定测试方法
+python -m unittest app.tests.test_ai_melody_service.TestAIMelodyService.test_build_melody_prompt

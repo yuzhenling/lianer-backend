@@ -112,7 +112,7 @@ class VipService:
         self, 
         db: Session, 
         vip_id: int, 
-        vip_describe: str
+        update_data: dict
     ) -> Optional[Vip]:
         """更新VIP信息"""
         try:
@@ -122,7 +122,9 @@ class VipService:
                 return None
 
             # 更新描述
-            vip.vip_describe = vip_describe
+            vip.vip_describe = update_data.get("describe")
+            vip.price = update_data.get("price")
+            vip.discount = update_data.get("discount")
             db.commit()
             db.refresh(vip)
 

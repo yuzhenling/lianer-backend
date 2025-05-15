@@ -174,7 +174,7 @@ async def update_vip(
         if vip_data.discount is not None:
             update_data["discount"] = vip_data.discount
 
-        updated_vip = await vip_service.update_vip(db, vip_id, **update_data)
+        updated_vip = await vip_service.update_vip(db, vip_id, update_data)
         if not updated_vip:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
