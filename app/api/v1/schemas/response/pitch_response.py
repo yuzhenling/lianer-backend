@@ -19,8 +19,7 @@ class PitchResponse(BaseModel):
                 "id": 1,
                 "pitch_number": 40,
                 "name": "C4",
-                "alias": None,
-                "url": ""
+                "alias": None
             }
         }
     }

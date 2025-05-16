@@ -207,17 +207,26 @@ class RhythmService:
         logger.info(f"Found {len(unique_wrong_options)} unique wrong options")
 
         # 如果生成的唯一错误选项不足3个，使用基本变化补充
-        while len(unique_wrong_options) < 3:
+        if len(unique_wrong_options) < 3:
             logger.info("Adding basic variations to reach 3 unique options")
             basic_wrong = correct_rhythm.copy(deep=True)
             basic_wrong.is_correct = False
             # 将第一个音符改为休止符作为基本变化
-            if (len(basic_wrong.measures) > 0 and 
-                len(basic_wrong.measures[0]) > 0 and 
-                len(basic_wrong.measures[0][0].notes) > 0):
-                basic_wrong.measures[0][0].notes[0].is_rest = True
+            # if (len(basic_wrong.measures) > 0 and
+            #     len(basic_wrong.measures[0]) > 0 and
+            #     len(basic_wrong.measures[0][0].notes) > 0):
+            #     basic_wrong.measures[0][0].notes[0].is_rest = True
+            random_measure = random.choice(basic_wrong.measures)
+            # 随机选择一个 voice（声部）
+            random_voice = random.choice(random_measure)
+            # 随机选择一个音符
+            random_note = random.choice(random_voice.notes)
+            # 将该音符改为休止符
+            random_note.is_rest = True
+
             if self._is_unique_rhythm(basic_wrong, unique_wrong_options):
                 unique_wrong_options.append(basic_wrong)
+
 
         # 随机排列选项
         logger.info("Randomizing options")

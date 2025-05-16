@@ -390,13 +390,13 @@ class PitchService:
             interval_ids = self.generate_default_interval_choices()
             if pitch_interval_setting.interval_list:
                 interval_ids = pitch_interval_setting.interval_list
-            questions = self.generate_interval_exam_quality(interval_ids, question_num)
+            questions = self.generate_interval_exam_quality(interval_ids, question_num, play_mode=pitch_interval_setting.play_mode,fix_mode_enabled=pitch_interval_setting.fix_mode_enabled, fix_mode=pitch_interval_setting.fix_mode, fix_mode_val=pitch_interval_setting.fix_mode_val)
 
         elif answer_mode_id == AnswerMode.PITCH.to_dict().get("index"):
             interval_ids = self.generate_default_interval_choices()
             if pitch_interval_setting.interval_list:
                 interval_ids = pitch_interval_setting.interval_list
-            questions = self.generate_interval_exam_pitch(interval_ids, question_num)
+            questions = self.generate_interval_exam_pitch(interval_ids, question_num, play_mode=pitch_interval_setting.play_mode,fix_mode_enabled=pitch_interval_setting.fix_mode_enabled, fix_mode=pitch_interval_setting.fix_mode, fix_mode_val=pitch_interval_setting.fix_mode_val)
 
         pie = PitchIntervalExam(
             id = 0,

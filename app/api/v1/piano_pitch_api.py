@@ -295,7 +295,7 @@ async def get_pitch_group_settings(
 @router.post("/pitch/single", response_model=List[PitchResponse])
 async def get_pitch_listen_single(
     request: Request,
-    pitch_setting: PitchSettingRequest,
+    pitch_setting: PitchSettingRequest,#pitch_black_keys作废
     current_user: User = Depends(get_current_user)
 ):
     lang = get_language(request)
