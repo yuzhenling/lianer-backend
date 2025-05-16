@@ -1,0 +1,147 @@
+1. Python 环境隔离方案推荐：Conda
+推荐使用 Conda 作为环境隔离方案，原因如下：
+安装简单，使用方便
+可以同时管理 Python 和非 Python 依赖
+环境隔离效果好
+适合部署多个项目
+安装步骤：
+# 1. 下载 Miniconda 安装脚本
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+
+# 2. 安装 Miniconda
+bash Miniconda3-latest-Linux-x86_64.sh
+
+# 3. 创建项目环境
+conda create -n shengyibaodian python=3.11
+
+# 4. 激活环境
+conda activate shengyibaodian
+
+# 5. 安装项目依赖
+pip install -r requirements.txt
+
+2. 项目部署步骤
+# 更新系统
+sudo apt update
+sudo apt upgrade
+
+# 安装必要的系统包
+sudo apt install -y nginx supervisor
+
+配置 Nginx：
+# 创建 Nginx 配置文件
+sudo nano /etc/nginx/sites-available/shengyibaodian
+
+# 添加以下配置
+server {
+    listen 80;
+    server_name your_domain.com;  # 替换为你的域名
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+
+# 启用配置
+sudo ln -s /etc/nginx/sites-available/shengyibaodian /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx
+
+配置 Supervisor：
+# 创建 Supervisor 配置文件
+sudo nano /etc/supervisor/conf.d/shengyibaodian.conf
+
+# 添加以下配置
+[program:shengyibaodian]
+directory=/home/yu/gitdev/shengyibaodian
+command=/home/yu/miniconda3/envs/shengyibaodian/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000
+user=yu
+autostart=true
+autorestart=true
+stderr_logfile=/var/log/shengyibaodian.err.log
+stdout_logfile=/var/log/shengyibaodian.out.log
+environment=PATH="/home/yu/miniconda3/envs/shengyibaodian/bin"
+
+# 更新 Supervisor
+sudo supervisorctl reread
+sudo supervisorctl update
+sudo supervisorctl start shengyibaodian
+
+部署项目：
+# 1. 创建项目目录
+mkdir -p /home/yu/gitdev/shengyibaodian
+
+# 2. 克隆项目
+git clone your_repository_url /home/yu/gitdev/shengyibaodian
+
+# 3. 激活 Conda 环境
+conda activate shengyibaodian
+
+# 4. 安装依赖
+cd /home/yu/gitdev/shengyibaodian
+pip install -r requirements.txt
+
+# 5. 启动服务
+sudo supervisorctl start shengyibaodian
+
+环境变量
+# 创建 .env 文件
+nano /home/yu/gitdev/shengyibaodian/.env
+
+# 添加必要的环境变量
+DEEPSEEK_API_KEY=your_api_key
+DEEPSEEK_API_URL=your_api_url
+
+安全
+# 只开放必要端口
+sudo ufw allow 80
+sudo ufw allow 443
+sudo ufw allow 22
+sudo ufw enable
+
+SSL 
+# 安装 certbot
+sudo apt install certbot python3-certbot-nginx
+
+# 获取证书
+sudo certbot --nginx -d your_domain.com
+
+
+# 查看应用日志
+tail -f /var/log/shengyibaodian.out.log
+tail -f /var/log/shengyibaodian.err.log
+
+# 查看 Nginx 日志
+tail -f /var/log/nginx/access.log
+tail -f /var/log/nginx/error.log
+
+# 重启应用
+sudo supervisorctl restart shengyibaodian
+
+# 重启 Nginx
+sudo systemctl restart nginx
+
+# 更新项目
+cd /home/yu/gitdev/shengyibaodian
+git pull
+pip install -r requirements.txt
+sudo supervisorctl restart shengyibaodian
+
+
+# 创建备份脚本
+nano /home/yu/backup.sh
+
+# 添加以下内容
+#!/bin/bash
+backup_dir="/home/yu/backups"
+timestamp=$(date +%Y%m%d_%H%M%S)
+tar -czf "$backup_dir/shengyibaodian_$timestamp.tar.gz" /home/yu/gitdev/shengyibaodian
+
+# 设置定时任务
+crontab -e
+# 添加以下行（每天凌晨 2 点备份）
+0 2 * * * /home/yu/backup.sh
