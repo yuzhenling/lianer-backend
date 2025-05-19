@@ -131,3 +131,48 @@ python -m uvicorn main:app --host 0.0.0.0 --port 9443 --ssl-keyfile /harbour/syb
 
 
 阿里云控制台增加9443端口规则
+
+
+
+/etc/systemd/system/yikao.service
+
+[Unit]
+Description=yikao app
+After=network.target
+
+[Service]
+User=yuzhenling
+Group=yuzhenling
+WorkingDirectory=/harbour/sybd/shengyibaodian
+
+# 使用conda环境中的Python和uvicorn
+#Environment="PATH=/opt/miniconda3/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ExecStart=/opt/miniconda3/envs/yikao/bin/python -m uvicorn main:app --host 0.0.0.0 --port 9443 --ssl-keyfile /harbour/sybd/shengyibaodian/etc/ssl/private/private.key --ssl-certfile /harbour/sybd/shengyibaodian/etc/ssl/certs/certificate.crt
+
+Restart=always
+RestartSec=5
+KillSignal=SIGINT
+TimeoutStopSec=30
+
+# 日志配置
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=yikao
+
+[Install]
+WantedBy=multi-user.target
+
+
+# 重新加载配置
+sudo systemctl daemon-reload
+
+# 重启服务
+sudo systemctl restart yikao
+
+sudo systemctl status yikao
+
+# 查看最新日志
+sudo journalctl -u yikao -n 30 --no-pager
+
+
+sudo systemctl show --property=User yikao.service

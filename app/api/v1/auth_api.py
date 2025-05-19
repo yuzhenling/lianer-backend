@@ -82,7 +82,7 @@ async def wechat_login(
     lang = get_language(request)
     
     try:
-        # wechat_data = await auth_service.verify_wechat_code(login_data.code)
+        wechat_data = await auth_service.verify_wechat_code(login_data.code)
         reps = '{"openid": "oqqiv6YxTvbPA0dGJXf-XAMGp6Gs", "session_key": "psbJmWtjELRODF9umW5rwA=="}'
         wechat_data = json.loads(reps)
         if not wechat_data:

@@ -7,6 +7,7 @@ class VipOrder(Base):
     __tablename__ = "vip_order"
     id = Column(BigInteger, primary_key=True, index=True, autoincrement=True)
     user_id = Column(Integer, index=True)
+    wechat_openid = Column(BigInteger, index=True)
     vip_id = Column(Integer, index=True)
 
     is_paid = Column(Boolean, default=False, nullable=True)

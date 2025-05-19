@@ -26,6 +26,7 @@ class OrderService:
             # 创建订单
             order = VipOrder(
                 user_id=user.id,
+                wechat_openid=user.wechat_openid,
                 vip_id=vip_order.vip_id,
                 is_paid=vip_order.is_paid,
                 paid_amount=vip_order.paid_amount,
@@ -60,6 +61,9 @@ class OrderService:
                 "amount": {
                     "total": order.paid_amount,
                     "currency": "CNY"
+                },
+                "payer": {
+                    "openid": order.wechat_openid,
                 }
             }
             
