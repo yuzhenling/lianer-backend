@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, DateTime, Double, Boolean, BigInteger
+from sqlalchemy import Column, Integer, DateTime, Double, Boolean, BigInteger, String
 from sqlalchemy.sql import func
 from app.db.base import Base
 
@@ -9,6 +9,8 @@ class VipOrder(Base):
     trade_no = Column(BigInteger, index=True, nullable=False)
     user_id = Column(Integer, index=True)
     vip_id = Column(Integer, index=True)
+
+    prepay_id=Column(String)
 
     is_paid = Column(Boolean, default=False, nullable=True)
     paid_date = Column(DateTime, nullable=True)

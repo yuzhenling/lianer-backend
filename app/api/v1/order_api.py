@@ -133,7 +133,7 @@ async def create_payment(
             )
 
         # 创建微信支付订单
-        payment_data = await order_service.create_wechat_payment(order, current_user)
+        payment_data = await order_service.create_wechat_payment(db, order, current_user)
         if not payment_data:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

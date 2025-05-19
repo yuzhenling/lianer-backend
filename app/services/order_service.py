@@ -5,7 +5,7 @@ import random
 import string
 import struct
 import time
-from datetime import datetime, timedelta
+from datetime import  timedelta
 from typing import Optional
 import requests
 from OpenSSL import crypto
@@ -55,7 +55,7 @@ class OrderService:
             db.rollback()
             return None
 
-    async def create_wechat_payment(self, order: VipOrder, current_user: User) -> Optional[dict]:
+    async def create_wechat_payment(self, db: Session, order: VipOrder, current_user: User) -> Optional[dict]:
         """创建微信支付订单"""
         try:
             # 调用微信支付统一下单API
@@ -88,13 +88,16 @@ class OrderService:
             logger.info(f"WECHAT PAY POST headers: {headers}")
             response = requests.post(url, data=body_str.encode('utf-8'), headers=headers)
             resp = response.json()
-            #TODO 模拟
-            resp = {"prepay_id": "wx19171500523387e20884ba3048ea1e0001"}
+            # #TODO 模拟
+            # resp = {"prepay_id": "wx19171500523387e20884ba3048ea1e0001"}
+            #更新order
+            order.prepay_id = resp.get("prepay_id")
+            db.add(order)
+            db.commit()
 
             paySign = self.build_pay_signature(settings.WECHAT_APP_ID, timestamp, nonce_str, resp)
-            
-            # 开发测试时模拟返回支付参数
 
+            # 开发测试时模拟返回支付参数
             result = {
                 "prepay_id": resp.get("prepay_id"),
                 "timeStamp": timestamp,
@@ -103,7 +106,7 @@ class OrderService:
                 "signType": "RSA",
                 "paySign": paySign
             }
-            
+            logger.info(f"WECHAT PAY return UI: {result}")
             return result
             
         except Exception as e:
