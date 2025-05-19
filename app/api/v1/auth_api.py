@@ -1,4 +1,5 @@
 import json
+from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -8,11 +9,12 @@ from pydantic import BaseModel
 
 from app.core import logger
 from app.core.config import settings
-from app.models.user import User
+from app.models.user import User, UserInfo
 from app.services.auth_service import AuthService
 from app.db.base import SessionLocal
 from app.core.i18n import i18n, get_language
 from app.core.logger import logger
+
 
 router = APIRouter(prefix="", tags=["auth"])
 auth_service = AuthService()
@@ -26,6 +28,17 @@ class Token(BaseModel):
 
 class WeChatLogin(BaseModel):
     code: str
+
+
+class WeChatUserInfo(BaseModel):
+    nickname: Optional[str] = None
+    avatar_url: Optional[str] = None
+    phone: Optional[str] = None
+    gender: Optional[str] = None
+    country: Optional[str] = None
+    province: Optional[str] = None
+    city: Optional[str] = None
+    language: Optional[str] = None
 
 
 def get_db():
@@ -119,4 +132,45 @@ async def wechat_login(
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=i18n.get_text("WECHAT_LOGIN_FAILED", lang)
+        )
+
+
+@router.post("/auth/update/userinfo")
+async def update_user_info(
+    request: Request,
+    user_info: WeChatUserInfo,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """更新微信用户信息"""
+    lang = get_language(request)
+    try:
+        # 检查是否已存在用户信息
+        existing_info = db.query(UserInfo).filter(UserInfo.user_id == current_user.id).first()
+        
+        if existing_info:
+            # 更新现有信息
+            for field, value in user_info.model_dump(exclude_unset=True).items():
+                setattr(existing_info, field, value)
+            db.add(existing_info)
+        else:
+            # 创建新的用户信息
+            new_info = UserInfo(
+                user_id=current_user.id,
+                **user_info.model_dump(exclude_unset=True)
+            )
+            db.add(new_info)
+        
+        db.commit()
+        
+        return {
+            "code": 0,
+            "message": i18n.get_text("USER_INFO_UPDATED", lang),
+            "data": user_info.model_dump(exclude_unset=True)
+        }
+    except Exception as e:
+        logger.error(f"Failed to update user info: {str(e)}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
