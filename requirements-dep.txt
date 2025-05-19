@@ -10,6 +10,7 @@ vamp==1.1.0
 python-jose[cryptography]==3.4.0
 passlib[bcrypt]==1.7.4
 cryptography==44.0.2
+pyopenssl==25.1.0
 
 # 测试
 pytest==7.4.3

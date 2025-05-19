@@ -176,3 +176,6 @@ sudo journalctl -u yikao -n 30 --no-pager
 
 
 sudo systemctl show --property=User yikao.service
+
+
+WECHATPAY2-SHA256-RSA2048 mchid="1711281977",nonce_str="OgSPMTVboijcEhrsd01X6jrsl6Flt7XG",signature="cr0KoDnBXXIOyoqIjN52NPDEVc6XjG+0V5NroAUAeYM7GNGaLHQyrtoLnb5+wCb2dwirZd4eVD2zlg7yjsL4CE7qMshKD4qMhASKOx2OpWiR2V58s9o/2EWmD8fjgg7/79P/ekoS5gg03zZeGAuZA9cpWWp7psyoCvBBn0kueiIZj8LLJ1qvrjyNw5+XW9abTSTQ7EiscShum8IiBybILCgfT2TfXizcMMYHdNGFAteIXPva5SBvcKfdOxv3BsKn3kqo/rce7HSQYT+TJ/giLrC/HZv/uxT91hNlPWt+B+BugTVxMNmUCcXL9ujKk/bcxWDxq8vtBsTUksrTi7G1Xg==",timestamp="1747635407",serial_no="5D7B5FCEE61F97EAD3726C3DD3766683344A501F"

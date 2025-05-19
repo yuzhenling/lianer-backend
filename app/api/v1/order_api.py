@@ -24,21 +24,22 @@ class OrderCreate(BaseModel):
     vip_id: int
     is_paid: Optional[bool] = None
     paid_date: Optional[datetime] = None
-    paid_amount: Optional[float] = None
+    paid_amount: Optional[int] = None
     is_return: Optional[bool] = None
     return_date: Optional[datetime] = None
-    return_amount: Optional[float] = None
+    return_amount: Optional[int] = None
 
 class OrderResponse(BaseModel):
     id: int
+    trade_no: int
     user_id: int
     vip_id: int
     is_paid: bool | None
     paid_date: datetime | None
-    paid_amount: float | None
+    paid_amount: int | None
     is_return: bool | None
     return_date: datetime | None
-    return_amount: float | None
+    return_amount: int | None
     created_at: datetime
     updated_at: datetime
 
@@ -110,7 +111,6 @@ async def create_payment(
     db: Session = Depends(get_db)
 ):
     """支付订单"""
-    lang = get_language(request)
     try:
         lang = get_language(request)
 
@@ -133,7 +133,7 @@ async def create_payment(
             )
 
         # 创建微信支付订单
-        payment_data = await order_service.create_wechat_payment(order)
+        payment_data = await order_service.create_wechat_payment(order, current_user)
         if not payment_data:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

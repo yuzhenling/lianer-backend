@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from pydantic_settings import BaseSettings
 from typing import Optional
 import secrets
@@ -9,7 +11,8 @@ class Settings(BaseSettings):
     # API_HOST: str = "https://api.shengyibaodian.com"  # API域名
     API_HOST: str = "http://127.0.0.1:8000"  # API域名
 
-    
+    APP_DIR: str = Path(__file__).resolve().parent.parent.as_posix()
+
     # PostgreSQL数据库配置
     POSTGRES_SERVER: str = "localhost"
     POSTGRES_USER: str = "postgres"
@@ -28,16 +31,19 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8  # 8 days
     
     # 微信小程序配置
-    WECHAT_APP_ID: str = "wx19a50120a8380422"
-    WECHAT_APP_SECRET: str = "c129f82d2b3c42cac5bbf442ae128bd8"
+    # WECHAT_APP_ID: str = "wx19a50120a8380422"
+    # WECHAT_APP_SECRET: str = "c129f82d2b3c42cac5bbf442ae128bd8"
+
+    WECHAT_APP_ID: str = "wx8db9b798acf25a4c"
+    WECHAT_APP_SECRET: str = "4398791fcc7cf2b1b9ee11e52e3daf60"
     
     # 微信支付配置
-    WECHAT_MCH_ID: str = "1234567890"  # 商户号
-    WECHAT_PAY_SERIAL_NO: str = ""  # 商户证书序列号
+    WECHAT_MCH_ID: str = "1711281977"  # 商户号
+    WECHAT_PAY_SERIAL_NO: str = "5D7B5FCEE61F97EAD3726C3DD3766683344A501F"  # 商户证书序列号
     WECHAT_PAY_KEY: str = ""  # API v3密钥
-    WECHAT_PAY_CERT_PATH: str = "cert/apiclient_cert.pem"  # 商户证书路径
-    WECHAT_PAY_KEY_PATH: str = "cert/apiclient_key.pem"  # 商户私钥路径
-    WECHAT_NOTIFY_URL: str = "http://127.0.0.1:8000/api/v1/pay"
+    WECHAT_PAY_CERT_PATH: str = APP_DIR+"/wepay/apiclient_cert.pem"  # 商户证书路径
+    WECHAT_PAY_KEY_PATH: str = APP_DIR+"/wepay/apiclient_key.pem"  # 商户私钥路径
+    WECHAT_NOTIFY_URL: str = "http://8.152.200.145:8000/api/v1/order/wechat-notify"
     
     # 音频处理配置
     AUDIO_UPLOAD_DIR: str = "uploads/audio"

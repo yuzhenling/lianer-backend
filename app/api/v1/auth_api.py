@@ -83,7 +83,8 @@ async def wechat_login(
     
     try:
         wechat_data = await auth_service.verify_wechat_code(login_data.code)
-        reps = '{"openid": "oqqiv6YxTvbPA0dGJXf-XAMGp6Gs", "session_key": "psbJmWtjELRODF9umW5rwA=="}'
+        reps = '{"openid": "ox75Z7NkQ58loRuhVu9OoNHTDtJY", "session_key": "qNnx7kln91EW/xBBbqP85A=="}'
+        # reps = '{"openid": "oqqiv6YxTvbPA0dGJXf-XAMGp6Gs", "session_key": "psbJmWtjELRODF9umW5rwA=="}'
         wechat_data = json.loads(reps)
         if not wechat_data:
             raise HTTPException(
