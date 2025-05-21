@@ -179,3 +179,16 @@ sudo systemctl show --property=User yikao.service
 
 
 WECHATPAY2-SHA256-RSA2048 mchid="1711281977",nonce_str="OgSPMTVboijcEhrsd01X6jrsl6Flt7XG",signature="cr0KoDnBXXIOyoqIjN52NPDEVc6XjG+0V5NroAUAeYM7GNGaLHQyrtoLnb5+wCb2dwirZd4eVD2zlg7yjsL4CE7qMshKD4qMhASKOx2OpWiR2V58s9o/2EWmD8fjgg7/79P/ekoS5gg03zZeGAuZA9cpWWp7psyoCvBBn0kueiIZj8LLJ1qvrjyNw5+XW9abTSTQ7EiscShum8IiBybILCgfT2TfXizcMMYHdNGFAteIXPva5SBvcKfdOxv3BsKn3kqo/rce7HSQYT+TJ/giLrC/HZv/uxT91hNlPWt+B+BugTVxMNmUCcXL9ujKk/bcxWDxq8vtBsTUksrTi7G1Xg==",timestamp="1747635407",serial_no="5D7B5FCEE61F97EAD3726C3DD3766683344A501F"
+
+POST
+v3/pay/transactions/jsapi
+1747638008
+vSN6XInXPHI0w547OVbivLCNCpPOUPPI
+{"appid":"wx19a50120a8380422","mchid":"1711281977","description":"声之宝典VIP会员","out_trade_no":"1747636937356","notify_url":"http://127.0.0.1:8000/api/v1/orders/wechat-notify","amount":{"total":100,"currency":"CNY"},"payer":{"openid":"oqqiv6YxTvbPA0dGJXf-XAMGp6Gs"}}
+
+
+
+WECHATPAY2-SHA256-RSA2048 mchid="1711281977",nonce_str="EA09E602C762C5BBC2D2A63DFD27947A",signature="G6BuZq1m779DQ9z6BWQyIRtErDOyo6RuEV1Dy3PDLx/JQBQn4OG7EubQumkBTrDLwq5kNECuJFUMGnono+33WJv9r9IwXK7rpoArIvNLmJYBSdC+uJnosv/ZuOjyFH4m8o/9RBRwhFxyh0G/bEutSuekmNwaY4Pff5g61dDMQkLsYuWKQhsdApn0vGcLOJaXhX+Xdlivoy28TufwY8m3sAORuUfssp7BI8Art4ku0WGgP5QhFoxmimz41aR70+3auzoOR2TGczNaGW3pqQtfgdk4zR31jk7l7HYtZB+pHGYxm31OuwAMgUSNFyAiKO3nnBEF1BQyNDeRMSDZ6SrwTQ==",timestamp="1747640652",serial_no="5D7B5FCEE61F97EAD3726C3DD3766683344A501F"
+
+
+{'Accept': 'application/json', 'Authorization': 'WECHATPAY2-SHA256-RSA2048 mchid="1711281977",nonce_str="EA09E602C762C5BBC2D2A63DFD27947A",signature="G6BuZq1m779DQ9z6BWQyIRtErDOyo6RuEV1Dy3PDLx/JQBQn4OG7EubQumkBTrDLwq5kNECuJFUMGnono+33WJv9r9IwXK7rpoArIvNLmJYBSdC+uJnosv/ZuOjyFH4m8o/9RBRwhFxyh0G/bEutSuekmNwaY4Pff5g61dDMQkLsYuWKQhsdApn0vGcLOJaXhX+Xdlivoy28TufwY8m3sAORuUfssp7BI8Art4ku0WGgP5QhFoxmimz41aR70+3auzoOR2TGczNaGW3pqQtfgdk4zR31jk7l7HYtZB+pHGYxm31OuwAMgUSNFyAiKO3nnBEF1BQyNDeRMSDZ6SrwTQ==",timestamp="1747640652",serial_no="5D7B5FCEE61F97EAD3726C3DD3766683344A501F"', 'Content-Type': 'application/json'}

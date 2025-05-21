@@ -174,3 +174,62 @@ async def update_user_info(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
+
+
+@router.get("/auth/myinfo")
+async def get_user_info(
+        request: Request,
+        current_user: User = Depends(get_current_user),
+        db: Session = Depends(get_db)
+):
+    """获取用户信息"""
+    lang = get_language(request)
+    try:
+        # 使用 join 查询用户信息和用户基本信息
+        result = db.query(User, UserInfo).outerjoin(UserInfo, User.id == UserInfo.user_id).filter(User.id == current_user.id).first()
+
+        if not result:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=i18n.get_text("USER_NOT_FOUND", lang)
+            )
+
+        user, user_info = result
+
+        # 构建返回数据
+        response_data = {
+            "id": user.id,
+            "email": user.email,
+            "phone": user.phone,
+            "wechat_openid": user.wechat_openid,
+            "unionid": user.unionid,
+            "is_active": user.is_active,
+            "is_vip": user.is_vip,
+            "vip_start_date": user.vip_start_date,
+            "vip_expire_date": user.vip_expire_date,
+            # "total_practice_time": user.total_practice_time,
+            # "pitch_test_count": user.pitch_test_count,
+            "created_at": user.created_at,
+            "updated_at": user.updated_at
+        }
+
+        # 如果存在用户信息，添加到返回数据中
+        if user_info:
+            user_info_dict = {
+                "nickname": user_info.nickname,
+                "avatar_url": user_info.avatar_url,
+                "gender": user_info.gender,
+                "country": user_info.country,
+                "province": user_info.province,
+                "city": user_info.city,
+                "language": user_info.language
+            }
+            response_data.update(user_info_dict)
+
+        return response_data
+    except Exception as e:
+        logger.error(f"Failed to get user info: {str(e)}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
+        )
