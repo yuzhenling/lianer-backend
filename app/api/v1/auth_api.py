@@ -1,20 +1,20 @@
 import json
-from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from datetime import timedelta
 from pydantic import BaseModel
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 
 from app.core import logger
 from app.core.config import settings
-from app.models.user import User, UserInfo
+from app.models.user import User
 from app.services.auth_service import AuthService
-from app.db.base import SessionLocal
+from app.db.database import get_db
 from app.core.i18n import i18n, get_language
 from app.core.logger import logger
-
 
 router = APIRouter(prefix="", tags=["auth"])
 auth_service = AuthService()
@@ -30,29 +30,10 @@ class WeChatLogin(BaseModel):
     code: str
 
 
-class WeChatUserInfo(BaseModel):
-    nickname: Optional[str] = None
-    avatar_url: Optional[str] = None
-    phone: Optional[str] = None
-    gender: Optional[str] = None
-    country: Optional[str] = None
-    province: Optional[str] = None
-    city: Optional[str] = None
-    language: Optional[str] = None
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
 async def get_current_user(
     request: Request,
     token: str = Depends(oauth2_scheme),
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ) -> User:
     lang = get_language(request)
     credentials_exception = HTTPException(
@@ -73,7 +54,10 @@ async def get_current_user(
         if user_id is None:
             raise credentials_exception
             
-        user = db.query(User).filter(User.id == int(user_id)).first()
+        # 使用异步查询
+        result = await db.execute(select(User).filter(User.id == int(user_id)))
+        user = result.scalar_one_or_none()
+        
         if user is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -132,104 +116,4 @@ async def wechat_login(
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=i18n.get_text("WECHAT_LOGIN_FAILED", lang)
-        )
-
-
-@router.post("/auth/update/userinfo")
-async def update_user_info(
-    request: Request,
-    user_info: WeChatUserInfo,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
-):
-    """更新微信用户信息"""
-    lang = get_language(request)
-    try:
-        # 检查是否已存在用户信息
-        existing_info = db.query(UserInfo).filter(UserInfo.user_id == current_user.id).first()
-        
-        if existing_info:
-            # 更新现有信息
-            for field, value in user_info.model_dump(exclude_unset=True).items():
-                setattr(existing_info, field, value)
-            db.add(existing_info)
-        else:
-            # 创建新的用户信息
-            new_info = UserInfo(
-                user_id=current_user.id,
-                **user_info.model_dump(exclude_unset=True)
-            )
-            db.add(new_info)
-        
-        db.commit()
-        
-        return {
-            "code": 0,
-            "message": i18n.get_text("USER_INFO_UPDATED", lang),
-            "data": user_info.model_dump(exclude_unset=True)
-        }
-    except Exception as e:
-        logger.error(f"Failed to update user info: {str(e)}", exc_info=True)
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
-        )
-
-
-@router.get("/auth/myinfo")
-async def get_user_info(
-        request: Request,
-        current_user: User = Depends(get_current_user),
-        db: Session = Depends(get_db)
-):
-    """获取用户信息"""
-    lang = get_language(request)
-    try:
-        # 使用 join 查询用户信息和用户基本信息
-        result = db.query(User, UserInfo).outerjoin(UserInfo, User.id == UserInfo.user_id).filter(User.id == current_user.id).first()
-
-        if not result:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=i18n.get_text("USER_NOT_FOUND", lang)
-            )
-
-        user, user_info = result
-
-        # 构建返回数据
-        response_data = {
-            "id": user.id,
-            "email": user.email,
-            "phone": user.phone,
-            "wechat_openid": user.wechat_openid,
-            "unionid": user.unionid,
-            "is_active": user.is_active,
-            "is_vip": user.is_vip,
-            "vip_start_date": user.vip_start_date,
-            "vip_expire_date": user.vip_expire_date,
-            # "total_practice_time": user.total_practice_time,
-            # "pitch_test_count": user.pitch_test_count,
-            "created_at": user.created_at,
-            "updated_at": user.updated_at
-        }
-
-        # 如果存在用户信息，添加到返回数据中
-        if user_info:
-            user_info_dict = {
-                "nickname": user_info.nickname,
-                "avatar_url": user_info.avatar_url,
-                "gender": user_info.gender,
-                "country": user_info.country,
-                "province": user_info.province,
-                "city": user_info.city,
-                "language": user_info.language
-            }
-            response_data.update(user_info_dict)
-
-        return response_data
-    except Exception as e:
-        logger.error(f"Failed to get user info: {str(e)}", exc_info=True)
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )

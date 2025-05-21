@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "声之宝典"
     API_V1_STR: str = "/api/v1"
     # API_HOST: str = "https://api.shengyibaodian.com"  # API域名
-    API_HOST: str = "http://127.0.0.1:8000"  # API域名
+    API_HOST: str = "https://8.152.200.145:9443"  # API域名
 
     APP_DIR: str = Path(__file__).resolve().parent.parent.as_posix()
 
@@ -19,11 +19,17 @@ class Settings(BaseSettings):
     POSTGRES_PASSWORD: str = "123456"
     POSTGRES_DB: str = "shengyibaodian"
     POSTGRES_PORT: str = "5432"
-    
+
+    # 数据库连接池配置
+    DB_POOL_SIZE: int = 20
+    DB_MAX_OVERFLOW: int = 100
+    DB_POOL_TIMEOUT: int = 30
+    DB_POOL_RECYCLE: int = 1800
+
     @property
     def SQLALCHEMY_DATABASE_URL(self) -> str:
         """构建PostgreSQL数据库URL"""
-        return f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+        return f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
     
     # JWT配置
     SECRET_KEY: str = secrets.token_urlsafe(32)
@@ -54,6 +60,7 @@ class Settings(BaseSettings):
     DEEPSEEK_API_KEY: str = "sk-93590ae8cf3a4025a204afc8fa0f6082"
     DEEPSEEK_API_URL: str = "https://api.deepseek.com/v1/chat/completions"
     
+
     class Config:
         env_file = ".env"
         case_sensitive = True

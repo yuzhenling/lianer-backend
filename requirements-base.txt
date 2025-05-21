@@ -12,7 +12,9 @@ httpx==0.25.2
 requests==2.32.3
 
 # 数据库相关
+# sqlalchemy[asyncio]
 sqlalchemy==2.0.23
+asyncpg==0.30.0
 alembic==1.12.1
 psycopg2-binary==2.9.9
 

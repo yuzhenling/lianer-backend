@@ -5,12 +5,14 @@ from alembic import context
 import os
 import sys
 
+from app.db.database import Base
+
 # 添加项目根目录到Python路径
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 # 导入项目配置和模型
 from app.core.config import settings
-from app.db.base import Base
+
 from app.models import user, pitch, order, vip  # 导入所有模型
 
 # this is the Alembic Config object, which provides
