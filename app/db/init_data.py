@@ -1,6 +1,7 @@
 import os
 from typing import List
 
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.core.logger import logger
@@ -14,7 +15,9 @@ async def init_vip_levels(db: Session):
     """初始化VIP等级数据"""
     try:
         # 检查是否已经存在数据
-        existing_levels = await db.query(Vip).all()
+        # existing_levels = await db.query(Vip).all()
+        result = await db.execute(select(Vip))
+        existing_levels = result.scalars().all()
         if existing_levels:
             logger.info("VIP levels already initialized, skipping...")
             return
@@ -51,7 +54,6 @@ async def init_vip_levels(db: Session):
                     discount=vip_discount[level],
                 )
                 db.add(vip)
-                await db.flush()  # 立即刷新以检查是否有问题
             except Exception as e:
                 logger.error(f"Failed to insert VIP level {level}: {str(e)}")
                 raise e
@@ -68,7 +70,9 @@ async def init_pitches(db: Session):
     """初始化音高数据"""
     try:
         # 检查是否已经有数据
-        pitches = await db.query(Pitch).all()
+        # pitches = await db.query(Pitch).all()
+        result = await db.execute(select(Pitch))
+        pitches = result.scalars().all()
         if pitches:
             logger.info("Pitch already initialized, skipping...")
             return
@@ -116,17 +120,24 @@ async def init_intervals(db: Session):
         await init_interval_type(db)
         await init_concordance_type(db)
 
-        intervals = await db.query(PitchInterval).all()
+        # intervals = await db.query(PitchInterval).all()
+        result = await db.execute(select(PitchInterval))
+        intervals = result.scalars().all()
         if intervals:
             logger.info("PitchInterval already initialized, skipping...")
             return
 
         #1: "协和", 2: "不完全协和", 3: "不协和"
-        concordance_types = await db.query(PitchConcordanceType).all()
+        # concordance_types = await db.query(PitchConcordanceType).all()
+        result = await db.execute(select(PitchConcordanceType))
+        concordance_types = result.scalars().all()
 
 
+        # type_datas = await db.query(PitchIntervalType).all()
+        result = await db.execute(select(PitchIntervalType))
+        type_datas = result.scalars().all()
 
-        type_datas = await db.query(PitchIntervalType).all()
+
         single_id: int = None;
         double_id: int = None;
         for type in type_datas:
@@ -249,7 +260,9 @@ def get_concordance_type(semitone_number: int, concordance_types: List[PitchConc
 
 
 async def init_interval_type(db: Session):
-    types = await db.query(PitchIntervalType).all()
+    # types = await db.query(PitchIntervalType).all()
+    result = await db.execute(select(PitchIntervalType))
+    types = result.scalars().all()
     if types:
         logger.info("PitchIntervalType already initialized, skipping...")
         return
@@ -265,7 +278,9 @@ async def init_interval_type(db: Session):
     await db.commit()
 
 async def init_concordance_type(db: Session):
-    types = await db.query(PitchConcordanceType).all()
+    # types = await db.query(PitchConcordanceType).all()
+    result = await db.execute(select(PitchConcordanceType))
+    types = result.scalars().all()
     if types:
         logger.info("PitchConcordanceType already initialized, skipping...")
         return
@@ -281,7 +296,9 @@ async def init_concordance_type(db: Session):
     await db.commit()
 
 async def init_pitch_chord_type(db: Session):
-    types = await db.query(PitchChordType).all()
+    # types = await db.query(PitchChordType).all()
+    result = await db.execute(select(PitchChordType))
+    types = result.scalars().all()
     if types:
         logger.info("PitchChordType already initialized, skipping...")
         return
@@ -297,12 +314,16 @@ async def init_pitch_chord_type(db: Session):
 
 async def init_pitch_chord(db: Session):
     await init_pitch_chord_type(db)
-    pitch_chord_mapping = await db.query(PitchChordTypeMapping).all()
+    # pitch_chord_mapping = await db.query(PitchChordTypeMapping).all()
+    result = await db.execute(select(PitchChordTypeMapping))
+    pitch_chord_mapping = result.scalars().all()
     if pitch_chord_mapping:
         logger.info("PitchChordTypeMapping already initialized, skipping...")
         return
 
-    types = await db.query(PitchChordType).all()
+    # types = await db.query(PitchChordType).all()
+    result = await db.execute(select(PitchChordType))
+    types = result.scalars().all()
     id3 = types[0].id if types[0].name.__contains__("三") else types[1].id
     id7 = types[1].id if types[1].name.__contains__("三") else types[0].id
     index = 1

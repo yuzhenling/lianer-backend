@@ -178,7 +178,7 @@ class RhythmService:
         
         return filtered
 
-    async def generate_question(self, request: RhythmSettingRequest) -> RhythmQuestionResponse:
+    def generate_question(self, request: RhythmSettingRequest) -> RhythmQuestionResponse:
         """生成一个完整的节奏听写题"""
         logger.info(f"Generating rhythm question with request: {request.dict()}")
         

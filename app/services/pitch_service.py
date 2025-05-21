@@ -2,6 +2,7 @@ import random
 from dataclasses import replace
 from typing import Dict, List, Any
 
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.api.v1.schemas.request.pitch_request import PitchIntervalSettingRequest, PitchChordSettingRequest
@@ -39,7 +40,9 @@ class PitchService:
     async def load_pitch_cache(self, db: Session) -> None:
         """从数据库加载所有Pitch数据到缓存"""
         try:
-            pitches = await db.query(Pitch).order_by(Pitch.pitch_number).all()
+            # pitches = await db.query(Pitch).order_by(Pitch.pitch_number).all()
+            result = await db.execute(select(Pitch))
+            pitches = result.scalars().all()
             # 清空现有缓存
             self.PITCH_CACHE.clear()
 
@@ -81,7 +84,9 @@ class PitchService:
         try:
             # 清空现有音程缓存
             self.PITCH_INTERVAL_TYPE_CACHE.clear()
-            pitch_interval_types = await db.query(PitchIntervalType).all()
+            # pitch_interval_types = await db.query(PitchIntervalType).all()
+            result = await db.execute(select(PitchIntervalType))
+            pitch_interval_types = result.scalars().all()
             for pit in pitch_interval_types:
                 self.PITCH_INTERVAL_TYPE_CACHE[pit.id] = pit
 
@@ -93,7 +98,9 @@ class PitchService:
         try:
             # 清空现有音程缓存
             self.PITCH_INTERVAL_CONCORDANCE_TYPE_CACHE.clear()
-            pitch_concordance_types = await db.query(PitchConcordanceType).all()
+            # pitch_concordance_types = await db.query(PitchConcordanceType).all()
+            result = await db.execute(select(PitchConcordanceType))
+            pitch_concordance_types = result.scalars().all()
             for pct in pitch_concordance_types:
                 self.PITCH_INTERVAL_CONCORDANCE_TYPE_CACHE[pct.id] = pct
 
@@ -104,11 +111,13 @@ class PitchService:
     async def build_pitch_interval_cache(self, db: Session):
         """构建音程缓存"""
         try:
-            self.build_pitch_interval_type_cache(db)
-            self.build_pitch_concordance_type_cache(db)
+            await self.build_pitch_interval_type_cache(db)
+            await self.build_pitch_concordance_type_cache(db)
             # 清空现有音程缓存
             self.PITCH_INTERVAL_CACHE.clear()
-            pitch_intervals = await db.query(PitchInterval).all()
+            # pitch_intervals = await db.query(PitchInterval).all()
+            result = await db.execute(select(PitchInterval))
+            pitch_intervals = result.scalars().all()
 
             # 为每个音程创建缓存
             for pi in pitch_intervals:
@@ -148,12 +157,14 @@ class PitchService:
     async def build_pitch_chord_cache(self, db: Session):
         """构建和弦缓存"""
         try:
-            self.build_pitch_chord_type_cache(db)
+            await self.build_pitch_chord_type_cache(db)
             # 清空现有音程缓存
             self.PITCH_CHORD_CACHE.clear()
 
+            # pitch_chords = await db.query(PitchChordTypeMapping).all()
 
-            pitch_chords = await db.query(PitchChordTypeMapping).all()
+            result = await db.execute(select(PitchChordTypeMapping))
+            pitch_chords = result.scalars().all()
 
             # 为每个音程创建缓存
             for chord in pitch_chords:
@@ -206,7 +217,9 @@ class PitchService:
 
     async def build_pitch_chord_type_cache(self, db: Session):
         self.PITCH_CHORD_TYPE_CACHE.clear()
-        chord_types = await db.query(PitchChordType).all()
+        # chord_types = await db.query(PitchChordType).all()
+        result = await db.execute(select(PitchChordType))
+        chord_types = result.scalars().all()
         for chord_type in chord_types:
             self.PITCH_CHORD_TYPE_CACHE[chord_type.id] = chord_type
 

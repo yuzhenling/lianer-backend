@@ -3,6 +3,7 @@ from __future__ import annotations
 import traceback
 
 from fastapi import APIRouter, Depends, HTTPException, status, Request
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 from typing import Optional
 from pydantic import BaseModel
@@ -68,7 +69,7 @@ async def create_vip_order(
     lang = get_language(request)
     try:
         # 检查VIP等级是否有效
-        is_contain = await vip_service.contains_vip(order_data.vip_id)
+        is_contain = vip_service.contains_vip(order_data.vip_id)
         if not is_contain:
             logger.error(f"VIP {order_data.vip_id} not found")
             raise HTTPException(
@@ -114,10 +115,12 @@ async def create_payment(
         lang = get_language(request)
 
         # 检查订单是否存在且属于当前用户
-        order = await db.query(VipOrder).filter(
-            VipOrder.id == order_id,
-            VipOrder.user_id == current_user.id
-        ).first()
+        # order = await db.query(VipOrder).filter(
+        #     VipOrder.id == order_id,
+        #     VipOrder.user_id == current_user.id
+        # ).first()
+        result = await db.execute(select(VipOrder).where(VipOrder.id == order_id, VipOrder.user_id == current_user.id))
+        order = result.scalar_one_or_none()
 
         if not order:
             raise HTTPException(

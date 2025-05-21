@@ -1,4 +1,6 @@
 from typing import Optional, Dict, List
+
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.db.database import get_db
@@ -24,7 +26,10 @@ class VipService:
     async def load_vip_cache(self, db: Session) -> None:
         """从数据库加载所有VIP数据到缓存"""
         try:
-            vips = await db.query(Vip).all()
+            # vips = await db.query(Vip).all()
+            result = await db.execute(select(Vip))
+            vips = result.scalars().all()
+
             # 清空现有缓存
             self._vip_cache.clear()
             self._vip_level_cache.clear()
@@ -47,19 +52,19 @@ class VipService:
         """通过等级获取VIP信息（从缓存）"""
         return self._vip_level_cache.get(vip_level)
 
-    async def get_all_vips(self) -> List[Vip]:
+    def get_all_vips(self) -> List[Vip]:
         """获取所有VIP信息（从缓存）"""
-        if not self._vip_cache:
-            db = await get_db()
-            logger.info("Initializing database data during get_all_vips...")
-            await self.load_vip_cache(db)
+        # if not self._vip_cache:
+        #     db = await get_db()
+        #     logger.info("Initializing database data during get_all_vips...")
+        #     await self.load_vip_cache(db)
         return list(self._vip_cache.values())
 
-    async def contains_vip(self, vip_ip: int) -> bool:
-        if not self._vip_cache:
-            db = await get_db()
-            logger.info("Initializing database data during get_all_vips...")
-            await self.load_vip_cache(db)
+    def contains_vip(self, vip_ip: int) -> bool:
+        # if not self._vip_cache:
+        #     db = await get_db()
+        #     logger.info("Initializing database data during get_all_vips...")
+        #     await self.load_vip_cache(db)
 
         if self._vip_cache[vip_ip]:
             return True
@@ -105,7 +110,9 @@ class VipService:
     ) -> Optional[Vip]:
         """更新VIP信息"""
         try:
-            vip = await db.query(Vip).filter(Vip.id == vip_id).first()
+            # vip = await db.query(Vip).filter(Vip.id == vip_id).first()
+            result = await db.execute(select(Vip).where(Vip.id == vip_id))
+            vip = result.scalar_one_or_none()
             if not vip:
                 logger.error(f"VIP id {vip_id} not found")
                 return None
@@ -133,7 +140,9 @@ class VipService:
     async def delete_vip(self, db: Session, vip_id: int) -> bool:
         """删除VIP等级"""
         try:
-            vip = await db.query(Vip).filter(Vip.id == vip_id).first()
+            # vip = await db.query(Vip).filter(Vip.id == vip_id).first()
+            result = await db.execute(select(Vip).where(Vip.id == vip_id))
+            vip = result.scalar_one_or_none()
             if not vip:
                 logger.error(f"VIP id {vip_id} not found")
                 return False

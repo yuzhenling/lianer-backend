@@ -83,6 +83,7 @@ async def wechat_login(
         reps = '{"openid": "ox75Z7NkQ58loRuhVu9OoNHTDtJY", "session_key": "qNnx7kln91EW/xBBbqP85A=="}'
         # reps = '{"openid": "oqqiv6YxTvbPA0dGJXf-XAMGp6Gs", "session_key": "psbJmWtjELRODF9umW5rwA=="}'
         wechat_data = json.loads(reps)
+        logger.info(wechat_data)
         if not wechat_data:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -90,7 +91,9 @@ async def wechat_login(
             )
         
         # 查找或创建用户
-        user = await db.query(User).filter(User.wechat_openid == wechat_data["openid"]).first()
+        # user = await db.query(User).filter(User.wechat_openid == wechat_data["openid"]).first()
+        result = await db.execute(select(User).where(User.wechat_openid == wechat_data["openid"]))
+        user = result.scalar_one_or_none
         if not user:
             user = User(
                 wechat_openid=wechat_data["openid"],

@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
+from sqlalchemy.ext.asyncio import AsyncEngine
 from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
 
 from app.core.config import settings
@@ -17,7 +18,9 @@ from app.core.logger import logger
 from app.services.pitch_service import pitch_service
 from app.services.vip_service import vip_service
 
-Base.metadata.create_all(bind=engine)
+async def create_tables(engine: AsyncEngine):
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -29,36 +32,37 @@ async def lifespan(app: FastAPI):
     try:
         # 创建所有表
         logger.info("Creating database tables...")
-        Base.metadata.create_all(bind=engine)
+        await create_tables(engine=engine)
         
         # 初始化数据库数据
-        db = get_db()
+        db_gen = get_db()
         try:
-            logger.info("Initializing database data...")
-            await init_vip_levels(db)
+            async for db in db_gen:
+                logger.info("Initializing database data...")
+                await init_vip_levels(db)
 
-            await init_pitches(db)
+                await init_pitches(db)
 
-            await init_intervals(db)
+                await init_intervals(db)
 
-            await init_pitch_chord(db)
+                await init_pitch_chord(db)
 
-            logger.info("Loading VIP cache...")
-            await vip_service.load_vip_cache(db)
+                logger.info("Loading VIP cache...")
+                await vip_service.load_vip_cache(db)
 
-            logger.info("Loading Pitch cache...")
-            await pitch_service.load_pitch_cache(db)
+                logger.info("Loading Pitch cache...")
+                await pitch_service.load_pitch_cache(db)
 
-            logger.info("building Pitch Group cache...")
-            pitch_service.build_pitch_group_cache()
+                logger.info("building Pitch Group cache...")
+                pitch_service.build_pitch_group_cache()
 
-            logger.info("building Pitch Interval cache...")
-            await pitch_service.build_pitch_interval_cache(db)
+                logger.info("building Pitch Interval cache...")
+                await pitch_service.build_pitch_interval_cache(db)
 
-            logger.info("building Pitch Chord cache...")
-            await pitch_service.build_pitch_chord_cache(db)
+                logger.info("building Pitch Chord cache...")
+                await pitch_service.build_pitch_chord_cache(db)
         finally:
-            db.close()
+            logger.info("Initializing database data done...")
     except Exception as e:
         logger.error("Failed to initialize application", exc_info=True)
         raise e
@@ -101,7 +105,7 @@ app.include_router(piano_pitch_api.router, prefix=settings.API_V1_STR)
 app.include_router(rhythm_api.router, prefix=settings.API_V1_STR)
 app.include_router(melody_api.router, prefix=settings.API_V1_STR)
 app.include_router(tuner_api.router, prefix=settings.API_V1_STR)
-app.include_router(payment_api.router, prefix=settings.API_V1_STR)
+# app.include_router(payment_api.router, prefix=settings.API_V1_STR)
 app.include_router(exam_api.router, prefix=settings.API_V1_STR)
 
 

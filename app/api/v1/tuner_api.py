@@ -60,7 +60,7 @@ async def analyze_pitch(file: UploadFile = File(...), current_user: User = Depen
             raise HTTPException(status_code=400, detail="无法检测到音高")
             
         # 获取最接近的钢琴音高
-        nearest_pitch, min_cents_diff = await tuner_service.get_nearest_piano_pitch(frequency)
+        nearest_pitch, min_cents_diff = tuner_service.get_nearest_piano_pitch(frequency)
         
         # 获取调音状态和方向
         tuning_status = tuner_service.get_tuning_status(frequency)
@@ -113,11 +113,11 @@ async def analyze_pitch_c(
             }
             
         # 获取最接近的钢琴音高
-        nearest_pitch, min_cents_diff = await fast_tuner_service.get_nearest_piano_pitch(frequency)
+        nearest_pitch, min_cents_diff = fast_tuner_service.get_nearest_piano_pitch(frequency)
         
         # 获取调音状态和方向
-        tuning_status = await fast_tuner_service.get_tuning_status(frequency)
-        tuning_direction = await fast_tuner_service.get_tuning_direction(frequency)
+        tuning_status = fast_tuner_service.get_tuning_status(frequency)
+        tuning_direction = fast_tuner_service.get_tuning_direction(frequency)
         
         return PitchAnalysisResult(
             frequency=float(frequency),

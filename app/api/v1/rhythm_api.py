@@ -21,7 +21,7 @@ async def generate_rhythm_question(
 ):
     """生成节奏听写题"""
     try:
-        response = await rhythm_service.generate_question(request)
+        response = rhythm_service.generate_question(request)
         return response
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

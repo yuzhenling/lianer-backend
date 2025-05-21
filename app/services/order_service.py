@@ -13,6 +13,7 @@ from OpenSSL import crypto
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.serialization import load_pem_private_key
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models.order import VipOrder
@@ -122,7 +123,9 @@ class OrderService:
     ) -> bool:
         """处理支付回调通知"""
         try:
-            order = await db.query(VipOrder).filter(VipOrder.id == order_id).first()
+            # order = await db.query(VipOrder).filter(VipOrder.id == order_id).first()
+            result = await db.execute(select(VipOrder).where(VipOrder.id == order_id))
+            order = result.scalar_one_or_none()
             if not order:
                 logger.error(f"Order {order_id} not found")
                 return False
@@ -135,14 +138,22 @@ class OrderService:
                 await db.commit()
                 
                 # 更新用户VIP状态
-                user = await db.query(User).filter(User.id == order.user_id).first()
+                # user = await db.query(User).filter(User.id == order.user_id).first()
+                result = await db.execute(select(User).where(User.id == order.user_id))
+                user = result.scalar_one_or_none()
                 if user:
-                    vip = await db.query(Vip).filter(Vip.id == order.vip_id).first()
+                    # vip = await db.query(Vip).filter(Vip.id == order.vip_id).first()
+                    result = await db.execute(select(Vip).where(Vip.id == order.vip_id))
+                    vip = result.scalar_one_or_none()
                     if vip:
                         user.is_vip = True
-                        user.vip_start_date = datetime.now()
+                        if user.vip_start_date:
+                            user.vip_start_date = user.vip_start_date
+                        else:
+                            user.vip_start_date = datetime.now()
                         # 计算到期时间
                         duration_days = vip_service.getDaysById(order.vip_id)
+                        #TODO 2次购买计算时间从过期起算
                         user.vip_expire_date = datetime.now() + timedelta(days=duration_days)
                         db.add(user)
                         await db.commit()

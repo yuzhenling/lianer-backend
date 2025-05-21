@@ -62,8 +62,7 @@ async def get_all_vips(
     lang = get_language(request)
     try:
         """获取所有VIP等级信息"""
-        # return vip_service.get_all_vips()
-        vips = await vip_service.get_all_vips()
+        vips = vip_service.get_all_vips()
         if not vips:
             return []
         return [VipResponse.model_validate(vip) for vip in vips]

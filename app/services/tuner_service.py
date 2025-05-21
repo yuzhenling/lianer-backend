@@ -124,7 +124,7 @@ class TunerService:
                     
                     if note_name is not None:
                         # 获取最接近的钢琴音高
-                        nearest_pitch, min_cents_diff = await self.get_nearest_piano_pitch(frequency)
+                        nearest_pitch, min_cents_diff = self.get_nearest_piano_pitch(frequency)
                         
                         # 获取调音状态和方向
                         tuning_status = await self.get_tuning_status(frequency)
@@ -179,7 +179,7 @@ class TunerService:
         main_frequency = pitches[0]
         
         # 获取最接近的钢琴音高
-        nearest_pitch, min_cents_diff = await self.get_nearest_piano_pitch(main_frequency)
+        nearest_pitch, min_cents_diff = self.get_nearest_piano_pitch(main_frequency)
         
         # 计算与最接近钢琴音高的音分偏差
         target_hz = librosa.note_to_hz(nearest_pitch.name)
@@ -211,7 +211,7 @@ class TunerService:
         
         return best_pitch.name, main_frequency, cents_diff
     
-    async def get_nearest_piano_pitch(self, frequency: float) -> Tuple[Pitch, float]:
+    def get_nearest_piano_pitch(self, frequency: float) -> Tuple[Pitch, float]:
         """获取最接近的钢琴音高
         
         Args:
@@ -248,7 +248,7 @@ class TunerService:
         Returns:
             str: 调音状态描述
         """
-        nearest_pitch, cents_diff = await self.get_nearest_piano_pitch(frequency)
+        nearest_pitch, cents_diff = self.get_nearest_piano_pitch(frequency)
         
         if cents_diff < 5:  # 5音分以内认为是准确的
             return "perfect"
@@ -266,7 +266,7 @@ class TunerService:
         Returns:
             str: 调音方向描述
         """
-        nearest_pitch, cents_diff = await self.get_nearest_piano_pitch(frequency)
+        nearest_pitch, cents_diff = self.get_nearest_piano_pitch(frequency)
         target_frequency = librosa.note_to_hz(nearest_pitch.name)
         
         if frequency > target_frequency:

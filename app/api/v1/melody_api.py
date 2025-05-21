@@ -27,7 +27,7 @@ async def generate_melody_question(
     """生成节奏听写题"""
     lang = get_language(request)
     try:
-        response = await melody_service.generate_question(melody_question_request)
+        response = melody_service.generate_question(melody_question_request)
         return response
     except Exception as e:
         logger.error(

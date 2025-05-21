@@ -23,7 +23,7 @@ class MelodyService:
     def __init__(self):
         pass
 
-    async def generate_question(self, request: MelodySettingRequest) -> MelodyQuestionResponse:
+    def generate_question(self, request: MelodySettingRequest) -> MelodyQuestionResponse:
         """生成一个完整的旋律听写题"""
         # 生成正确答案
         correct_melody = self.generate_melody(
