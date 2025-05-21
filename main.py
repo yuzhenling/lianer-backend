@@ -1,22 +1,19 @@
-from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
 from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
-from starlette.staticfiles import StaticFiles
 
 from app.core.config import settings
-from app.db.database import engine, get_db
+from app.db.database import engine, get_db, Base
 from app.middleware.logging import LoggingMiddleware
-from app.api.v1 import auth_api, pitch_api, order_api, vip_api, piano_pitch_api, rhythm_api, melody_api, tuner_api, \
+from app.api.v1 import auth_api, order_api, vip_api, piano_pitch_api, rhythm_api, melody_api, tuner_api, \
     payment_api, exam_api
 from app.db.init_data import init_vip_levels, init_pitches, init_intervals, init_pitch_chord
 from app.core.logger import logger
 
 # 导入所有模型以确保它们被注册到Base.metadata
-from app.models import user, pitch, order
 from app.services.pitch_service import pitch_service
 from app.services.vip_service import vip_service
 
@@ -38,13 +35,13 @@ async def lifespan(app: FastAPI):
         db = get_db()
         try:
             logger.info("Initializing database data...")
-            init_vip_levels(db)
+            await init_vip_levels(db)
 
-            init_pitches(db)
+            await init_pitches(db)
 
-            init_intervals(db)
+            await init_intervals(db)
 
-            init_pitch_chord(db)
+            await init_pitch_chord(db)
 
             logger.info("Loading VIP cache...")
             await vip_service.load_vip_cache(db)
@@ -56,10 +53,10 @@ async def lifespan(app: FastAPI):
             pitch_service.build_pitch_group_cache()
 
             logger.info("building Pitch Interval cache...")
-            pitch_service.build_pitch_interval_cache(db)
+            await pitch_service.build_pitch_interval_cache(db)
 
             logger.info("building Pitch Chord cache...")
-            pitch_service.build_pitch_chord_cache(db)
+            await pitch_service.build_pitch_chord_cache(db)
         finally:
             db.close()
     except Exception as e:
