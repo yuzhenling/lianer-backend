@@ -1,4 +1,5 @@
 import base64
+import datetime
 import json
 import os
 import random
@@ -45,14 +46,14 @@ class OrderService:
                 return_date=vip_order.return_date,
             )
             db.add(order)
-            db.commit()
-            db.refresh(order)
+            await db.commit()
+            await db.refresh(order)
             
             return order
             
         except Exception as e:
             logger.error(f"Failed to create VIP order: {str(e)}", exc_info=True)
-            db.rollback()
+            await db.rollback()
             return None
 
     async def create_wechat_payment(self, db: Session, order: VipOrder, current_user: User) -> Optional[dict]:
@@ -93,7 +94,7 @@ class OrderService:
             #更新order
             order.prepay_id = resp.get("prepay_id")
             db.add(order)
-            db.commit()
+            await db.commit()
 
             paySign = self.build_pay_signature(settings.WECHAT_APP_ID, timestamp, nonce_str, resp)
 
@@ -121,7 +122,7 @@ class OrderService:
     ) -> bool:
         """处理支付回调通知"""
         try:
-            order = db.query(VipOrder).filter(VipOrder.id == order_id).first()
+            order = await db.query(VipOrder).filter(VipOrder.id == order_id).first()
             if not order:
                 logger.error(f"Order {order_id} not found")
                 return False
@@ -129,14 +130,14 @@ class OrderService:
             if payment_success:
                 # 更新订单状态
                 order.is_paid = True
-                order.paid_date = datetime.now()
+                order.paid_date = datetime.datetime.now()
                 db.add(order)
-                db.commit()
+                await db.commit()
                 
                 # 更新用户VIP状态
-                user = db.query(User).filter(User.id == order.user_id).first()
+                user = await db.query(User).filter(User.id == order.user_id).first()
                 if user:
-                    vip = db.query(Vip).filter(Vip.id == order.vip_id).first()
+                    vip = await db.query(Vip).filter(Vip.id == order.vip_id).first()
                     if vip:
                         user.is_vip = True
                         user.vip_start_date = datetime.now()
@@ -144,8 +145,8 @@ class OrderService:
                         duration_days = vip_service.getDaysById(order.vip_id)
                         user.vip_expire_date = datetime.now() + timedelta(days=duration_days)
                         db.add(user)
-                        db.commit()
-                        db.refresh(user)
+                        await db.commit()
+                        await db.refresh(user)
 
                 logger.info(f"Successfully processed payment for order {order_id}")
                 return True
@@ -155,7 +156,7 @@ class OrderService:
                 
         except Exception as e:
             logger.error(f"Failed to process payment notification: {str(e)}", exc_info=True)
-            db.rollback()
+            await db.rollback()
             return False
 
 

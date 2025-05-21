@@ -90,16 +90,15 @@ async def wechat_login(
             )
         
         # 查找或创建用户
-        user = db.query(User).filter(User.wechat_openid == wechat_data["openid"]).first()
+        user = await db.query(User).filter(User.wechat_openid == wechat_data["openid"]).first()
         if not user:
             user = User(
                 wechat_openid=wechat_data["openid"],
                 unionid=wechat_data.get("unionid"),
             )
             db.add(user)
-            db.commit()
-            db.refresh(user)
-        
+            await db.commit()
+            await db.refresh(user)
         # 创建访问令牌
         access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
         access_token = auth_service.create_access_token(

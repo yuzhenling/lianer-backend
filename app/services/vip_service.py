@@ -24,7 +24,7 @@ class VipService:
     async def load_vip_cache(self, db: Session) -> None:
         """从数据库加载所有VIP数据到缓存"""
         try:
-            vips = db.query(Vip).all()
+            vips = await db.query(Vip).all()
             # 清空现有缓存
             self._vip_cache.clear()
             self._vip_level_cache.clear()
@@ -88,8 +88,8 @@ class VipService:
                 discount=vip_discount
             )
             db.add(vip)
-            db.commit()
-            db.refresh(vip)
+            await db.commit()
+            await db.refresh(vip)
 
             # 更新缓存
             self._vip_cache[vip.id] = vip
@@ -100,7 +100,7 @@ class VipService:
 
         except Exception as e:
             logger.error(f"Failed to create VIP level: {str(e)}", exc_info=True)
-            db.rollback()
+            await db.rollback()
             return None
 
     async def update_vip(
@@ -111,7 +111,7 @@ class VipService:
     ) -> Optional[Vip]:
         """更新VIP信息"""
         try:
-            vip = db.query(Vip).filter(Vip.id == vip_id).first()
+            vip = await db.query(Vip).filter(Vip.id == vip_id).first()
             if not vip:
                 logger.error(f"VIP id {vip_id} not found")
                 return None
@@ -121,8 +121,8 @@ class VipService:
             vip.price = update_data.get("price")
             vip.discount = update_data.get("discount")
             db.add(vip)
-            db.commit()
-            db.refresh(vip)
+            await db.commit()
+            await db.refresh(vip)
 
             # 更新缓存
             self._vip_cache[vip.id] = vip
@@ -133,20 +133,20 @@ class VipService:
 
         except Exception as e:
             logger.error(f"Failed to update VIP: {str(e)}", exc_info=True)
-            db.rollback()
+            await db.rollback()
             return None
 
     async def delete_vip(self, db: Session, vip_id: int) -> bool:
         """删除VIP等级"""
         try:
-            vip = db.query(Vip).filter(Vip.id == vip_id).first()
+            vip = await db.query(Vip).filter(Vip.id == vip_id).first()
             if not vip:
                 logger.error(f"VIP id {vip_id} not found")
                 return False
 
             # 从数据库删除
-            db.delete(vip)
-            db.commit()
+            await db.delete(vip)
+            await db.commit()
 
             # 从缓存中删除
             self._vip_cache.pop(vip.id, None)
@@ -157,7 +157,7 @@ class VipService:
 
         except Exception as e:
             logger.error(f"Failed to delete VIP: {str(e)}", exc_info=True)
-            db.rollback()
+            await db.rollback()
             return False
 
     def refresh_cache(self, db: Session) -> bool:

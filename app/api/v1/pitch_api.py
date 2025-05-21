@@ -74,8 +74,8 @@ async def create_pitch_test(
     # 更新用户统计
     current_user.pitch_test_count += 1
     
-    db.commit()
-    db.refresh(pitch_test)
+    await db.commit()
+    await db.refresh(pitch_test)
     
     return pitch_test
 
@@ -86,7 +86,7 @@ async def get_pitch_test_history(
     db: Session = Depends(get_db)
 ):
     """获取用户的音高测试历史"""
-    tests = db.query(PitchTest)\
+    tests = await db.query(PitchTest)\
         .filter(PitchTest.user_id == current_user.id)\
         .order_by(PitchTest.created_at.desc())\
         .limit(50)\
@@ -121,6 +121,6 @@ async def create_practice_session(
     # 更新用户统计
     current_user.total_practice_time += session_data.duration // 60  # 转换为分钟
     
-    db.commit()
+    await db.commit()
     
     return {"status": "success"}

@@ -10,11 +10,11 @@ from app.models.vip import Vip, VipLevel
 from app.constants.constant import PIANO_KEYS_MAPPING
 
 
-def init_vip_levels(db: Session):
+async def init_vip_levels(db: Session):
     """初始化VIP等级数据"""
     try:
         # 检查是否已经存在数据
-        existing_levels = db.query(Vip).all()
+        existing_levels = await db.query(Vip).all()
         if existing_levels:
             logger.info("VIP levels already initialized, skipping...")
             return
@@ -51,24 +51,24 @@ def init_vip_levels(db: Session):
                     discount=vip_discount[level],
                 )
                 db.add(vip)
-                db.flush()  # 立即刷新以检查是否有问题
+                await db.flush()  # 立即刷新以检查是否有问题
             except Exception as e:
                 logger.error(f"Failed to insert VIP level {level}: {str(e)}")
                 raise e
 
-        db.commit()
+        await db.commit()
         logger.info("Successfully initialized VIP levels")
 
     except Exception as e:
         logger.error("Failed to initialize VIP levels", exc_info=True)
-        db.rollback()
+        await db.rollback()
         raise e
 
-def init_pitches(db: Session):
+async def init_pitches(db: Session):
     """初始化音高数据"""
     try:
         # 检查是否已经有数据
-        pitches = db.query(Pitch).all()
+        pitches = await db.query(Pitch).all()
         if pitches:
             logger.info("Pitch already initialized, skipping...")
             return
@@ -100,33 +100,33 @@ def init_pitches(db: Session):
             )
             db.add(pitch)
 
-        db.commit()
+        await db.commit()
         print("Successfully initialized pitch data")
 
     except Exception as e:
-        db.rollback()
+        await db.rollback()
         print(f"Error initializing pitch data: {str(e)}")
         raise
 
 
-def init_intervals(db: Session):
+async def init_intervals(db: Session):
     """初始化音程数据"""
     try:
         # type
-        init_interval_type(db)
-        init_concordance_type(db)
+        await init_interval_type(db)
+        await init_concordance_type(db)
 
-        intervals = db.query(PitchInterval).all()
+        intervals = await db.query(PitchInterval).all()
         if intervals:
             logger.info("PitchInterval already initialized, skipping...")
             return
 
         #1: "协和", 2: "不完全协和", 3: "不协和"
-        concordance_types = db.query(PitchConcordanceType).all()
+        concordance_types = await db.query(PitchConcordanceType).all()
 
 
 
-        type_datas = db.query(PitchIntervalType).all()
+        type_datas = await db.query(PitchIntervalType).all()
         single_id: int = None;
         double_id: int = None;
         for type in type_datas:
@@ -227,11 +227,11 @@ def init_intervals(db: Session):
             )
             db.add(pitch_interval)
 
-        db.commit()
+        await db.commit()
         print("Successfully initialized pitch data")
 
     except Exception as e:
-        db.rollback()
+        await db.rollback()
         print(f"Error initializing pitch data: {str(e)}")
         raise
 
@@ -248,8 +248,8 @@ def get_concordance_type(semitone_number: int, concordance_types: List[PitchConc
         return 3
 
 
-def init_interval_type(db: Session):
-    types = db.query(PitchIntervalType).all()
+async def init_interval_type(db: Session):
+    types = await db.query(PitchIntervalType).all()
     if types:
         logger.info("PitchIntervalType already initialized, skipping...")
         return
@@ -262,10 +262,10 @@ def init_interval_type(db: Session):
         )
         db.add(type)
 
-    db.commit()
+    await db.commit()
 
-def init_concordance_type(db: Session):
-    types = db.query(PitchConcordanceType).all()
+async def init_concordance_type(db: Session):
+    types = await db.query(PitchConcordanceType).all()
     if types:
         logger.info("PitchConcordanceType already initialized, skipping...")
         return
@@ -278,10 +278,10 @@ def init_concordance_type(db: Session):
         )
         db.add(type)
 
-    db.commit()
+    await db.commit()
 
-def init_pitch_chord_type(db: Session):
-    types = db.query(PitchChordType).all()
+async def init_pitch_chord_type(db: Session):
+    types = await db.query(PitchChordType).all()
     if types:
         logger.info("PitchChordType already initialized, skipping...")
         return
@@ -293,16 +293,16 @@ def init_pitch_chord_type(db: Session):
             name=value,
         )
         db.add(type)
-    db.commit()
+    await db.commit()
 
-def init_pitch_chord(db: Session):
-    init_pitch_chord_type(db)
-    pitch_chord_mapping = db.query(PitchChordTypeMapping).all()
+async def init_pitch_chord(db: Session):
+    await init_pitch_chord_type(db)
+    pitch_chord_mapping = await db.query(PitchChordTypeMapping).all()
     if pitch_chord_mapping:
         logger.info("PitchChordTypeMapping already initialized, skipping...")
         return
 
-    types = db.query(PitchChordType).all()
+    types = await db.query(PitchChordType).all()
     id3 = types[0].id if types[0].name.__contains__("三") else types[1].id
     id7 = types[1].id if types[1].name.__contains__("三") else types[0].id
     index = 1
@@ -320,4 +320,4 @@ def init_pitch_chord(db: Session):
         )
         db.add(pitch_chord)
         index += 1
-    db.commit()
+    await db.commit()

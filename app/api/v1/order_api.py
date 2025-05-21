@@ -115,7 +115,7 @@ async def create_payment(
         lang = get_language(request)
 
         # 检查订单是否存在且属于当前用户
-        order = db.query(VipOrder).filter(
+        order = await db.query(VipOrder).filter(
             VipOrder.id == order_id,
             VipOrder.user_id == current_user.id
         ).first()
