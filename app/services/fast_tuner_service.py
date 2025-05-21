@@ -16,7 +16,7 @@ class FastTunerService:
     def __init__(self):
         self.audio_processor = fast_audio_processor
         
-    def analyze_pitch(self, audio_data: np.ndarray, sample_rate: int) -> Tuple[Optional[str], float, float]:
+    async def analyze_pitch(self, audio_data: np.ndarray, sample_rate: int) -> Tuple[Optional[str], float, float]:
         """快速分析音频的音高
         
         Args:
@@ -39,7 +39,7 @@ class FastTunerService:
             note_name = self.audio_processor.hz_to_note(main_frequency)
             
             # 获取最接近的钢琴音高
-            nearest_pitch, min_cents_diff = self.get_nearest_piano_pitch(main_frequency)
+            nearest_pitch, min_cents_diff = await self.get_nearest_piano_pitch(main_frequency)
             
             # 计算音分偏差
             target_hz = self.audio_processor.note_to_hz(nearest_pitch.name)
@@ -51,7 +51,7 @@ class FastTunerService:
             logger.error(f"Error in analyze_pitch: {str(e)}")
             return None, 0.0, 0.0
     
-    def get_nearest_piano_pitch(self, frequency: float) -> Tuple[Any, float]:
+    async def get_nearest_piano_pitch(self, frequency: float) -> Tuple[Any, float]:
         """获取最接近的钢琴音高
         
         Args:
@@ -77,7 +77,7 @@ class FastTunerService:
         
         return nearest_pitch, min_cents_diff
     
-    def get_tuning_status(self, frequency: float) -> str:
+    async def get_tuning_status(self, frequency: float) -> str:
         """获取调音状态
         
         Args:
@@ -86,7 +86,7 @@ class FastTunerService:
         Returns:
             str: 调音状态
         """
-        _, min_cents_diff = self.get_nearest_piano_pitch(frequency)
+        _, min_cents_diff = await self.get_nearest_piano_pitch(frequency)
         
         if min_cents_diff <= 5:
             return "perfect"
@@ -97,7 +97,7 @@ class FastTunerService:
         else:
             return "poor"
     
-    def get_tuning_direction(self, frequency: float) -> str:
+    async def get_tuning_direction(self, frequency: float) -> str:
         """获取调音方向
         
         Args:
@@ -106,7 +106,7 @@ class FastTunerService:
         Returns:
             str: 调音方向
         """
-        nearest_pitch, _ = self.get_nearest_piano_pitch(frequency)
+        nearest_pitch, _ = await self.get_nearest_piano_pitch(frequency)
         target_hz = self.audio_processor.note_to_hz(nearest_pitch.name)
         
         if frequency > target_hz:
@@ -132,7 +132,7 @@ class FastTunerService:
         return f"{note_names[note_index]}{octave}"
 
     # Service 方法
-    def analyze_pitch_from_bytes(self, file_bytes):
+    async def analyze_pitch_from_bytes(self, file_bytes):
         # 读取 bytes，转为 numpy 数组
         audio_data, samplerate = librosa.load(io.BytesIO(file_bytes), sr=44100)
         audio_data, _ = librosa.effects.trim(audio_data, top_db=30)

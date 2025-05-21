@@ -97,7 +97,7 @@ class TunerService:
         if user_id in self.user_contexts:
             self.user_contexts[user_id].audio_queue.put(audio_data)
     
-    def _user_analysis_loop(self, user_id: str, sample_rate: int, frame_length: int) -> None:
+    async def _user_analysis_loop(self, user_id: str, sample_rate: int, frame_length: int) -> None:
         """特定用户的实时分析循环
         
         Args:
@@ -120,15 +120,15 @@ class TunerService:
                     context.buffer = context.buffer[frame_length:]
                     
                     # 分析音高
-                    note_name, frequency, cents_diff = self.analyze_pitch(audio_array, sample_rate)
+                    note_name, frequency, cents_diff = await self.analyze_pitch(audio_array, sample_rate)
                     
                     if note_name is not None:
                         # 获取最接近的钢琴音高
-                        nearest_pitch, min_cents_diff = self.get_nearest_piano_pitch(frequency)
+                        nearest_pitch, min_cents_diff = await self.get_nearest_piano_pitch(frequency)
                         
                         # 获取调音状态和方向
-                        tuning_status = self.get_tuning_status(frequency)
-                        tuning_direction = self.get_tuning_direction(frequency)
+                        tuning_status = await self.get_tuning_status(frequency)
+                        tuning_direction = await self.get_tuning_direction(frequency)
                         
                         # 构建分析结果
                         result = {
@@ -160,7 +160,7 @@ class TunerService:
                 print(f"Analysis error for user {user_id}: {e}")
                 continue
     
-    def analyze_pitch(self, audio_data: np.ndarray, sample_rate: int) -> Tuple[Optional[str], float, float]:
+    async def analyze_pitch(self, audio_data: np.ndarray, sample_rate: int) -> Tuple[Optional[str], float, float]:
         """分析音频的音高
         
         Args:
@@ -179,7 +179,7 @@ class TunerService:
         main_frequency = pitches[0]
         
         # 获取最接近的钢琴音高
-        nearest_pitch, min_cents_diff = self.get_nearest_piano_pitch(main_frequency)
+        nearest_pitch, min_cents_diff = await self.get_nearest_piano_pitch(main_frequency)
         
         # 计算与最接近钢琴音高的音分偏差
         target_hz = librosa.note_to_hz(nearest_pitch.name)
@@ -211,7 +211,7 @@ class TunerService:
         
         return best_pitch.name, main_frequency, cents_diff
     
-    def get_nearest_piano_pitch(self, frequency: float) -> Tuple[Pitch, float]:
+    async def get_nearest_piano_pitch(self, frequency: float) -> Tuple[Pitch, float]:
         """获取最接近的钢琴音高
         
         Args:
@@ -222,7 +222,7 @@ class TunerService:
         """
         # 获取所有钢琴音高
         piano_pitches = pitch_service.get_all_pitch()
-        
+
         min_cents_diff = float('inf')
         nearest_pitch = None
         
@@ -239,7 +239,7 @@ class TunerService:
                 
         return nearest_pitch, min_cents_diff
     
-    def get_tuning_status(self, frequency: float) -> str:
+    async def get_tuning_status(self, frequency: float) -> str:
         """获取调音状态
         
         Args:
@@ -248,7 +248,7 @@ class TunerService:
         Returns:
             str: 调音状态描述
         """
-        nearest_pitch, cents_diff = self.get_nearest_piano_pitch(frequency)
+        nearest_pitch, cents_diff = await self.get_nearest_piano_pitch(frequency)
         
         if cents_diff < 5:  # 5音分以内认为是准确的
             return "perfect"
@@ -257,7 +257,7 @@ class TunerService:
         else:
             return "far"
     
-    def get_tuning_direction(self, frequency: float) -> str:
+    async def get_tuning_direction(self, frequency: float) -> str:
         """获取调音方向
         
         Args:
@@ -266,7 +266,7 @@ class TunerService:
         Returns:
             str: 调音方向描述
         """
-        nearest_pitch, cents_diff = self.get_nearest_piano_pitch(frequency)
+        nearest_pitch, cents_diff = await self.get_nearest_piano_pitch(frequency)
         target_frequency = librosa.note_to_hz(nearest_pitch.name)
         
         if frequency > target_frequency:

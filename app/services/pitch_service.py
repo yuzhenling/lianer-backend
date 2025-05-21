@@ -232,14 +232,14 @@ class PitchService:
             logger.error("Failed to load Pitch cache", exc_info=True)
             raise e
 
-    async def get_all_pitchgroups(self) -> List[PitchGroup]:
+    def get_all_pitchgroups(self) -> List[PitchGroup]:
         try:
             return list(self.PITCH_GROUP_CACHE.values())
         except Exception as e:
             logger.error("Failed to load Pitch cache", exc_info=True)
             raise e
 
-    async def get_all_intervals(self) -> List[PitchIntervalWithPitches]:
+    def get_all_intervals(self) -> List[PitchIntervalWithPitches]:
         """获取所有音程"""
         try:
             return list(self.PITCH_INTERVAL_CACHE.values())
@@ -247,7 +247,7 @@ class PitchService:
             logger.error("Failed to get all intervals", exc_info=True)
             raise e
 
-    async def get_interval_by_index(self, index: int) -> PitchInterval:
+    def get_interval_by_index(self, index: int) -> PitchInterval:
         """根据索引获取特定音程"""
         try:
             return self.PITCH_INTERVAL_CACHE[index]
@@ -255,7 +255,7 @@ class PitchService:
             logger.error(f"Failed to get interval with index {index}", exc_info=True)
             raise e
 
-    async def get_all_chords(self) -> List[PitchChord]:
+    def get_all_chords(self) -> List[PitchChord]:
         """获取所有音程"""
         try:
             return list(self.PITCH_CHORD_CACHE.values())
@@ -263,7 +263,7 @@ class PitchService:
             logger.error("Failed to get all chords", exc_info=True)
             raise e
 
-    async def get_chord_by_index(self, index: int) -> PitchChord:
+    def get_chord_by_index(self, index: int) -> PitchChord:
         """根据索引获取特定音程"""
         try:
             return self.PITCH_CHORD_CACHE[index]
@@ -272,7 +272,7 @@ class PitchService:
             raise e
 
     #, pitch_black_keys: List[str], mode_key:int
-    async def get_pitches_by_setting(self, min_pitch_number: int, max_pitch_number: int) -> List[Pitch]:
+    def get_pitches_by_setting(self, min_pitch_number: int, max_pitch_number: int) -> List[Pitch]:
         try:
             list = []
             for i in range(min_pitch_number, max_pitch_number+1):
@@ -282,10 +282,10 @@ class PitchService:
             logger.error("Failed to load Pitch cache", exc_info=True)
             raise e
 
-    async def generate_single_exam(self, min_pitch_number: int, max_pitch_number: int, pitch_black_keys: List[str], question_num:int = ExamType.SINGLE.question_num) -> SinglePitchExam:
+    def generate_single_exam(self, min_pitch_number: int, max_pitch_number: int, pitch_black_keys: List[str], question_num:int = ExamType.SINGLE.question_num) -> SinglePitchExam:
         """根据设置生成考试题目"""
         # 获取指定音域范围内的所有可用音高
-        available_pitches = await self.get_pitches_by_range_black(min_pitch_number, max_pitch_number, pitch_black_keys)
+        available_pitches = self.get_pitches_by_range_black(min_pitch_number, max_pitch_number, pitch_black_keys)
 
         # 生成指定数量的随机题目
         questions = self.generate_single_questions(available_pitches, question_num)
@@ -319,10 +319,10 @@ class PitchService:
 
         return questions
 
-    async def generate_group_exam(self, min_pitch_number: int, max_pitch_number: int, pitch_black_keys: List[str], count: int, question_num:int = ExamType.GROUP.question_num ) -> GroupPitchExam:
+    def generate_group_exam(self, min_pitch_number: int, max_pitch_number: int, pitch_black_keys: List[str], count: int, question_num:int = ExamType.GROUP.question_num ) -> GroupPitchExam:
         """根据设置生成考试题目"""
         # 获取指定音域范围内的所有可用音高
-        available_pitches = await self.get_pitches_by_range_black(min_pitch_number, max_pitch_number, pitch_black_keys)
+        available_pitches = self.get_pitches_by_range_black(min_pitch_number, max_pitch_number, pitch_black_keys)
 
         # 生成指定数量的随机题目
         questions = self.generate_group_questions(available_pitches, question_num, count)
@@ -354,8 +354,8 @@ class PitchService:
 
         return questions
 
-    async def get_pitches_by_range_black(self,min_pitch_number: int, max_pitch_number: int, pitch_black_keys: List[str]) -> List[Pitch]:
-        pitches = await self.get_pitches_by_setting(min_pitch_number, max_pitch_number)
+    def get_pitches_by_range_black(self,min_pitch_number: int, max_pitch_number: int, pitch_black_keys: List[str]) -> List[Pitch]:
+        pitches = self.get_pitches_by_setting(min_pitch_number, max_pitch_number)
         available_pitches = []
         for p in pitches:
             if not p.name.__contains__("#"):
@@ -368,7 +368,7 @@ class PitchService:
         return available_pitches
 
 
-    async def generate_interval_exam(self, pitch_interval_setting: PitchIntervalSettingRequest, question_num:int = ExamType.INTERVAL.question_num ) -> PitchIntervalExam:
+    def generate_interval_exam(self, pitch_interval_setting: PitchIntervalSettingRequest, question_num:int = ExamType.INTERVAL.question_num ) -> PitchIntervalExam:
         answer_mode_id = pitch_interval_setting.answer_mode
         exam_type = ExamType.INTERVAL.display_value
         questions = []
@@ -416,7 +416,7 @@ class PitchService:
                 list.append(key)
         return list
 
-    def generate_interval_exam_concordance(self, interval_list: List[int], question_num: int, play_mode: int, fix_mode_enabled: bool, fix_mode: int, fix_mode_val: str) -> List[dict]:
+    async def generate_interval_exam_concordance(self, interval_list: List[int], question_num: int, play_mode: int, fix_mode_enabled: bool, fix_mode: int, fix_mode_val: str) -> List[dict]:
         questions = []
         # 从PITCH_INTERVAL_CACHE中获取所有可用的音程
         available_intervals = list(self.PITCH_INTERVAL_CACHE.keys())
@@ -501,7 +501,7 @@ class PitchService:
         if fix_mode_val == "Ti":
             return "B"
 
-    def generate_interval_exam_quality(self, interval_list: List[int], question_num: int, play_mode: int, fix_mode_enabled: bool, fix_mode: int, fix_mode_val: str) -> List[dict]:
+    async def generate_interval_exam_quality(self, interval_list: List[int], question_num: int, play_mode: int, fix_mode_enabled: bool, fix_mode: int, fix_mode_val: str) -> List[dict]:
         questions = []
         # 从PITCH_INTERVAL_CACHE中获取所有可用的音程
         available_intervals = list(self.PITCH_INTERVAL_CACHE.keys())
@@ -570,7 +570,7 @@ class PitchService:
 
         return questions
 
-    def generate_interval_exam_pitch(self, interval_list: List[int], question_num: int, play_mode: int, fix_mode_enabled: bool, fix_mode: int, fix_mode_val: str) -> List[dict]:
+    async def generate_interval_exam_pitch(self, interval_list: List[int], question_num: int, play_mode: int, fix_mode_enabled: bool, fix_mode: int, fix_mode_val: str) -> List[dict]:
         questions = []
         # 从PITCH_INTERVAL_CACHE中获取所有可用的音程
         available_intervals = list(self.PITCH_INTERVAL_CACHE.keys())
@@ -639,7 +639,7 @@ class PitchService:
 
         return questions
 
-    def generate_chord_exam_first(self, chord_list: List[int], question_num: int, play_mode: int, transfer_set: int) -> List[dict]:
+    async def generate_chord_exam_first(self, chord_list: List[int], question_num: int, play_mode: int, transfer_set: int) -> List[dict]:
         questions = []
         # 从PITCH_INTERVAL_CACHE中获取所有可用的音程
         available_chords = list(self.PITCH_CHORD_CACHE.keys())
@@ -674,7 +674,7 @@ class PitchService:
 
         return questions
 
-    def generate_chord_exam_second(self, chord_list: List[int], question_num: int, play_mode: int, transfer_set: int) -> List[dict]:
+    async def generate_chord_exam_second(self, chord_list: List[int], question_num: int, play_mode: int, transfer_set: int) -> List[dict]:
         questions = []
         available_chords = list(self.PITCH_CHORD_CACHE.keys())
 
@@ -708,7 +708,7 @@ class PitchService:
 
         return questions
 
-    async def generate_chord_exam(self, pitch_chord_setting: PitchChordSettingRequest, question_num:int = ExamType.CHORD.question_num ) -> PitchChordExam:
+    def generate_chord_exam(self, pitch_chord_setting: PitchChordSettingRequest, question_num:int = ExamType.CHORD.question_num ) -> PitchChordExam:
         answer_mode_id = pitch_chord_setting.answer_mode
         play_mode = pitch_chord_setting.play_mode
         transfer_set = pitch_chord_setting.transfer_set

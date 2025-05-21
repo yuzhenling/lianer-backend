@@ -20,9 +20,9 @@ class PitchSettingsService:
         if not hasattr(self, '_initialized'):
             self._initialized = True
 
-    async def get_pitch_single_settings(self) -> PitchSingleSetting:
+    def get_pitch_single_settings(self) -> PitchSingleSetting:
         #default
-        pitch_groups = await pitch_service.get_all_pitchgroups()
+        pitch_groups = pitch_service.get_all_pitchgroups()
         if not pitch_groups:
              raise Exception("No Pitch Groups found")
 
@@ -56,9 +56,9 @@ class PitchSettingsService:
         )
         return pitch_setting
 
-    async def get_pitch_group_settings(self) -> PitchGroupSetting:
+    def get_pitch_group_settings(self) -> PitchGroupSetting:
         #default
-        pitch_groups = await pitch_service.get_all_pitchgroups()
+        pitch_groups = pitch_service.get_all_pitchgroups()
         if not pitch_groups:
              raise Exception("No Pitch Groups found")
 
@@ -90,14 +90,14 @@ class PitchSettingsService:
         )
         return pitch_setting
 
-    async def get_pitch_interval_settings(self) -> PitchIntervalSetting:
+    def get_pitch_interval_settings(self) -> PitchIntervalSetting:
         #default
         answer_mode = [AnswerMode.CONCORDANCE.to_dict(),AnswerMode.QUALITY.to_dict(),AnswerMode.PITCH.to_dict()]
         concordance_choice = [ConcordanceChoice.CONCORDANCE.to_dict(),ConcordanceChoice.CONCORDANCE_PART.to_dict(),ConcordanceChoice.CONCORDANCE_NO.to_dict()]
         play_mode = [PlayMode.HARMONY.to_dict(),PlayMode.UP.to_dict(),PlayMode.DOWN.to_dict(),PlayMode.UP_DOWN.to_dict(),]
         fix_mode = [FixMode.ROOT_FIX.to_dict(),FixMode.TOP_FIX.to_dict(),FixMode.RANDOM.to_dict()]
 
-        intervals = await pitch_service.get_all_intervals()
+        intervals = pitch_service.get_all_intervals()
         interval_list: List[dict[int, str]] = []
         for interval in intervals:
             interval_dict = {"id":interval.id,"name":interval.name,"type_id":interval.type_id,"type_name": interval.type_name,"semitone_number":interval.semitone_number}
@@ -125,13 +125,13 @@ class PitchSettingsService:
             chord_list.append(chord_dict)
         return chord_list
 
-    async def get_pitch_chord_settings(self) -> PitchChordSetting:
+    def get_pitch_chord_settings(self) -> PitchChordSetting:
         #default
         answer_mode = [ChordAnswerMode.FIRST.to_dict(),ChordAnswerMode.SECOND.to_dict()]
         play_mode = [ChordPlayMode.COMBINE.to_dict(),ChordPlayMode.SINGLE.to_dict()]
         transfer_set = [TransferSetMode.ORIGIN.to_dict(), TransferSetMode.TRANSFER_1.to_dict(),TransferSetMode.TRANSFER_2.to_dict(),TransferSetMode.TRANSFER_3.to_dict()]
 
-        chords = await pitch_service.get_all_chords()
+        chords = pitch_service.get_all_chords()
         chord_list = self.get_chord_list(chords)
 
         pitch_interval_setting = PitchChordSetting(

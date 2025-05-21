@@ -184,7 +184,7 @@ class RhythmService:
         
         # 生成正确答案
         logger.info("Generating correct rhythm")
-        correct_rhythm = await self.generate_rhythm(
+        correct_rhythm = self.generate_rhythm(
             request.difficulty,
             request.time_signature,
             request.measures_count.value,
@@ -248,7 +248,7 @@ class RhythmService:
             difficulty=request.difficulty
         )
 
-    async def generate_rhythm(
+    def generate_rhythm(
             self,
             difficulty: RhythmDifficulty,
             time_signature: TimeSignature,

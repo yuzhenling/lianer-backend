@@ -6,7 +6,18 @@
   <component name="ChangeListManager">
     <list default="true" id="83c1f24d-9736-40eb-a780-45c9d33bfc91" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api/v1/exam_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/exam_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api/v1/order_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/order_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api/v1/piano_pitch_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/piano_pitch_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api/v1/pitch_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/pitch_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api/v1/tuner_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/tuner_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/services/fast_tuner_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/fast_tuner_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/services/melody_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/melody_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/services/pitch_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/pitch_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/services/pitch_settings_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/pitch_settings_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/services/rhythm_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/rhythm_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/services/tuner_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/tuner_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/services/vip_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/vip_service.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -241,7 +252,7 @@
       <workItem from="1747542606933" duration="4239000" />
       <workItem from="1747570983441" duration="772000" />
       <workItem from="1747614401310" duration="29998000" />
-      <workItem from="1747788950992" duration="10629000" />
+      <workItem from="1747788950992" duration="14942000" />
     </task>
     <servers />
   </component>

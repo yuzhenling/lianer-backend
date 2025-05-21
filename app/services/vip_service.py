@@ -51,21 +51,15 @@ class VipService:
         """获取所有VIP信息（从缓存）"""
         if not self._vip_cache:
             db = await get_db()
-            try:
-                logger.info("Initializing database data during get_all_vips...")
-                self.load_vip_cache(db)
-            finally:
-                db.close()
+            logger.info("Initializing database data during get_all_vips...")
+            await self.load_vip_cache(db)
         return list(self._vip_cache.values())
 
     async def contains_vip(self, vip_ip: int) -> bool:
         if not self._vip_cache:
             db = await get_db()
-            try:
-                logger.info("Initializing database data during get_all_vips...")
-                self.load_vip_cache(db)
-            finally:
-                db.close()
+            logger.info("Initializing database data during get_all_vips...")
+            await self.load_vip_cache(db)
 
         if self._vip_cache[vip_ip]:
             return True

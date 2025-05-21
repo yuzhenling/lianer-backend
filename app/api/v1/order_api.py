@@ -8,7 +8,6 @@ from typing import Optional
 from pydantic import BaseModel
 from datetime import datetime
 
-from app.models.vip import VipLevel
 from app.services.order_service import OrderService
 from app.models.user import User
 from app.models.order import VipOrder

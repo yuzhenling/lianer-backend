@@ -32,11 +32,11 @@ async def generate_exam(
     """生成节奏听写题"""
     lang = get_language(request)
     try:
-        single = await pitch_service.generate_single_exam(exam_request.pitch_setting.pitch_range.pitch_number_min,
+        single = pitch_service.generate_single_exam(exam_request.pitch_setting.pitch_range.pitch_number_min,
                                                         exam_request.pitch_setting.pitch_range.pitch_number_max,
                                                         exam_request.pitch_setting.pitch_black_keys,
                                                         5)
-        group = await pitch_service.generate_group_exam(
+        group = pitch_service.generate_group_exam(
             exam_request.pitch_group_setting.pitch_range.pitch_number_min,
             exam_request.pitch_group_setting.pitch_range.pitch_number_max,
             exam_request.pitch_group_setting.pitch_black_keys,
@@ -44,18 +44,18 @@ async def generate_exam(
             5
         )
 
-        interval = await pitch_service.generate_interval_exam(exam_request.pitch_interval_setting, 5)
+        interval = pitch_service.generate_interval_exam(exam_request.pitch_interval_setting, 5)
 
-        chord = await pitch_service.generate_chord_exam(exam_request.pitch_chord_setting, 5)
+        chord = pitch_service.generate_chord_exam(exam_request.pitch_chord_setting, 5)
 
-        rhythm = await rhythm_service.generate_rhythm(
+        rhythm = rhythm_service.generate_rhythm(
             exam_request.rhythm_setting.difficulty,
             exam_request.rhythm_setting.time_signature,
             exam_request.rhythm_setting.measures_count.value,
             exam_request.rhythm_setting.tempo.value
         )
 
-        melody = await melody_service.generate_melody(
+        melody = melody_service.generate_melody(
             exam_request.melody_setting.difficulty,
             exam_request.melody_setting.time_signature,
             exam_request.melody_setting.measures_count.value,
@@ -92,13 +92,13 @@ async def get_exam_settings(
     lang = get_language(request)
     try:
         """获取所有信息"""
-        single_setting = await pitch_settings_service.get_pitch_single_settings()
+        single_setting = pitch_settings_service.get_pitch_single_settings()
 
-        group_setting = await pitch_settings_service.get_pitch_group_settings()
+        group_setting = pitch_settings_service.get_pitch_group_settings()
 
-        interval_setting = await pitch_settings_service.get_pitch_interval_settings()
+        interval_setting = pitch_settings_service.get_pitch_interval_settings()
 
-        chord_setting = await pitch_settings_service.get_pitch_chord_settings()
+        chord_setting = pitch_settings_service.get_pitch_chord_settings()
 
         """节奏听写设置选项"""
         rhythm_settings = RhythmSettingResponse(

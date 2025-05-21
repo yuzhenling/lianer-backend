@@ -182,7 +182,7 @@ async def get_all_pitchgroups(
 ):
     lang = get_language(request)
     try:
-        pitch_groups = await pitch_service.get_all_pitchgroups()
+        pitch_groups = pitch_service.get_all_pitchgroups()
         if not pitch_groups:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -212,7 +212,7 @@ async def get_all_pitchinterval(
 ):
     lang = get_language(request)
     try:
-        pitch_intervals= await pitch_service.get_all_intervals()
+        pitch_intervals= pitch_service.get_all_intervals()
         if not pitch_intervals:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -236,7 +236,7 @@ async def get_all_pitchchord(
 ):
     lang = get_language(request)
     try:
-        pitch_chords= await pitch_service.get_all_chords()
+        pitch_chords= pitch_service.get_all_chords()
         if not pitch_chords:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -262,7 +262,7 @@ async def get_pitch_single_setting(
     lang = get_language(request)
     try:
         """获取所有信息"""
-        pitch_setting = await pitch_settings_service.get_pitch_single_settings()
+        pitch_setting = pitch_settings_service.get_pitch_single_settings()
         if not pitch_setting:
             return None
         return pitch_setting
@@ -280,7 +280,7 @@ async def get_pitch_group_settings(
     lang = get_language(request)
     try:
         """获取所有信息"""
-        pitch_setting = await pitch_settings_service.get_pitch_group_settings()
+        pitch_setting = pitch_settings_service.get_pitch_group_settings()
         if not pitch_setting:
             return None
         return pitch_setting
@@ -304,7 +304,7 @@ async def get_pitch_listen_single(
         # pitch_black_keys = pitch_setting.pitch_black_keys
         # mode_key = pitch_setting.mode_key
 
-        pitches = await pitch_service.get_pitches_by_setting(min_pitch_number, max_pitch_number)
+        pitches = pitch_service.get_pitches_by_setting(min_pitch_number, max_pitch_number)
         if not pitches:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -326,7 +326,7 @@ async def get_pitch_listen_single_exam(
 ) -> SinglePitchExamResponse:
     lang = get_language(request)
     try:
-        exam = await pitch_service.generate_single_exam(pitch_setting.pitch_range.pitch_number_min, pitch_setting.pitch_range.pitch_number_max, pitch_setting.pitch_black_keys)
+        exam = pitch_service.generate_single_exam(pitch_setting.pitch_range.pitch_number_min, pitch_setting.pitch_range.pitch_number_max, pitch_setting.pitch_black_keys)
         return exam
     except Exception as e:
         logger.error(f"Error in get_pitch_listen_single_exam: {str(e)}\nTraceback: {traceback.format_exc()}")
@@ -343,7 +343,7 @@ async def get_pitch_listen_group_exam(
 ) -> GroupPitchExamResponse:
     lang = get_language(request)
     try:
-        exam = await pitch_service.generate_group_exam(
+        exam = pitch_service.generate_group_exam(
             pitch_group_setting.pitch_range.pitch_number_min,
             pitch_group_setting.pitch_range.pitch_number_max,
             pitch_group_setting.pitch_black_keys,
@@ -366,7 +366,7 @@ async def get_pitch_interval_settings(
     lang = get_language(request)
     try:
         """获取所有信息"""
-        pitch_setting = await pitch_settings_service.get_pitch_interval_settings()
+        pitch_setting = pitch_settings_service.get_pitch_interval_settings()
         if not pitch_setting:
             return None
         return pitch_setting
@@ -385,7 +385,7 @@ async def get_pitch_listen_interval_exam(
 ) -> PitchIntervalExamResponse:
     lang = get_language(request)
     try:
-        exam = await pitch_service.generate_interval_exam(pitch_interval_setting)
+        exam = pitch_service.generate_interval_exam(pitch_interval_setting)
         return exam
     except Exception as e:
         logger.error(f"Error in get_pitch_listen_single_exam: {str(e)}\nTraceback: {traceback.format_exc()}")
@@ -402,7 +402,7 @@ async def get_pitch_chord_settings(
     lang = get_language(request)
     try:
         """获取所有信息"""
-        chord_setting = await pitch_settings_service.get_pitch_chord_settings()
+        chord_setting = pitch_settings_service.get_pitch_chord_settings()
         if not chord_setting:
             return None
         return chord_setting
@@ -421,7 +421,7 @@ async def get_pitch_listen_chord_exam(
 ) -> PitchChordExamResponse:
     lang = get_language(request)
     try:
-        exam = await pitch_service.generate_chord_exam(pitch_chord_setting)
+        exam = pitch_service.generate_chord_exam(pitch_chord_setting)
         return exam
     except Exception as e:
         logger.error(f"Error in get_pitch_listen_chord_exam: {str(e)}\nTraceback: {traceback.format_exc()}")

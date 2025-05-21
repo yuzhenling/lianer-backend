@@ -39,9 +39,9 @@ class UserWebSocketCallback:
                 del user_connections[self.user_id]
                 tuner_service.unregister_callback(self.user_id)
 
-@router.post("/analyze")
+@router.post("/analyze",deprecated=True)
 async def analyze_pitch(file: UploadFile = File(...), current_user: User = Depends(get_current_user)) -> Dict[str, Any]:
-    """分析上传的音频文件的音高
+    """慢-分析上传的音频文件的音高
     
     Args:
         file: 上传的音频文件
@@ -60,7 +60,7 @@ async def analyze_pitch(file: UploadFile = File(...), current_user: User = Depen
             raise HTTPException(status_code=400, detail="无法检测到音高")
             
         # 获取最接近的钢琴音高
-        nearest_pitch, min_cents_diff = tuner_service.get_nearest_piano_pitch(frequency)
+        nearest_pitch, min_cents_diff = await tuner_service.get_nearest_piano_pitch(frequency)
         
         # 获取调音状态和方向
         tuning_status = tuner_service.get_tuning_status(frequency)
@@ -103,7 +103,7 @@ async def analyze_pitch_c(
     """
     try:
         # 分析音高
-        note_name, frequency, cents_diff = fast_tuner_service.analyze_pitch_from_bytes(await file.read())
+        note_name, frequency, cents_diff = await fast_tuner_service.analyze_pitch_from_bytes(await file.read())
         
         if note_name is None:
             return {
@@ -113,11 +113,11 @@ async def analyze_pitch_c(
             }
             
         # 获取最接近的钢琴音高
-        nearest_pitch, min_cents_diff = fast_tuner_service.get_nearest_piano_pitch(frequency)
+        nearest_pitch, min_cents_diff = await fast_tuner_service.get_nearest_piano_pitch(frequency)
         
         # 获取调音状态和方向
-        tuning_status = fast_tuner_service.get_tuning_status(frequency)
-        tuning_direction = fast_tuner_service.get_tuning_direction(frequency)
+        tuning_status = await fast_tuner_service.get_tuning_status(frequency)
+        tuning_direction = await fast_tuner_service.get_tuning_direction(frequency)
         
         return PitchAnalysisResult(
             frequency=float(frequency),
