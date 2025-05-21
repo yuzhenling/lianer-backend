@@ -2,7 +2,6 @@ import random
 from dataclasses import replace
 from typing import Dict, List, Any
 
-from numba.core.event import start_event
 from sqlalchemy.orm import Session
 
 from app.api.v1.schemas.request.pitch_request import PitchIntervalSettingRequest, PitchChordSettingRequest

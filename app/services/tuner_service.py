@@ -7,7 +7,6 @@ from app.services.pitch_service import pitch_service
 import queue
 import threading
 import time
-import json
 
 class UserAnalysisContext:
     def __init__(self, user_id: str, callback: Callable[[Dict[str, Any]], None]):

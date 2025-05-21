@@ -1,11 +1,8 @@
 # app/models/rhythm.py
 
-from enum import Enum
-from pydantic import BaseModel, Field
-from typing import List, Optional
-from datetime import datetime
 from sqlalchemy import Column, Integer, String, DateTime, Float, Enum as SQLEnum, JSON, func
-from app.db.base import Base
+
+from app.db.database import Base
 from app.models.rhythm_settings import TimeSignature, RhythmDifficulty, MeasureCount, Tempo
 
 

@@ -8,12 +8,11 @@ from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
 from starlette.staticfiles import StaticFiles
 
 from app.core.config import settings
-from app.db.database import engine
+from app.db.database import engine, get_db
 from app.middleware.logging import LoggingMiddleware
 from app.api.v1 import auth_api, pitch_api, order_api, vip_api, piano_pitch_api, rhythm_api, melody_api, tuner_api, \
     payment_api, exam_api
 from app.db.init_data import init_vip_levels, init_pitches, init_intervals, init_pitch_chord
-from app.db.base import SessionLocal, Base
 from app.core.logger import logger
 
 # 导入所有模型以确保它们被注册到Base.metadata
@@ -36,7 +35,7 @@ async def lifespan(app: FastAPI):
         Base.metadata.create_all(bind=engine)
         
         # 初始化数据库数据
-        db = SessionLocal()
+        db = get_db()
         try:
             logger.info("Initializing database data...")
             init_vip_levels(db)

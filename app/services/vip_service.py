@@ -1,12 +1,7 @@
-from datetime import datetime, timedelta
 from typing import Optional, Dict, List
-from jose import JWTError, jwt
-from passlib.context import CryptContext
-import requests
-from app.core.config import settings
 from sqlalchemy.orm import Session
 
-from app.db.base import SessionLocal
+from app.db.database import get_db
 from app.models.vip import Vip, VipLevel
 from app.core.logger import logger
 
@@ -52,10 +47,10 @@ class VipService:
         """通过等级获取VIP信息（从缓存）"""
         return self._vip_level_cache.get(vip_level)
 
-    def get_all_vips(self) -> List[Vip]:
+    async def get_all_vips(self) -> List[Vip]:
         """获取所有VIP信息（从缓存）"""
         if not self._vip_cache:
-            db = SessionLocal()
+            db = await get_db()
             try:
                 logger.info("Initializing database data during get_all_vips...")
                 self.load_vip_cache(db)
@@ -63,9 +58,9 @@ class VipService:
                 db.close()
         return list(self._vip_cache.values())
 
-    def contains_vip(self, vip_ip: int) -> bool:
+    async def contains_vip(self, vip_ip: int) -> bool:
         if not self._vip_cache:
-            db = SessionLocal()
+            db = await get_db()
             try:
                 logger.info("Initializing database data during get_all_vips...")
                 self.load_vip_cache(db)

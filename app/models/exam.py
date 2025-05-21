@@ -3,10 +3,8 @@ from datetime import datetime
 from enum import Enum
 from typing import Optional, List
 
-from pydantic import BaseModel
 
 from app.models.pitch import Pitch, PitchIntervalPair
-from app.models.pitch_setting import PitchRange
 
 @dataclass
 class Question:

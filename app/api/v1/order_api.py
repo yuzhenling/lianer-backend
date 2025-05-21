@@ -69,7 +69,7 @@ async def create_vip_order(
     lang = get_language(request)
     try:
         # 检查VIP等级是否有效
-        is_contain = vip_service.contains_vip(order_data.vip_id)
+        is_contain = await vip_service.contains_vip(order_data.vip_id)
         if not is_contain:
             logger.error(f"VIP {order_data.vip_id} not found")
             raise HTTPException(

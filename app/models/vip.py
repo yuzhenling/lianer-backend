@@ -1,7 +1,9 @@
 from sqlalchemy import Column, Integer, DateTime, Double, Boolean, Enum, String
 from sqlalchemy.sql import func
-from app.db.base import Base
 import enum
+
+from app.db.database import Base
+
 
 class VipLevel(enum.Enum):
     FREE = "free"

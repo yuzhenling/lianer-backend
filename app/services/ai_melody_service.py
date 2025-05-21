@@ -1,7 +1,6 @@
 import time
 from typing import List, Optional, Dict, Any
 import random
-import logging
 
 from app.api.v1.schemas.request.pitch_request import MelodySettingRequest
 from app.api.v1.schemas.response.pitch_response import MelodyQuestionResponse, MelodyScorePitch, MelodyNotePitch, \

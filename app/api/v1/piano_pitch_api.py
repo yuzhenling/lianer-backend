@@ -275,8 +275,7 @@ async def get_pitch_single_setting(
 
 @router.get("/pitch/group/setting", response_model=PitchGroupSettingResponse)
 async def get_pitch_group_settings(
-    request: Request,
-    current_user: User = Depends(get_current_user)
+    request: Request
 ):
     lang = get_language(request)
     try:

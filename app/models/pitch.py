@@ -1,17 +1,12 @@
 import enum
 from dataclasses import dataclass
 
-from librosa.core import intervals
 from sqlalchemy import Column, Integer, String, DateTime, Float, Enum as SQLEnum, ForeignKey, Boolean
 from sqlalchemy.sql import func
-from sqlalchemy.orm import relationship
-from datetime import datetime
-import os
-from pathlib import Path
-from app.db.base import Base
-from typing import Dict, List
-from pydantic import BaseModel
-from app.utils.rename_file import ToneRenamer
+
+from typing import  List
+
+from app.db.database import Base
 
 
 class PitchType(str, enum.Enum):

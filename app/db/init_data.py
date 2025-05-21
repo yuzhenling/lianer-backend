@@ -1,5 +1,4 @@
 import os
-from pathlib import Path
 from typing import List
 
 from sqlalchemy.orm import Session
@@ -9,7 +8,6 @@ from app.models.pitch import Pitch, PitchIntervalType, PitchInterval, PitchConco
     PitchChordTypeMapping, ChordEnum
 from app.models.vip import Vip, VipLevel
 from app.constants.constant import PIANO_KEYS_MAPPING
-from app.services.pitch_service import pitch_service
 
 
 def init_vip_levels(db: Session):
