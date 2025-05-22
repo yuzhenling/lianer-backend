@@ -186,15 +186,13 @@ async def get_user_info(
         # 使用 join 查询用户信息和用户基本信息
         # result = db.query(User, UserInfo).outerjoin(UserInfo, User.id == UserInfo.user_id).filter(User.id == current_user.id).first()
         result = await db.execute(select(User, UserInfo).select_from(outerjoin(User, UserInfo, User.id == UserInfo.user_id)).where(User.id == current_user.id))
-        result: User = result.scalar_one_or_none()
+        user, user_info = result.first()
 
-        if not result:
+        if not user:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=i18n.get_text("USER_NOT_FOUND", lang)
             )
-
-        user, user_info = result
 
         # 构建返回数据：
         response_data = {
