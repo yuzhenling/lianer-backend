@@ -34,7 +34,7 @@ class OrderService:
     ) -> Optional[VipOrder]:
         """创建VIP订单"""
         try:
-            out_trade_no = f"{int(time.time())}{random.randint(100, 999)}"
+            out_trade_no = int(f"{int(time.time())}{random.randint(100, 999)}")
             # 创建订单
             order = VipOrder(
                 user_id=user.id,
