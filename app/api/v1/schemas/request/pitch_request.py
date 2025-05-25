@@ -37,7 +37,12 @@ class PitchSettingRequest(BaseModel):
         "from_attributes": True,
         "arbitrary_types_allowed": True,
         "json_schema_extra": {
-
+            "example": {
+                "pitch_range": {
+                    "pitch_number_min": 4,
+                    "pitch_number_max": 12
+                }
+            }
         }
     }
 
@@ -47,7 +52,13 @@ class PitchGroupSettingRequest(PitchSettingRequest):
         "from_attributes": True,
         "arbitrary_types_allowed": True,
         "json_schema_extra": {
-
+            "example": {
+                "pitch_range": {
+                    "pitch_number_min": 4,
+                    "pitch_number_max": 12
+                },
+                "count": 2
+            }
         }
     }
 
@@ -63,7 +74,15 @@ class PitchIntervalSettingRequest(BaseModel):
         "from_attributes": True,
         "arbitrary_types_allowed": True,
         "json_schema_extra": {
-
+            "example": {
+                "answer_mode": 1,
+                "play_mode": 1,
+                "interval_list": [1,2,3,4,5,6,7,8,9,10,11,12,13],
+                "fix_mode_enabled": "false",
+                "fix_mode":1,
+                "fix_mode_vals": "",
+                "black_key": "false"
+            }
         }
     }
 
@@ -76,7 +95,12 @@ class PitchChordSettingRequest(BaseModel):
         "from_attributes": True,
         "arbitrary_types_allowed": True,
         "json_schema_extra": {
-
+            "example": {
+                "answer_mode": 1,
+                "play_mode": 1,
+                "chord_list": [1,2,3,4,5,6,7],
+                "transfer_set": 1
+            }
         }
     }
 

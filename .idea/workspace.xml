@@ -6,17 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="83c1f24d-9736-40eb-a780-45c9d33bfc91" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/v1/auth_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/auth_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/v1/exam_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/exam_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/v1/melody_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/melody_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/v1/order_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/order_api.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/api/v1/piano_pitch_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/piano_pitch_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/v1/rhythm_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/rhythm_api.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/api/v1/schemas/request/pitch_request.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/schemas/request/pitch_request.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/api/v1/schemas/response/pitch_response.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/schemas/response/pitch_response.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/v1/tuner_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/tuner_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/v1/vip_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/vip_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/app.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/app.log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -253,7 +245,7 @@
       <workItem from="1747614401310" duration="29998000" />
       <workItem from="1747788950992" duration="23723000" />
       <workItem from="1747920224014" duration="5044000" />
-      <workItem from="1748134165879" duration="4451000" />
+      <workItem from="1748134165879" duration="7720000" />
     </task>
     <servers />
   </component>

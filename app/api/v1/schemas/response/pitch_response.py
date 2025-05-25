@@ -484,7 +484,79 @@ class PitchChordResponse(BaseModel):
         "from_attributes": True,
         "arbitrary_types_allowed": True,
         "json_schema_extra": {
-
+            "examples": [
+                {
+                    "index": 1,
+                    "name": "大三和弦",
+                    "simple_name": "大三",
+                    "pair": [
+                        [
+                            {
+                                "id": 1,
+                                "pitch_number": 1,
+                                "name": "A0",
+                                "alias": "null"
+                            },
+                            {
+                                "id": 5,
+                                "pitch_number": 5,
+                                "name": "C#1",
+                                "alias": "Db1"
+                            },
+                            {
+                                "id": 8,
+                                "pitch_number": 8,
+                                "name": "E1",
+                                "alias": "null"
+                            }
+                        ],
+                        [
+                            {
+                                "id": 2,
+                                "pitch_number": 2,
+                                "name": "A#0",
+                                "alias": "Bb0"
+                            },
+                            {
+                                "id": 6,
+                                "pitch_number": 6,
+                                "name": "D1",
+                                "alias": "null"
+                            },
+                            {
+                                "id": 9,
+                                "pitch_number": 9,
+                                "name": "F1",
+                                "alias": "null"
+                            }
+                        ],
+                        [
+                            {
+                                "id": 3,
+                                "pitch_number": 3,
+                                "name": "B0",
+                                "alias": "null"
+                            },
+                            {
+                                "id": 7,
+                                "pitch_number": 7,
+                                "name": "D#1",
+                                "alias": "Eb1"
+                            },
+                            {
+                                "id": 10,
+                                "pitch_number": 10,
+                                "name": "F#1",
+                                "alias": "Gb1"
+                            }
+                        ],
+                    ],
+                    "count": 81,
+                    "is_three": "false",
+                    "type_id": 1,
+                    "type_name": "三和弦"
+                }
+            ]
         }
     }
 
@@ -789,6 +861,55 @@ class GroupPitchExamResponse(BaseModel):
     questions: List[GroupQuestionResponse]
     correct_number: int = 0
     wrong_number: int = 0
+    model_config = {
+        "from_attributes": True,
+        "arbitrary_types_allowed": True,
+        "json_schema_extra": {
+            "example": {
+                "exam_type": "group",
+                "question_num": 20,
+                "correct_number": 0,
+                "wrong_number": 0,
+                "questions": [
+                    {
+                        "id": 1,
+                        "pitches": [
+                            {
+                                "id": 11,
+                                "pitch_number": 11,
+                                "name": "G1",
+                                "alias": "null"
+                            },
+                            {
+                                "id": 9,
+                                "pitch_number": 9,
+                                "name": "F1",
+                                "alias": "null"
+                            }
+                        ]
+                    },
+                    {
+                        "id": 2,
+                        "pitches": [
+                            {
+                                "id": 8,
+                                "pitch_number": 8,
+                                "name": "E1",
+                                "alias": "null"
+                            },
+                            {
+                                "id": 9,
+                                "pitch_number": 9,
+                                "name": "F1",
+                                "alias": "null"
+                            }
+                        ]
+		            },
+                ]
+
+            }
+        }
+    }
 
 class PitchIntervalSettingResponse(BaseModel):
     answer_mode: List[dict[str, Any]]
@@ -802,7 +923,448 @@ class PitchIntervalSettingResponse(BaseModel):
     model_config = {
         "from_attributes": True,
         "arbitrary_types_allowed": True,
-        "json_schema_extra": {}
+        "json_schema_extra": {
+            "example": {
+                "answer_mode": [
+                    {
+                        "index": 1,
+                        "display_value": "听协和性"
+                    },
+                    {
+                        "index": 2,
+                        "display_value": "听性质"
+                    },
+                    {
+                        "index": 3,
+                        "display_value": "听音高"
+                    }
+                ],
+                "concordance_choice": [
+                    {
+                        "index": 1,
+                        "display_value": "完全协和"
+                    },
+                    {
+                        "index": 2,
+                        "display_value": "不完全协和"
+                    },
+                    {
+                        "index": 3,
+                        "display_value": "不协和"
+                    }
+                ],
+                "quality_choice": [
+                    {
+                        "id": 1,
+                        "name": "小二度",
+                        "type_id": 1,
+                        "type_name": "单音程",
+                        "semitone_number": 1
+                    },
+                    {
+                        "id": 2,
+                        "name": "大二度",
+                        "type_id": 1,
+                        "type_name": "单音程",
+                        "semitone_number": 2
+                    },
+                    {
+                        "id": 3,
+                        "name": "小三度",
+                        "type_id": 1,
+                        "type_name": "单音程",
+                        "semitone_number": 3
+                    },
+                    {
+                        "id": 4,
+                        "name": "大三度",
+                        "type_id": 1,
+                        "type_name": "单音程",
+                        "semitone_number": 4
+                    },
+                    {
+                        "id": 5,
+                        "name": "纯四度",
+                        "type_id": 1,
+                        "type_name": "单音程",
+                        "semitone_number": 5
+                    },
+                    {
+                        "id": 6,
+                        "name": "增四度",
+                        "type_id": 1,
+                        "type_name": "单音程",
+                        "semitone_number": 6
+                    },
+                    {
+                        "id": 7,
+                        "name": "减五度",
+                        "type_id": 1,
+                        "type_name": "单音程",
+                        "semitone_number": 6
+                    },
+                    {
+                        "id": 8,
+                        "name": "纯五度",
+                        "type_id": 1,
+                        "type_name": "单音程",
+                        "semitone_number": 7
+                    },
+                    {
+                        "id": 9,
+                        "name": "小六度",
+                        "type_id": 1,
+                        "type_name": "单音程",
+                        "semitone_number": 8
+                    },
+                    {
+                        "id": 10,
+                        "name": "大六度",
+                        "type_id": 1,
+                        "type_name": "单音程",
+                        "semitone_number": 9
+                    },
+                    {
+                        "id": 11,
+                        "name": "小七度",
+                        "type_id": 1,
+                        "type_name": "单音程",
+                        "semitone_number": 10
+                    },
+                    {
+                        "id": 12,
+                        "name": "大七度",
+                        "type_id": 1,
+                        "type_name": "单音程",
+                        "semitone_number": 11
+                    },
+                    {
+                        "id": 13,
+                        "name": "纯八度",
+                        "type_id": 1,
+                        "type_name": "单音程",
+                        "semitone_number": 12
+                    },
+                    {
+                        "id": 14,
+                        "name": "小九度",
+                        "type_id": 2,
+                        "type_name": "复音程",
+                        "semitone_number": 13
+                    },
+                    {
+                        "id": 15,
+                        "name": "大九度",
+                        "type_id": 2,
+                        "type_name": "复音程",
+                        "semitone_number": 14
+                    },
+                    {
+                        "id": 16,
+                        "name": "小十度",
+                        "type_id": 2,
+                        "type_name": "复音程",
+                        "semitone_number": 15
+                    },
+                    {
+                        "id": 17,
+                        "name": "大十度",
+                        "type_id": 2,
+                        "type_name": "复音程",
+                        "semitone_number": 16
+                    },
+                    {
+                        "id": 18,
+                        "name": "纯十一度",
+                        "type_id": 2,
+                        "type_name": "复音程",
+                        "semitone_number": 17
+                    },
+                    {
+                        "id": 19,
+                        "name": "增十一度",
+                        "type_id": 2,
+                        "type_name": "复音程",
+                        "semitone_number": 18
+                    },
+                    {
+                        "id": 20,
+                        "name": "减十二度",
+                        "type_id": 2,
+                        "type_name": "复音程",
+                        "semitone_number": 18
+                    },
+                    {
+                        "id": 21,
+                        "name": "纯十二度",
+                        "type_id": 2,
+                        "type_name": "复音程",
+                        "semitone_number": 19
+                    },
+                    {
+                        "id": 22,
+                        "name": "小十三度",
+                        "type_id": 2,
+                        "type_name": "复音程",
+                        "semitone_number": 20
+                    },
+                    {
+                        "id": 23,
+                        "name": "大十三度",
+                        "type_id": 2,
+                        "type_name": "复音程",
+                        "semitone_number": 21
+                    },
+                    {
+                        "id": 24,
+                        "name": "小十四度",
+                        "type_id": 2,
+                        "type_name": "复音程",
+                        "semitone_number": 22
+                    },
+                    {
+                        "id": 25,
+                        "name": "大十四度",
+                        "type_id": 2,
+                        "type_name": "复音程",
+                        "semitone_number": 23
+                    },
+                    {
+                        "id": 26,
+                        "name": "纯十五度",
+                        "type_id": 2,
+                        "type_name": "复音程",
+                        "semitone_number": 24
+                    }
+                ],
+                "play_mode": [
+                    {
+                        "index": 1,
+                        "display_value": "和声"
+                    },
+                    {
+                        "index": 2,
+                        "display_value": "上行"
+                    },
+                    {
+                        "index": 3,
+                        "display_value": "下行"
+                    },
+                    {
+                        "index": 4,
+                        "display_value": "上/下"
+                    }
+                ],
+                "interval_list": [
+                    {
+                        "id": 1,
+                        "name": "小二度",
+                        "type_id": 1,
+                        "type_name": "单音程",
+                        "semitone_number": 1
+                    },
+                    {
+                        "id": 2,
+                        "name": "大二度",
+                        "type_id": 1,
+                        "type_name": "单音程",
+                        "semitone_number": 2
+                    },
+                    {
+                        "id": 3,
+                        "name": "小三度",
+                        "type_id": 1,
+                        "type_name": "单音程",
+                        "semitone_number": 3
+                    },
+                    {
+                        "id": 4,
+                        "name": "大三度",
+                        "type_id": 1,
+                        "type_name": "单音程",
+                        "semitone_number": 4
+                    },
+                    {
+                        "id": 5,
+                        "name": "纯四度",
+                        "type_id": 1,
+                        "type_name": "单音程",
+                        "semitone_number": 5
+                    },
+                    {
+                        "id": 6,
+                        "name": "增四度",
+                        "type_id": 1,
+                        "type_name": "单音程",
+                        "semitone_number": 6
+                    },
+                    {
+                        "id": 7,
+                        "name": "减五度",
+                        "type_id": 1,
+                        "type_name": "单音程",
+                        "semitone_number": 6
+                    },
+                    {
+                        "id": 8,
+                        "name": "纯五度",
+                        "type_id": 1,
+                        "type_name": "单音程",
+                        "semitone_number": 7
+                    },
+                    {
+                        "id": 9,
+                        "name": "小六度",
+                        "type_id": 1,
+                        "type_name": "单音程",
+                        "semitone_number": 8
+                    },
+                    {
+                        "id": 10,
+                        "name": "大六度",
+                        "type_id": 1,
+                        "type_name": "单音程",
+                        "semitone_number": 9
+                    },
+                    {
+                        "id": 11,
+                        "name": "小七度",
+                        "type_id": 1,
+                        "type_name": "单音程",
+                        "semitone_number": 10
+                    },
+                    {
+                        "id": 12,
+                        "name": "大七度",
+                        "type_id": 1,
+                        "type_name": "单音程",
+                        "semitone_number": 11
+                    },
+                    {
+                        "id": 13,
+                        "name": "纯八度",
+                        "type_id": 1,
+                        "type_name": "单音程",
+                        "semitone_number": 12
+                    },
+                    {
+                        "id": 14,
+                        "name": "小九度",
+                        "type_id": 2,
+                        "type_name": "复音程",
+                        "semitone_number": 13
+                    },
+                    {
+                        "id": 15,
+                        "name": "大九度",
+                        "type_id": 2,
+                        "type_name": "复音程",
+                        "semitone_number": 14
+                    },
+                    {
+                        "id": 16,
+                        "name": "小十度",
+                        "type_id": 2,
+                        "type_name": "复音程",
+                        "semitone_number": 15
+                    },
+                    {
+                        "id": 17,
+                        "name": "大十度",
+                        "type_id": 2,
+                        "type_name": "复音程",
+                        "semitone_number": 16
+                    },
+                    {
+                        "id": 18,
+                        "name": "纯十一度",
+                        "type_id": 2,
+                        "type_name": "复音程",
+                        "semitone_number": 17
+                    },
+                    {
+                        "id": 19,
+                        "name": "增十一度",
+                        "type_id": 2,
+                        "type_name": "复音程",
+                        "semitone_number": 18
+                    },
+                    {
+                        "id": 20,
+                        "name": "减十二度",
+                        "type_id": 2,
+                        "type_name": "复音程",
+                        "semitone_number": 18
+                    },
+                    {
+                        "id": 21,
+                        "name": "纯十二度",
+                        "type_id": 2,
+                        "type_name": "复音程",
+                        "semitone_number": 19
+                    },
+                    {
+                        "id": 22,
+                        "name": "小十三度",
+                        "type_id": 2,
+                        "type_name": "复音程",
+                        "semitone_number": 20
+                    },
+                    {
+                        "id": 23,
+                        "name": "大十三度",
+                        "type_id": 2,
+                        "type_name": "复音程",
+                        "semitone_number": 21
+                    },
+                    {
+                        "id": 24,
+                        "name": "小十四度",
+                        "type_id": 2,
+                        "type_name": "复音程",
+                        "semitone_number": 22
+                    },
+                    {
+                        "id": 25,
+                        "name": "大十四度",
+                        "type_id": 2,
+                        "type_name": "复音程",
+                        "semitone_number": 23
+                    },
+                    {
+                        "id": 26,
+                        "name": "纯十五度",
+                        "type_id": 2,
+                        "type_name": "复音程",
+                        "semitone_number": 24
+                    }
+                ],
+                "fix_mode_enabled": "false",
+                "fix_mode": [
+                    {
+                        "index": 1,
+                        "display_value": "根音"
+                    },
+                    {
+                        "index": 2,
+                        "display_value": "冠音"
+                    },
+                    {
+                        "index": 3,
+                        "display_value": "随机"
+                    }
+                ],
+                "fix_mode_vals": [
+                    "Do",
+                    "Re",
+                    "Mi",
+                    "Fa",
+                    "Sol",
+                    "La",
+                    "Ti"
+                ]
+            }
+        }
     }
 
 class IntervalQuestionResponse(BaseModel):
@@ -817,6 +1379,39 @@ class PitchIntervalExamResponse(BaseModel):
     questions: List[IntervalQuestionResponse]
     correct_number: int = 0
     wrong_number: int = 0
+    model_config = {
+        "from_attributes": True,
+        "arbitrary_types_allowed": True,
+        "json_schema_extra": {
+            "examples": {
+                "exam_type": "interval",
+                "question_num": 20,
+                "questions": [
+                    {
+                        "id": 1,
+                        "answer_id": 2,
+                        "answer_name": "不完全协和",
+                        "question": {
+                            "first": {
+                                "id": 73,
+                                "pitch_number": 73,
+                                "name": "A6",
+                                "alias": "null"
+                            },
+                            "second": {
+                                "id": 81,
+                                "pitch_number": 81,
+                                "name": "F7",
+                                "alias": "null"
+                            }
+                        }
+                    },
+                ],
+                "correct_number": 0,
+                "wrong_number": 0
+            }
+        }
+    }
 
 class PitchChordSettingResponse(BaseModel):
     answer_mode: List[dict[str, Any]]
