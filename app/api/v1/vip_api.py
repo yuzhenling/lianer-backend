@@ -79,23 +79,7 @@ async def get_all_vips(
         HTTPException:
             - 500: 服务器内部错误
             
-    Example Response:
-        ```json
-        [
-            {
-                "level": "basic",
-                "describe": "基础会员",
-                "price": 29.9,
-                "discount": 0.95
-            },
-            {
-                "level": "premium",
-                "describe": "高级会员",
-                "price": 99.9,
-                "discount": 0.8
-            }
-        ]
-        ```
+
     """
     lang = get_language(request)
     try:
@@ -139,15 +123,7 @@ async def get_vip_by_id(
             - 404: VIP等级不存在
             - 500: 服务器内部错误
             
-    Example Response:
-        ```json
-        {
-            "level": "premium",
-            "describe": "高级会员",
-            "price": 99.9,
-            "discount": 0.8
-        }
-        ```
+
     """
     lang = get_language(request)
     try:
@@ -199,15 +175,7 @@ async def create_vip(
             - 403: 权限不足
             - 500: 服务器内部错误
             
-    Example Request:
-        ```json
-        {
-            "level": "premium",
-            "describe": "高级会员",
-            "price": 99.9,
-            "discount": 0.8
-        }
-        ```
+
     """
     lang = get_language(request)
     try:
@@ -322,12 +290,7 @@ async def delete_vip(
             - 400: 删除失败
             - 500: 服务器内部错误
             
-    Example Response:
-        ```json
-        {
-            "message": "VIP等级删除成功"
-        }
-        ```
+
     """
     lang = get_language(request)
     try:

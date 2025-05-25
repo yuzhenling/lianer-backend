@@ -32,11 +32,12 @@ class OrderCreate(BaseModel):
         "from_attributes": True,
         "arbitrary_types_allowed": True,
         "json_schema_extra": {
-            "example": {
+            "example": [
                 {
-                    "vip_id": 1
+                "vip_id": 2,
+                "paid_amount": 100
                 }
-            }
+            ]
         }
     }
 
@@ -71,7 +72,7 @@ class WeChatPaymentResponse(BaseModel):
         "from_attributes": True,
         "arbitrary_types_allowed": True,
         "json_schema_extra": {
-            "example": {
+            "example": [
                 {
                     "prepay_id": 1111,
                     "timeStamp": 1111,
@@ -80,7 +81,7 @@ class WeChatPaymentResponse(BaseModel):
                     "signType": 1111,
                     "paySign": 1111,
                 }
-            }
+            ]
         }
     }
 

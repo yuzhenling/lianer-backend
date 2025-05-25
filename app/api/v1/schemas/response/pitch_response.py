@@ -1383,33 +1383,35 @@ class PitchIntervalExamResponse(BaseModel):
         "from_attributes": True,
         "arbitrary_types_allowed": True,
         "json_schema_extra": {
-            "examples": {
-                "exam_type": "interval",
-                "question_num": 20,
-                "questions": [
-                    {
-                        "id": 1,
-                        "answer_id": 2,
-                        "answer_name": "不完全协和",
-                        "question": {
-                            "first": {
-                                "id": 73,
-                                "pitch_number": 73,
-                                "name": "A6",
-                                "alias": "null"
-                            },
-                            "second": {
-                                "id": 81,
-                                "pitch_number": 81,
-                                "name": "F7",
-                                "alias": "null"
+            "examples": [
+                {
+                    "exam_type": "interval",
+                    "question_num": 20,
+                    "questions": [
+                        {
+                            "id": 1,
+                            "answer_id": 2,
+                            "answer_name": "不完全协和",
+                            "question": {
+                                "first": {
+                                    "id": 73,
+                                    "pitch_number": 73,
+                                    "name": "A6",
+                                    "alias": "null"
+                                },
+                                "second": {
+                                    "id": 81,
+                                    "pitch_number": 81,
+                                    "name": "F7",
+                                    "alias": "null"
+                                }
                             }
-                        }
-                    },
-                ],
-                "correct_number": 0,
-                "wrong_number": 0
-            }
+                        },
+                    ],
+                    "correct_number": 0,
+                    "wrong_number": 0
+                }
+            ]
         }
     }
 
