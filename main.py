@@ -153,5 +153,5 @@ async def list_compress_files():
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
-for route in app.routes:
-    print(f"{route.path}")
+# for route in app.routes:
+#     print(f"{route.path}")
