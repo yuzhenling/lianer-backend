@@ -24,7 +24,32 @@ async def generate_melody_question(
         melody_question_request: MelodySettingRequest,
         current_user: User = Depends(get_current_user),
 ):
-    """生成节奏听写题"""
+    """
+    生成旋律听写题目接口
+    
+    根据用户设置的参数生成旋律听写题目，包括难度、拍号、小节数、速度等参数。
+    
+    Args:
+        request: FastAPI请求对象
+        melody_question_request: 旋律设置请求体
+            - difficulty: 难度级别
+            - time_signature: 拍号
+            - measures_count: 小节数
+            - tempo: 速度
+            - tonality: 调性
+            - tonality_choice: 调性选择（大调/小调）
+        current_user: 当前登录用户对象
+        
+    Returns:
+        MelodyQuestionResponse: 包含生成的旋律题目数据
+            - melody: 旋律数据
+            - audio_url: 音频文件URL
+            
+    Raises:
+        HTTPException:
+            - 500: 服务器内部错误
+            
+    """
     lang = get_language(request)
     try:
         response = melody_service.generate_question(melody_question_request)
@@ -44,6 +69,32 @@ async def generate_ai_melody_question(
     melody_question_request: MelodySettingRequest,
     current_user: User = Depends(get_current_user)
 ):
+    """
+    使用AI生成旋律听写题目接口
+    
+    使用AI模型根据用户设置的参数生成旋律听写题目，可以生成更自然和富有创意的旋律。
+    
+    Args:
+        request: FastAPI请求对象
+        melody_question_request: 旋律设置请求体
+            - difficulty: 难度级别
+            - time_signature: 拍号
+            - measures_count: 小节数
+            - tempo: 速度
+            - tonality: 调性
+            - tonality_choice: 调性选择（大调/小调）
+        current_user: 当前登录用户对象
+        
+    Returns:
+        MelodyQuestionResponse: 包含AI生成的旋律题目数据
+            - melody: 旋律数据
+            - audio_url: 音频文件URL
+            
+    Raises:
+        HTTPException:
+            - 500: 服务器内部错误
+            
+    """
     lang = get_language(request)
     try:
         return await ai_melody_service.generate_melody_question(melody_question_request)

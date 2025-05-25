@@ -59,6 +59,44 @@ async def get_all_vips(
     request: Request,
     current_user: User = Depends(get_current_user)
 ):
+    """
+    获取所有VIP等级信息接口
+    
+    返回系统中所有可用的VIP等级信息，包括等级、描述、价格、折扣等。
+    
+    Args:
+        request: FastAPI请求对象
+        current_user: 当前登录用户对象
+        
+    Returns:
+        List[VipResponse]: VIP等级信息列表
+            - level: VIP等级
+            - describe: 等级描述
+            - price: 价格
+            - discount: 折扣率
+            
+    Raises:
+        HTTPException:
+            - 500: 服务器内部错误
+            
+    Example Response:
+        ```json
+        [
+            {
+                "level": "basic",
+                "describe": "基础会员",
+                "price": 29.9,
+                "discount": 0.95
+            },
+            {
+                "level": "premium",
+                "describe": "高级会员",
+                "price": 99.9,
+                "discount": 0.8
+            }
+        ]
+        ```
+    """
     lang = get_language(request)
     try:
         """获取所有VIP等级信息"""
@@ -79,7 +117,38 @@ async def get_vip_by_id(
     vip_id: int,
     current_user: User = Depends(get_current_user)
 ):
-    """通过ID获取VIP等级信息"""
+    """
+    通过ID获取VIP等级信息接口
+    
+    根据VIP等级ID返回对应的VIP等级详细信息。
+    
+    Args:
+        request: FastAPI请求对象
+        vip_id: VIP等级ID
+        current_user: 当前登录用户对象
+        
+    Returns:
+        VipResponse: VIP等级信息
+            - level: VIP等级
+            - describe: 等级描述
+            - price: 价格
+            - discount: 折扣率
+            
+    Raises:
+        HTTPException:
+            - 404: VIP等级不存在
+            - 500: 服务器内部错误
+            
+    Example Response:
+        ```json
+        {
+            "level": "premium",
+            "describe": "高级会员",
+            "price": 99.9,
+            "discount": 0.8
+        }
+        ```
+    """
     lang = get_language(request)
     try:
         vip = vip_service.get_vip_by_id(vip_id)
@@ -106,7 +175,40 @@ async def create_vip(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    """创建新的VIP等级"""
+    """
+    创建新的VIP等级接口
+    
+    创建新的VIP等级，需要管理员权限。
+    
+    Args:
+        request: FastAPI请求对象
+        vip_data: VIP等级创建请求体
+            - level: VIP等级
+            - describe: 等级描述
+            - price: 价格（必须大于0）
+            - discount: 折扣率（0-1之间）
+        current_user: 当前登录用户对象
+        db: 数据库会话依赖
+        
+    Returns:
+        VipResponse: 创建的VIP等级信息
+        
+    Raises:
+        HTTPException:
+            - 400: 请求参数错误
+            - 403: 权限不足
+            - 500: 服务器内部错误
+            
+    Example Request:
+        ```json
+        {
+            "level": "premium",
+            "describe": "高级会员",
+            "price": 99.9,
+            "discount": 0.8
+        }
+        ```
+    """
     lang = get_language(request)
     try:
         # 检查权限（这里假设只有管理员可以创建VIP等级）
@@ -198,7 +300,35 @@ async def delete_vip(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    """删除VIP等级"""
+    """
+    删除VIP等级接口
+    
+    删除指定ID的VIP等级，需要管理员权限。
+    
+    Args:
+        request: FastAPI请求对象
+        vip_id: VIP等级ID
+        current_user: 当前登录用户对象
+        db: 数据库会话依赖
+        
+    Returns:
+        dict: 包含操作结果的响应对象
+            - message: 操作结果消息
+            
+    Raises:
+        HTTPException:
+            - 403: 权限不足
+            - 404: VIP等级不存在
+            - 400: 删除失败
+            - 500: 服务器内部错误
+            
+    Example Response:
+        ```json
+        {
+            "message": "VIP等级删除成功"
+        }
+        ```
+    """
     lang = get_language(request)
     try:
         if not current_user.is_admin:

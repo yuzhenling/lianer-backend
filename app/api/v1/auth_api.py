@@ -86,7 +86,31 @@ async def wechat_login(
     login_data: WeChatLogin,
     db: Session = Depends(get_db)
 ):
-    """微信小程序登录"""
+    """
+    微信小程序登录接口
+    
+    通过微信小程序的code进行用户登录认证，如果用户不存在则自动创建新用户。
+    
+    Args:
+        request: FastAPI请求对象
+        login_data: 包含微信登录code的请求体
+        db: 数据库会话依赖
+        
+    Returns:
+        Token: 包含访问令牌的响应对象
+        
+    Raises:
+        HTTPException: 
+            - 401: 微信code无效或登录失败
+            - 500: 服务器内部错误
+            
+    Example:
+        ```json
+        {
+            "code": "023Qc5000Yw1j24qL3000Yw1j2Qc50g"
+        }
+        ```
+    """
     lang = get_language(request)
     
     try:
@@ -139,7 +163,41 @@ async def update_user_info(
         current_user: User = Depends(get_current_user),
         db: Session = Depends(get_db)
 ):
-    """更新微信用户信息"""
+    """
+    更新用户信息接口
+    
+    更新当前登录用户的个人信息，包括昵称、头像、性别等基本信息。
+    
+    Args:
+        request: FastAPI请求对象
+        user_info: 用户信息更新请求体
+        current_user: 当前登录用户对象
+        db: 数据库会话依赖
+        
+    Returns:
+        dict: 包含更新结果的响应对象
+            - code: 状态码
+            - message: 响应消息
+            - data: 更新后的用户信息
+            
+    Raises:
+        HTTPException:
+            - 401: 未认证或认证失败
+            - 500: 服务器内部错误
+            
+    Example:
+        ```json
+        {
+            "nickname": "张三",
+            "avatar_url": "https://example.com/avatar.jpg",
+            "gender": "男",
+            "country": "中国",
+            "province": "广东",
+            "city": "深圳",
+            "language": "zh_CN"
+        }
+        ```
+    """
     lang = get_language(request)
     try:
         # 检查是否已存在用户信息
@@ -180,7 +238,43 @@ async def get_user_info(
         current_user: User = Depends(get_current_user),
         db: Session = Depends(get_db)
 ):
-    """获取用户信息"""
+    """
+    获取用户信息接口
+    
+    获取当前登录用户的完整信息，包括基本信息和扩展信息。
+    
+    Args:
+        request: FastAPI请求对象
+        current_user: 当前登录用户对象
+        db: 数据库会话依赖
+        
+    Returns:
+        dict: 包含用户完整信息的响应对象
+            - id: 用户ID
+            - email: 邮箱
+            - phone: 手机号
+            - wechat_openid: 微信OpenID
+            - unionid: 微信UnionID
+            - is_active: 是否激活
+            - is_vip: 是否VIP
+            - vip_start_date: VIP开始日期
+            - vip_expire_date: VIP过期日期
+            - created_at: 创建时间
+            - updated_at: 更新时间
+            - nickname: 昵称
+            - avatar_url: 头像URL
+            - gender: 性别
+            - country: 国家
+            - province: 省份
+            - city: 城市
+            - language: 语言
+            
+    Raises:
+        HTTPException:
+            - 401: 未认证或认证失败
+            - 404: 用户不存在
+            - 500: 服务器内部错误
+    """
     lang = get_language(request)
     try:
         # 使用 join 查询用户信息和用户基本信息

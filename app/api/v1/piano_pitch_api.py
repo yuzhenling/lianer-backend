@@ -30,6 +30,28 @@ async def get_all_pitches(
         request: Request,
         current_user: User = Depends(get_current_user)
 ):
+    """
+    获取所有钢琴音高信息接口
+    
+    返回系统中所有可用的钢琴音高信息，包括音高名称、频率、MIDI音符号等。
+    
+    Args:
+        request: FastAPI请求对象
+        current_user: 当前登录用户对象
+        
+    Returns:
+        List[PitchResponse]: 钢琴音高信息列表
+            - name: 音高名称（如"C4", "D#4"等）
+            - frequency: 频率（Hz）
+            - midi_number: MIDI音符号
+            - url: 音频文件URL
+            
+    Raises:
+        HTTPException:
+            - 500: 服务器内部错误
+            
+
+    """
     lang = get_language(request)
     try:
         """获取所有信息"""
@@ -51,7 +73,28 @@ async def get_pitch_by_id(
     request: Request,
     current_user: User = Depends(get_current_user),
 ):
-    """根据ID获取钢琴音高信息"""
+    """
+    获取pitch_number对应的钢琴音高信息接口
+
+    返回钢琴音高信息，包括音高id,音高号，音高名称、音高别名。
+
+    Args:
+        request: FastAPI请求对象
+        current_user: 当前登录用户对象
+
+    Returns:
+        List[PitchResponse]: 钢琴音高信息列表
+            - id: 音高id
+            - pitch_number: 音高number 1-88
+            - name: 音高名称（如"C4"等）
+            - alias: 音高名称（如 "D#4"等）
+
+    Raises:
+        HTTPException:
+            - 500: 服务器内部错误
+
+
+    """
     lang = get_language(request)
     try:
         pitch = pitch_service.get_pitch_by_number(pitch_number)
@@ -76,7 +119,28 @@ async def search_pitch_by_name(
     name: str,
     current_user: User = Depends(get_current_user),
 ):
-    """根据音名或别名搜索钢琴音高信息"""
+    """
+    根据音名或别名搜索钢琴音高信息
+
+    返回钢琴音高信息，包括音高id,音高号，音高名称、音高别名。
+
+    Args:
+        request: FastAPI请求对象
+        current_user: 当前登录用户对象
+
+    Returns:
+        List[PitchResponse]: 钢琴音高信息列表
+            - id: 音高id
+            - pitch_number: 音高number 1-88
+            - name: 音高名称（如"C4"等）
+            - alias: 音高名称（如 "D#4"等）
+
+    Raises:
+        HTTPException:
+            - 500: 服务器内部错误
+
+
+    """
     lang = get_language(request)
     try:
         name = unquote(name)
@@ -104,6 +168,26 @@ async def get_wav_by_index(
     index: int,
     current_user: User = Depends(get_current_user),
 ):
+    """
+    通过MIDI音符号获取钢琴音高音频文件接口
+    
+    根据MIDI音符号返回对应的钢琴音高音频文件。
+    
+    Args:
+        request: FastAPI请求对象
+        index: pitch_num
+        current_user: 当前登录用户对象
+        
+    Returns:
+        FileResponse: 音频文件响应
+            - Content-Type: audio/wav
+            - Content-Disposition: inline
+            
+    Raises:
+        HTTPException:
+            - 404: 音高不存在或音频文件不存在
+            - 500: 服务器内部错误
+    """
     lang = get_language(request)
     try:
 
@@ -142,6 +226,26 @@ async def get_wav_by_name(
     name: str,
     current_user: User = Depends(get_current_user),
 ):
+    """
+    通过音高名称获取钢琴音高音频文件接口
+    
+    根据音高名称（如"C4", "D#4"等）返回对应的钢琴音高音频文件。
+    
+    Args:
+        request: FastAPI请求对象
+        name: 音高名称（URL编码）
+        current_user: 当前登录用户对象
+        
+    Returns:
+        FileResponse: 音频文件响应
+            - Content-Type: audio/wav
+            - Content-Disposition: inline
+            
+    Raises:
+        HTTPException:
+            - 404: 音高不存在或音频文件不存在
+            - 500: 服务器内部错误
+    """
     lang = get_language(request)
     try:
         name = unquote(name)
@@ -180,6 +284,25 @@ async def get_all_pitchgroups(
     include_black_key: bool = True,
     current_user: User = Depends(get_current_user),
 ):
+    """
+    获取所有音组信息接口
+
+    返回系统中所有可用的音组信息。
+
+    Args:
+        request: FastAPI请求对象
+        current_user: 当前登录用户对象
+
+    Returns:
+        List[PitchGroupResponse]: 音程信息列表
+
+    Raises:
+        HTTPException:
+            - 404: 未找到音程信息
+            - 500: 服务器内部错误
+
+
+    """
     lang = get_language(request)
     try:
         pitch_groups = pitch_service.get_all_pitchgroups()
@@ -210,6 +333,25 @@ async def get_all_pitchinterval(
     request: Request,
     current_user: User = Depends(get_current_user),
 ):
+    """
+    获取所有音程信息接口
+    
+    返回系统中所有可用的音程信息，包括音程类型、音程名称、起始音高等。
+    
+    Args:
+        request: FastAPI请求对象
+        current_user: 当前登录用户对象
+        
+    Returns:
+        List[PitchIntervalWithPitchesResponse]: 音程信息列表
+
+    Raises:
+        HTTPException:
+            - 404: 未找到音程信息
+            - 500: 服务器内部错误
+            
+
+    """
     lang = get_language(request)
     try:
         pitch_intervals= pitch_service.get_all_intervals()
@@ -234,6 +376,42 @@ async def get_all_pitchchord(
     request: Request,
     current_user: User = Depends(get_current_user),
 ):
+    """
+    获取所有和弦信息接口
+    
+    返回系统中所有可用的和弦信息，包括和弦类型、和弦名称、组成音高等。
+    
+    Args:
+        request: FastAPI请求对象
+        current_user: 当前登录用户对象
+        
+    Returns:
+        List[PitchChordResponse]: 和弦信息列表
+            - chord_type: 和弦类型
+            - name: 和弦名称
+            - pitches: 组成音高列表
+            
+    Raises:
+        HTTPException:
+            - 404: 未找到和弦信息
+            - 500: 服务器内部错误
+            
+    Example Response:
+        ```json
+        [
+            {
+                "chord_type": "major_triad",
+                "name": "大三和弦",
+                "pitches": ["C4", "E4", "G4"]
+            },
+            {
+                "chord_type": "minor_triad",
+                "name": "小三和弦",
+                "pitches": ["C4", "Eb4", "G4"]
+            }
+        ]
+        ```
+    """
     lang = get_language(request)
     try:
         pitch_chords= pitch_service.get_all_chords()
@@ -324,6 +502,40 @@ async def get_pitch_listen_single_exam(
     pitch_setting: PitchSettingRequest,
     current_user: User = Depends(get_current_user)
 ) -> SinglePitchExamResponse:
+    """
+    生成单音听写题目接口
+    
+    根据用户设置的参数生成单音听写题目，包括音高范围、是否包含黑键等参数。
+    
+    Args:
+        request: FastAPI请求对象
+        pitch_setting: 单音设置请求体
+            - pitch_range: 音高范围
+                - pitch_number_min: 最小MIDI音符号
+                - pitch_number_max: 最大MIDI音符号
+            - pitch_black_keys: 是否包含黑键
+        current_user: 当前登录用户对象
+        
+    Returns:
+        SinglePitchExamResponse: 包含生成的单音题目数据
+            - pitches: 音高列表
+            - audio_urls: 音频文件URL列表
+            
+    Raises:
+        HTTPException:
+            - 500: 服务器内部错误
+            
+    Example Request:
+        ```json
+        {
+            "pitch_range": {
+                "pitch_number_min": 60,
+                "pitch_number_max": 72
+            },
+            "pitch_black_keys": true
+        }
+        ```
+    """
     lang = get_language(request)
     try:
         exam = pitch_service.generate_single_exam(pitch_setting.pitch_range.pitch_number_min, pitch_setting.pitch_range.pitch_number_max, pitch_setting.pitch_black_keys)

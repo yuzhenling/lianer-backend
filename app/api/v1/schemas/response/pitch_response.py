@@ -32,6 +32,207 @@ class PitchGroupResponse(BaseModel):
     count: int
     model_config = {
         "from_attributes": True,
+        "arbitrary_types_allowed": True,
+        "json_schema_extra": {
+            "example": [
+	{
+		"index": 1,
+		"name": "大字二组",
+		"pitches": [
+			{
+				"id": 1,
+				"pitch_number": 1,
+				"name": "A0",
+				"alias": "null"
+			},
+			{
+				"id": 2,
+				"pitch_number": 2,
+				"name": "A#0",
+				"alias": "Bb0"
+			},
+			{
+				"id": 3,
+				"pitch_number": 3,
+				"name": "B0",
+				"alias": "null"
+			}
+		],
+		"count": 3
+	},
+	{
+		"index": 2,
+		"name": "大字一组",
+		"pitches": [
+			{
+				"id": 4,
+				"pitch_number": 4,
+				"name": "C1",
+				"alias": "null"
+			},
+			{
+				"id": 5,
+				"pitch_number": 5,
+				"name": "C#1",
+				"alias": "Db1"
+			},
+			{
+				"id": 6,
+				"pitch_number": 6,
+				"name": "D1",
+				"alias": "null"
+			},
+			{
+				"id": 7,
+				"pitch_number": 7,
+				"name": "D#1",
+				"alias": "Eb1"
+			},
+			{
+				"id": 8,
+				"pitch_number": 8,
+				"name": "E1",
+				"alias": "null"
+			},
+			{
+				"id": 9,
+				"pitch_number": 9,
+				"name": "F1",
+				"alias": "null"
+			},
+			{
+				"id": 10,
+				"pitch_number": 10,
+				"name": "F#1",
+				"alias": "Gb1"
+			},
+			{
+				"id": 11,
+				"pitch_number": 11,
+				"name": "G1",
+				"alias": "null"
+			},
+			{
+				"id": 12,
+				"pitch_number": 12,
+				"name": "G#1",
+				"alias": "Ab1"
+			},
+			{
+				"id": 13,
+				"pitch_number": 13,
+				"name": "A1",
+				"alias": "null"
+			},
+			{
+				"id": 14,
+				"pitch_number": 14,
+				"name": "A#1",
+				"alias": "Bb1"
+			},
+			{
+				"id": 15,
+				"pitch_number": 15,
+				"name": "B1",
+				"alias": "null"
+			}
+		],
+		"count": 12
+	},
+	{
+		"index": 7,
+		"name": "小字三组",
+		"pitches": [
+			{
+				"id": 64,
+				"pitch_number": 64,
+				"name": "C6",
+				"alias": "null"
+			},
+			{
+				"id": 65,
+				"pitch_number": 65,
+				"name": "C#6",
+				"alias": "Db6"
+			},
+			{
+				"id": 66,
+				"pitch_number": 66,
+				"name": "D6",
+				"alias": "null"
+			},
+			{
+				"id": 67,
+				"pitch_number": 67,
+				"name": "D#6",
+				"alias": "Eb6"
+			},
+			{
+				"id": 68,
+				"pitch_number": 68,
+				"name": "E6",
+				"alias": "null"
+			},
+			{
+				"id": 69,
+				"pitch_number": 69,
+				"name": "F6",
+				"alias": "null"
+			},
+			{
+				"id": 70,
+				"pitch_number": 70,
+				"name": "F#6",
+				"alias": "Gb6"
+			},
+			{
+				"id": 71,
+				"pitch_number": 71,
+				"name": "G6",
+				"alias": "null"
+			},
+			{
+				"id": 72,
+				"pitch_number": 72,
+				"name": "G#6",
+				"alias": "Ab6"
+			},
+			{
+				"id": 73,
+				"pitch_number": 73,
+				"name": "A6",
+				"alias": "null"
+			},
+			{
+				"id": 74,
+				"pitch_number": 74,
+				"name": "A#6",
+				"alias": "Bb6"
+			},
+			{
+				"id": 75,
+				"pitch_number": 75,
+				"name": "B6",
+				"alias": "null"
+			}
+		],
+		"count": 12
+	},
+	{
+		"index": 9,
+		"name": "小字五组",
+		"pitches": [
+			{
+				"id": 88,
+				"pitch_number": 88,
+				"name": "C8",
+				"alias": "null"
+			}
+		],
+		"count": 1
+	}
+]
+        }
     }
 
 class PitchIntervalPairResponse(BaseModel):
@@ -2151,7 +2352,184 @@ class MelodySettingResponse(RhythmSettingResponse):
         "arbitrary_types_allowed": True,
         "json_schema_extra": {
             "examples": [
-
+                {
+                    "difficulties": [
+                        "low",
+                        "medium",
+                        "high"
+                    ],
+                    "measures_counts": [
+                        4,
+                        6,
+                        8,
+                        10,
+                        12,
+                        16
+                    ],
+                    "time_signatures": [
+                        "2/4",
+                        "3/4",
+                        "4/4",
+                        "3/8",
+                        "6/8"
+                    ],
+                    "tempo": [
+                        40,
+                        45,
+                        50,
+                        60,
+                        80,
+                        100
+                    ],
+                    "tonality": [
+                        {
+                            "index": 1,
+                            "display_value": "C大调"
+                        },
+                        {
+                            "index": 2,
+                            "display_value": "G大调"
+                        },
+                        {
+                            "index": 3,
+                            "display_value": "D大调"
+                        },
+                        {
+                            "index": 4,
+                            "display_value": "A大调"
+                        },
+                        {
+                            "index": 5,
+                            "display_value": "E大调"
+                        },
+                        {
+                            "index": 6,
+                            "display_value": "B大调"
+                        },
+                        {
+                            "index": 7,
+                            "display_value": "升F大调"
+                        },
+                        {
+                            "index": 8,
+                            "display_value": "升C大调"
+                        },
+                        {
+                            "index": 9,
+                            "display_value": "F大调"
+                        },
+                        {
+                            "index": 10,
+                            "display_value": "降B大调"
+                        },
+                        {
+                            "index": 11,
+                            "display_value": "降E大调"
+                        },
+                        {
+                            "index": 12,
+                            "display_value": "降A大调"
+                        },
+                        {
+                            "index": 13,
+                            "display_value": "降D大调"
+                        },
+                        {
+                            "index": 14,
+                            "display_value": "降G大调"
+                        },
+                        {
+                            "index": 15,
+                            "display_value": "降C大调"
+                        },
+                        {
+                            "index": 16,
+                            "display_value": "a小调"
+                        },
+                        {
+                            "index": 17,
+                            "display_value": "e小调"
+                        },
+                        {
+                            "index": 18,
+                            "display_value": "b小调"
+                        },
+                        {
+                            "index": 19,
+                            "display_value": "升f小调"
+                        },
+                        {
+                            "index": 20,
+                            "display_value": "升c小调"
+                        },
+                        {
+                            "index": 21,
+                            "display_value": "升g小调"
+                        },
+                        {
+                            "index": 22,
+                            "display_value": "升d小调"
+                        },
+                        {
+                            "index": 23,
+                            "display_value": "升a小调"
+                        },
+                        {
+                            "index": 24,
+                            "display_value": "d小调"
+                        },
+                        {
+                            "index": 25,
+                            "display_value": "g小调"
+                        },
+                        {
+                            "index": 26,
+                            "display_value": "c小调"
+                        },
+                        {
+                            "index": 27,
+                            "display_value": "f小调"
+                        },
+                        {
+                            "index": 28,
+                            "display_value": "降b小调"
+                        },
+                        {
+                            "index": 29,
+                            "display_value": "降e小调"
+                        },
+                        {
+                            "index": 30,
+                            "display_value": "降a小调"
+                        }
+                    ],
+                    "tonality_choice": [
+                        {
+                            "index": 1,
+                            "display_value": "自然大调"
+                        },
+                        {
+                            "index": 2,
+                            "display_value": "旋律大调"
+                        },
+                        {
+                            "index": 3,
+                            "display_value": "和声大调"
+                        },
+                        {
+                            "index": 4,
+                            "display_value": "自然小调"
+                        },
+                        {
+                            "index": 5,
+                            "display_value": "旋律小调"
+                        },
+                        {
+                            "index": 6,
+                            "display_value": "和声小调"
+                        }
+                    ]
+                }
             ]
         }
     }

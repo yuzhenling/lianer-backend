@@ -29,7 +29,30 @@ async def generate_exam(
         exam_request: ExamRequest,
         current_user: User = Depends(get_current_user),
 ):
-    """生成节奏听写题"""
+    """
+    生成综合考试题目接口
+    
+    根据用户设置的参数生成包含单音、音组、音程、和弦、节奏和旋律的综合考试题目。
+    
+    Args:
+        request: FastAPI请求对象
+        exam_request: 考试设置请求体，包含各类题目的设置参数
+        current_user: 当前登录用户对象
+        
+    Returns:
+        ExamResponse: 包含所有类型题目的考试数据
+            - single: 单音听写题目
+            - group: 音组听写题目
+            - interval: 音程听写题目
+            - chord: 和弦听写题目
+            - rhythm: 节奏听写题目
+            - melody: 旋律听写题目
+            
+    Raises:
+        HTTPException:
+            - 500: 服务器内部错误
+            
+    """
     lang = get_language(request)
     try:
         single = pitch_service.generate_single_exam(exam_request.pitch_setting.pitch_range.pitch_number_min,
@@ -89,6 +112,29 @@ async def get_exam_settings(
         request: Request,
         current_user: User = Depends(get_current_user)
 ):
+    """
+    获取考试设置选项接口
+    
+    返回所有可用的考试设置选项，包括单音、音组、音程、和弦、节奏和旋律的各类参数设置。
+    
+    Args:
+        request: FastAPI请求对象
+        current_user: 当前登录用户对象
+        
+    Returns:
+        ExamSettingResponse: 包含所有类型题目的设置选项
+            - pitch_single_setting: 单音听写设置
+            - pitch_group_setting: 音组听写设置
+            - pitch_interval_setting: 音程听写设置
+            - pitch_chord_setting: 和弦听写设置
+            - rhythm_setting: 节奏听写设置
+            - melody_setting: 旋律听写设置
+            
+    Raises:
+        HTTPException:
+            - 500: 服务器内部错误
+            
+    """
     lang = get_language(request)
     try:
         """获取所有信息"""

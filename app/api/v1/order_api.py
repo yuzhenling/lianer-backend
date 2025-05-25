@@ -28,6 +28,17 @@ class OrderCreate(BaseModel):
     is_return: Optional[bool] = None
     return_date: Optional[datetime] = None
     return_amount: Optional[int] = None
+    model_config = {
+        "from_attributes": True,
+        "arbitrary_types_allowed": True,
+        "json_schema_extra": {
+            "example": {
+                {
+                    "vip_id": 1
+                }
+            }
+        }
+    }
 
 class OrderResponse(BaseModel):
     id: int
@@ -56,6 +67,22 @@ class WeChatPaymentResponse(BaseModel):
     package: str
     signType: str
     paySign: str
+    model_config = {
+        "from_attributes": True,
+        "arbitrary_types_allowed": True,
+        "json_schema_extra": {
+            "example": {
+                {
+                    "prepay_id": 1111,
+                    "timeStamp": 1111,
+                    "nonceStr": 1111,
+                    "package": 1111,
+                    "signType": 1111,
+                    "paySign": 1111,
+                }
+            }
+        }
+    }
 
 
 @router.post("/vip", response_model=OrderResponse)
@@ -65,7 +92,39 @@ async def create_vip_order(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    """创建VIP订单"""
+    """
+    创建VIP订单接口
+    
+    为用户创建VIP购买订单，包括订单状态、支付信息等。
+    
+    Args:
+        request: FastAPI请求对象
+        order_data: 订单创建请求体
+            - vip_id: VIP等级ID
+            - is_paid: 是否已支付（可选）
+            - paid_date: 支付日期（可选）
+            - paid_amount: 支付金额（可选）
+            - is_return: 是否退款（可选）
+            - return_date: 退款日期（可选）
+            - return_amount: 退款金额（可选）
+        current_user: 当前登录用户对象
+        db: 数据库会话依赖
+        
+    Returns:
+        OrderResponse: 创建的订单信息
+            - id: 订单ID
+            - user_id: 用户ID
+            - vip_id: VIP等级ID
+            - order_date: 订单日期
+            - status: 订单状态
+            - amount: 订单金额
+            
+    Raises:
+        HTTPException:
+            - 400: 无效的VIP等级
+            - 500: 服务器内部错误
+
+    """
     lang = get_language(request)
     try:
         # 检查VIP等级是否有效
@@ -110,7 +169,33 @@ async def create_payment(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    """支付订单"""
+    """
+    创建订单支付接口
+    
+    为指定订单创建微信支付订单，返回支付所需的参数。
+    
+    Args:
+        request: FastAPI请求对象
+        order_id: 订单ID
+        current_user: 当前登录用户对象
+        db: 数据库会话依赖
+        
+    Returns:
+        WeChatPaymentResponse: 微信支付参数
+            - prepay_id: 预支付ID
+            - timeStamp: 时间戳
+            - nonceStr: 随机字符串
+            - package: 订单详情扩展字符串
+            - signType: 签名类型
+            - paySign: 签名
+            
+    Raises:
+        HTTPException:
+            - 404: 订单不存在
+            - 400: 订单已支付
+            - 500: 服务器内部错误
+            
+    """
     try:
         lang = get_language(request)
 
@@ -158,7 +243,28 @@ async def wechat_payment_notify(
     request: Request,
     db: Session = Depends(get_db)
 ):
-    """处理微信支付回调通知"""
+    """
+    处理微信支付回调通知接口
+    
+    接收并处理微信支付的异步通知，更新订单支付状态。
+    
+    Args:
+        request: FastAPI请求对象
+        db: 数据库会话依赖
+        
+    Returns:
+        dict: 处理结果
+            - code: 处理结果代码（SUCCESS/FAIL）
+            - message: 处理结果消息
+            
+    Example Response:
+        ```json
+        {
+            "code": "SUCCESS",
+            "message": "OK"
+        }
+        ```
+    """
     try:
         # 解析微信支付回调数据
         # TODO: 实现微信支付回调数据验证

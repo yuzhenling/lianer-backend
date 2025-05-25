@@ -93,3 +93,19 @@ class MelodySettingRequest(BaseModel):
     tempo: Tempo = Tempo.EIGHTY
     tonality: int = 1 # 调式 eg: C大调
     tonality_choice: int = 1 # 自然 旋律 和声
+    model_config = {
+        "from_attributes": True,
+        "arbitrary_types_allowed": True,
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "difficulty": "low",
+                    "time_signature": "2/4",
+                    "measures_count": 4,
+                    "tempo": 80,
+                    "tonality": 1,
+                    "tonality_choice": 1
+                }
+            ]
+        }
+    }

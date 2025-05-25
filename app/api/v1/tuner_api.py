@@ -90,16 +90,40 @@ async def analyze_pitch_c(
     file: UploadFile = File(...),
     current_user: User = Depends(get_current_user)
 ) -> PitchAnalysisResult:
-    """快速音高检测API
+    """
+    快速音高检测API
     
-    使用pYIN C++绑定进行快速音高检测，适合实时应用。
+    使用pYIN C++绑定进行快速音高检测，适合实时应用。可以检测音频文件中的音高，并返回最接近的钢琴音高。
     
     Args:
-        file: 音频文件
-        current_user: 当前用户
+        file: 音频文件（支持wav、mp3等格式）
+        current_user: 当前登录用户对象
         
     Returns:
-        PitchAnalysisResult: 包含检测结果的字典
+        PitchAnalysisResult: 包含检测结果的响应对象
+            - frequency: 检测到的频率（Hz）
+            - note: 音符名称
+            - cents_difference: 与标准音高的音分差
+            - nearest_piano_pitch: 最接近的钢琴音高
+            - tuning_status: 调音状态（in_tune/too_high/too_low）
+            - tuning_direction: 调音方向（up/down）
+            
+    Raises:
+        HTTPException:
+            - 400: 无效的音频文件
+            - 500: 服务器内部错误
+            
+    Example Response:
+        ```json
+        {
+            "frequency": 440.0,
+            "note": "A4",
+            "cents_difference": 0.0,
+            "nearest_piano_pitch": "A4",
+            "tuning_status": "in_tune",
+            "tuning_direction": "none"
+        }
+        ```
     """
     try:
         # 分析音高
