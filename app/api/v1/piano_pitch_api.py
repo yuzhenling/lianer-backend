@@ -166,7 +166,6 @@ async def search_pitch_by_name(
 async def get_wav_by_index(
     request: Request,
     index: int,
-    current_user: User = Depends(get_current_user),
 ):
     """
     通过MIDI音符号获取钢琴音高音频文件接口
@@ -224,7 +223,6 @@ async def get_wav_by_index(
 async def get_wav_by_name(
     request: Request,
     name: str,
-    current_user: User = Depends(get_current_user),
 ):
     """
     通过音高名称获取钢琴音高音频文件接口

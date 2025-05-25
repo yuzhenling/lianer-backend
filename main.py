@@ -1,5 +1,6 @@
+from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
@@ -13,6 +14,7 @@ from app.api.v1 import auth_api, order_api, vip_api, piano_pitch_api, rhythm_api
     payment_api, exam_api
 from app.db.init_data import init_vip_levels, init_pitches, init_intervals, init_pitch_chord
 from app.core.logger import logger
+from fastapi.staticfiles import StaticFiles
 
 # 导入所有模型以确保它们被注册到Base.metadata
 from app.services.pitch_service import pitch_service
@@ -80,7 +82,7 @@ app = FastAPI(
 )
 
 
-# app.mount("/static", StaticFiles(directory=Path("app/static")), name="static")
+
 
 # 添加CORS中间件
 app.add_middleware(
@@ -122,3 +124,34 @@ async def root():
 @app.get("/hello/{name}")
 async def say_hello(name: str):
     return {"message": f"Hello {name}"}
+
+@app.get("/files/audio")
+async def list_files():
+    import os
+    from pathlib import Path
+
+    static_dir = Path(__file__).parent / "app" / "static" / "audio"
+    print(f"Static dir: {static_dir}")
+
+    if not static_dir.exists():
+        raise HTTPException(status_code=500, detail=f"Static dir not found: {static_dir}")
+
+    return os.listdir(static_dir)
+
+@app.get("/files/audio/compress")
+async def list_compress_files():
+    import os
+    from pathlib import Path
+
+    static_dir = Path(__file__).parent / "app" / "static" / "compress"
+    print(f"Static dir: {static_dir}")
+
+    if not static_dir.exists():
+        raise HTTPException(status_code=500, detail=f"Static dir not found: {static_dir}")
+
+    return os.listdir(static_dir)
+
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
+for route in app.routes:
+    print(f"{route.path}")
