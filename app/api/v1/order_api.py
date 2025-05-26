@@ -41,6 +41,28 @@ class OrderCreate(BaseModel):
         }
     }
 
+class OrderQuery(BaseModel):
+    id: Optional[int] = None
+    user_id: Optional[int] = None
+    vip_id: Optional[int] = None
+    trade_no: Optional[int] = None
+    prepay_id: Optional[str] = None
+    is_paid: Optional[bool] = None
+    paid_date: Optional[datetime] = None
+    paid_amount: Optional[int] = None
+    is_return: Optional[bool] = None
+    return_date: Optional[datetime] = None
+    return_amount: Optional[int] = None
+    model_config = {
+        "from_attributes": True,
+        "arbitrary_types_allowed": True,
+        "json_schema_extra": {
+            "example": [
+
+            ]
+        }
+    }
+
 class OrderResponse(BaseModel):
     id: int
     trade_no: int
@@ -162,6 +184,27 @@ async def create_vip_order(
             detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
         )
 
+
+@router.post(response_model=OrderResponse)
+async def get_vip_orders(
+        request: Request,
+        order_query: OrderQuery,
+        current_user: User = Depends(get_current_user),
+        db: Session = Depends(get_db)
+):
+
+    lang = get_language(request)
+    try:
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(
+            f"Failed to query create_vip_order for user {current_user.id}: {str(e)}\nTraceback: {traceback.format_exc()}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
+        )
 
 @router.post("/{order_id}/pay", response_model=WeChatPaymentResponse)
 async def create_payment(

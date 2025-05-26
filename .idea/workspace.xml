@@ -4,7 +4,188 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="83c1f24d-9736-40eb-a780-45c9d33bfc91" name="Changes" comment="" />
+    <list default="true" id="83c1f24d-9736-40eb-a780-45c9d33bfc91" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/doc/compress.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api/v1/order_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/order_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_10_F#1_Gb1.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_11_G1.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_12_G#1_Ab1.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_13_A1.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_14_A#1_Bb1.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_15_B1.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_16_C2.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_17_C#2_Db2.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_18_D2.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_19_D#2_Eb2.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_1_A0.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_20_E2.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_21_F2.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_22_F#2_Gb2.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_23_G2.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_24_G#2_Ab2.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_25_A2.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_26_A#2_Bb2.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_27_B2.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_28_C3.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_29_C#3_Db3.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_2_A#0_Bb0.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_30_D3.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_31_D#3_Eb3.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_32_E3.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_33_F3.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_34_F#3_Gb3.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_35_G3.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_36_G#3_Ab3.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_37_A3.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_38_A#3_Bb3.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_39_B3.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_3_B0.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_40_C4.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_41_C#4_Db4.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_42_D4.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_43_D#4_Eb4.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_44_E4.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_45_F4.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_46_F#4_Gb4.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_47_G4.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_48_G#4_Ab4.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_49_A4.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_4_C1.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_50_A#4_Bb4.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_51_B4.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_52_C5.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_53_C#5_Db5.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_54_D5.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_55_D#5_Eb5.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_56_E5.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_57_F5.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_58_F#5_Gb5.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_59_G5.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_5_C#1_Db1.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_60_G#5_Ab5.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_61_A5.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_62_A#5_Bb5.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_63_B5.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_64_C6.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_65_C#6_Db6.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_66_D6.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_67_D#6_Eb6.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_68_E6.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_69_F6.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_6_D1.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_70_F#6_Gb6.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_71_G6.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_72_G#6_Ab6.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_73_A6.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_74_A#6_Bb6.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_75_B6.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_76_C7.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_77_C#7_Db7.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_78_D7.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_79_D#7_Eb7.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_7_D#1_Eb1.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_80_E7.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_81_F7.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_82_F#7_Gb7.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_83_G7.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_84_G#7_Ab7.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_85_A7.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_86_A#7_Bb7.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_87_B7.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_88_C8.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_8_E1.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/audio/tone_9_F1.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_A.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_A1.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_A2.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_B.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_B1.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_B2.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_C.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_C1.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_D.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_D1.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_E.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_E1.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_F.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_F1.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_G.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_G1.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_a_0.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_a_1.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_a_2.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_a_3.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_a_4.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_b_0.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_b_1.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_b_2.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_b_3.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_b_4.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_c_0.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_c_1.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_c_2.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_c_3.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_c_4.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_c_5.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_d_0.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_d_1.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_d_2.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_d_3.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_d_4.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_e_0.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_e_1.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_e_2.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_e_3.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_e_4.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_f_0.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_f_1.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_f_2.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_f_3.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_f_4.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_g_0.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_g_1.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_g_2.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_g_3.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/b_g_4.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_A.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_A1.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_A2.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_C.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_C1.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_D.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_D1.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_F.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_F1.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_G.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_G1.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_a_0.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_a_1.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_a_2.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_a_3.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_a_4.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_c_0.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_c_1.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_c_2.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_c_3.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_c_4.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_d_0.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_d_1.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_d_2.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_d_3.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_d_4.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_f_0.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_f_1.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_f_2.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_f_3.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_f_4.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_g_0.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_g_1.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_g_2.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_g_3.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/compress/h_g_4.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/app.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/app.log" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -34,26 +215,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "FastAPI.shengyibaodian.executor": "Run",
-    "Python.ptest.executor": "Debug",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "/home/yu/gitdev/shengyibaodian",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.keymap",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;FastAPI.shengyibaodian.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ptest.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/yu/gitdev/shengyibaodian&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
       <console-settings module-name="shengyibaodian" is-module-sdk="true">
@@ -241,7 +422,8 @@
       <workItem from="1747788950992" duration="23723000" />
       <workItem from="1747920224014" duration="5044000" />
       <workItem from="1748134165879" duration="8703000" />
-      <workItem from="1748167361672" duration="6119000" />
+      <workItem from="1748167361672" duration="6742000" />
+      <workItem from="1748223575157" duration="1454000" />
     </task>
     <servers />
   </component>
