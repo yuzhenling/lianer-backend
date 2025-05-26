@@ -267,7 +267,7 @@ async def get_vip_orders(
             )
 
         return OrderServiceResponse(
-            count=orders.count,
+            count=len(orders),
             orders=orders,
         )
         
@@ -322,7 +322,7 @@ async def get_vip_service(
             )
 
         return OrderServiceResponse(
-                count=orders.count,
+                count=len(orders),
                 orders=orders,
             )
 
