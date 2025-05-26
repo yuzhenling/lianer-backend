@@ -48,10 +48,12 @@ class OrderQuery(BaseModel):
     trade_no: Optional[int] = None
     prepay_id: Optional[str] = None
     is_paid: Optional[bool] = None
-    paid_date: Optional[datetime] = None
+    paid_date_s: Optional[datetime] = None
+    paid_date_e: Optional[datetime] = None
     paid_amount: Optional[int] = None
     is_return: Optional[bool] = None
-    return_date: Optional[datetime] = None
+    return_date_s: Optional[datetime] = None
+    return_date_e: Optional[datetime] = None
     return_amount: Optional[int] = None
     model_config = {
         "from_attributes": True,
@@ -62,6 +64,20 @@ class OrderQuery(BaseModel):
             ]
         }
     }
+
+# class OrderServiceQuery(BaseModel):
+#     user_id: Optional[int] = None
+#     # is_paid: bool = True
+#     # is_return: bool = False
+#     model_config = {
+#         "from_attributes": True,
+#         "arbitrary_types_allowed": True,
+#         "json_schema_extra": {
+#             "example": [
+#
+#             ]
+#         }
+#     }
 
 class OrderResponse(BaseModel):
     id: int
@@ -192,9 +208,116 @@ async def get_vip_orders(
         current_user: User = Depends(get_current_user),
         db: Session = Depends(get_db)
 ):
-
+    """
+    获取当前用户下单的VIP订单列表接口
+    
+    根据查询条件获取用户的VIP订单列表，包括未支付的、支付的全部订单。
+    
+    Args:
+        request: FastAPI请求对象
+        order_query: 订单查询条件
+            - id: 订单ID（可选）
+            - user_id: 用户ID（可选）
+            - vip_id: VIP等级ID（可选）
+            - trade_no: 交易号（可选）
+            - prepay_id: 预支付ID（可选）
+            - is_paid: 是否已支付（可选）
+            - paid_date_s: 起始支付日期（可选）
+            - paid_date_e: 结束支付日期（可选）
+            - paid_amount: 支付金额（可选）
+            - is_return: 是否退款（可选）
+            - return_date_s: 起始退款日期（可选）
+            - return_date_e: 结束退款日期（可选）
+            - return_amount: 退款金额（可选）
+        current_user: 当前登录用户对象
+        db: 数据库会话依赖
+        
+    Returns:
+        OrderResponse: 订单信息列表
+        
+    Raises:
+        HTTPException:
+            - 500: 服务器内部错误
+    """
     lang = get_language(request)
     try:
+        # 将查询参数转换为字典，并移除None值
+        query_params = {k: v for k, v in order_query.model_dump().items() if v is not None}
+        
+        # 调用服务层方法获取订单列表
+        orders = await order_service.get_vip_orders(
+            db=db,
+            query_params=query_params,
+            user_id=current_user.id
+        )
+        
+        if not orders:
+            return []
+            
+        return orders
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(
+            f"Failed to query create_vip_order for user {current_user.id}: {str(e)}\nTraceback: {traceback.format_exc()}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=i18n.get_text("INTERNAL_SERVER_ERROR", lang)
+        )
+
+
+@router.post(response_model=OrderResponse)
+async def get_vip_service(
+        request: Request,
+        current_user: User = Depends(get_current_user),
+        db: Session = Depends(get_db)
+):
+    """
+    获取VIP订单列表接口
+
+    根据查询条件获取用户的VIP订单列表。
+
+    Args:
+        request: FastAPI请求对象
+        order_query: 订单查询条件
+            - id: 订单ID（可选）
+            - user_id: 用户ID（可选）
+            - vip_id: VIP等级ID（可选）
+            - trade_no: 交易号（可选）
+            - prepay_id: 预支付ID（可选）
+            - is_paid: 是否已支付（可选）
+            - paid_date_s: 起始支付日期（可选）
+            - paid_date_e: 结束支付日期（可选）
+            - paid_amount: 支付金额（可选）
+            - is_return: 是否退款（可选）
+            - return_date_s: 起始退款日期（可选）
+            - return_date_e: 结束退款日期（可选）
+            - return_amount: 退款金额（可选）
+        current_user: 当前登录用户对象
+        db: 数据库会话依赖
+
+    Returns:
+        OrderResponse: 订单信息列表
+
+    Raises:
+        HTTPException:
+            - 500: 服务器内部错误
+    """
+    lang = get_language(request)
+    try:
+        # 将查询参数转换为字典，并移除None值
+
+        # 调用服务层方法获取订单列表
+        orders = await order_service.get_service_orders(
+            db=db,
+            user_id=current_user.id
+        )
+
+        if not orders:
+            return []
+
+        return orders
 
     except HTTPException:
         raise

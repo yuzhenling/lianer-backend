@@ -262,4 +262,87 @@ class OrderService:
         cert = crypto.load_certificate(crypto.FILETYPE_PEM, cert_content)
         return cert.get_serial_number()
 
+    async def get_vip_orders(
+        self,
+        db: Session,
+        query_params: dict,
+        user_id: int
+    ) -> list[VipOrder]:
+        """
+        根据查询条件获取VIP订单列表
+        
+        Args:
+            db: 数据库会话
+            query_params: 查询参数字典
+            user_id: 用户ID
+            
+        Returns:
+            list[VipOrder]: VIP订单列表
+        """
+        try:
+            # 构建基础查询
+            query = select(VipOrder).where(VipOrder.user_id == user_id)
+            
+            # 添加可选的过滤条件
+            if query_params.get("id"):
+                query = query.where(VipOrder.id == query_params["id"])
+            if query_params.get("vip_id"):
+                query = query.where(VipOrder.vip_id == query_params["vip_id"])
+            if query_params.get("trade_no"):
+                query = query.where(VipOrder.trade_no == query_params["trade_no"])
+            if query_params.get("prepay_id"):
+                query = query.where(VipOrder.prepay_id == query_params["prepay_id"])
+            if query_params.get("is_paid") is not None:
+                query = query.where(VipOrder.is_paid == query_params["is_paid"])
+            if query_params.get("is_return") is not None:
+                query = query.where(VipOrder.is_return == query_params["is_return"])
+            if query_params.get("paid_date_s"):
+                query = query.where(VipOrder.paid_date >= query_params["paid_date_s"])
+            if query_params.get("paid_date_e"):
+                query = query.where(VipOrder.paid_date <= query_params["paid_date_e"])
+            if query_params.get("return_date_s"):
+                query = query.where(VipOrder.return_date == query_params["return_date_s"])
+            if query_params.get("return_date_e"):
+                query = query.where(VipOrder.return_date <= query_params["return_date_e"])
+            
+            # 执行查询
+            result = await db.execute(query)
+            orders = result.scalars().all()
+            
+            return orders
+            
+        except Exception as e:
+            logger.error(f"Failed to get VIP orders: {str(e)}", exc_info=True)
+            return []
+
+    async def get_service_orders(
+            self,
+            db: Session,
+            user_id: int
+    ) -> list[VipOrder]:
+        """
+        根据查询条件获取VIP订单列表
+
+        Args:
+            db: 数据库会话
+            query_params: 查询参数字典
+            user_id: 用户ID
+
+        Returns:
+            list[VipOrder]: VIP订单列表
+        """
+        try:
+            # 构建基础查询
+            query = select(VipOrder).where(VipOrder.user_id == user_id, VipOrder.is_paid == True, VipOrder.is_return == False)
+
+            # 执行查询
+            result = await db.execute(query)
+            orders = result.scalars().all()
+
+            return orders
+
+        except Exception as e:
+            logger.error(f"Failed to get VIP orders: {str(e)}", exc_info=True)
+            return []
+
 
