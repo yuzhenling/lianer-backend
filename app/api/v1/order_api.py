@@ -98,6 +98,15 @@ class OrderResponse(BaseModel):
         "arbitrary_types_allowed": True
     }
 
+class OrderServiceResponse(BaseModel):
+    count: int
+    orders: list[OrderResponse]
+
+    model_config = {
+        "from_attributes": True,
+        "arbitrary_types_allowed": True
+    }
+
 
 class WeChatPaymentResponse(BaseModel):
     prepay_id: str
@@ -201,7 +210,7 @@ async def create_vip_order(
         )
 
 
-@router.post(response_model=OrderResponse)
+@router.post(path="/query", response_model=OrderServiceResponse)
 async def get_vip_orders(
         request: Request,
         order_query: OrderQuery,
@@ -233,7 +242,7 @@ async def get_vip_orders(
         db: 数据库会话依赖
         
     Returns:
-        OrderResponse: 订单信息列表
+        OrderServiceResponse: 订单信息列表
         
     Raises:
         HTTPException:
@@ -250,11 +259,17 @@ async def get_vip_orders(
             query_params=query_params,
             user_id=current_user.id
         )
-        
+
         if not orders:
-            return []
-            
-        return orders
+            return OrderServiceResponse(
+                count=0,
+                orders=[],
+            )
+
+        return OrderServiceResponse(
+            count=orders.count,
+            orders=orders,
+        )
         
     except HTTPException:
         raise
@@ -267,38 +282,24 @@ async def get_vip_orders(
         )
 
 
-@router.post(response_model=OrderResponse)
+@router.get(path="/service", response_model=OrderServiceResponse)
 async def get_vip_service(
         request: Request,
         current_user: User = Depends(get_current_user),
         db: Session = Depends(get_db)
 ):
     """
-    获取VIP订单列表接口
+    获取当前用户的生效的VIP订单列表接口
 
     根据查询条件获取用户的VIP订单列表。
 
     Args:
         request: FastAPI请求对象
-        order_query: 订单查询条件
-            - id: 订单ID（可选）
-            - user_id: 用户ID（可选）
-            - vip_id: VIP等级ID（可选）
-            - trade_no: 交易号（可选）
-            - prepay_id: 预支付ID（可选）
-            - is_paid: 是否已支付（可选）
-            - paid_date_s: 起始支付日期（可选）
-            - paid_date_e: 结束支付日期（可选）
-            - paid_amount: 支付金额（可选）
-            - is_return: 是否退款（可选）
-            - return_date_s: 起始退款日期（可选）
-            - return_date_e: 结束退款日期（可选）
-            - return_amount: 退款金额（可选）
         current_user: 当前登录用户对象
         db: 数据库会话依赖
 
     Returns:
-        OrderResponse: 订单信息列表
+        OrderServiceResponse: 订单信息列表
 
     Raises:
         HTTPException:
@@ -315,9 +316,15 @@ async def get_vip_service(
         )
 
         if not orders:
-            return []
+            return OrderServiceResponse(
+                count=0,
+                orders=[],
+            )
 
-        return orders
+        return OrderServiceResponse(
+                count=orders.count,
+                orders=orders,
+            )
 
     except HTTPException:
         raise
