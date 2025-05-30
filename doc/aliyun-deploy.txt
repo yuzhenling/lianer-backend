@@ -1,0 +1,181 @@
+(sybd) [sybd@iZ2ze7jrizip1283mvo7kcZ ~]$ history
+    1  whoami
+    2  sudo mkdir /product
+    3  cd /
+    4  ls
+    5  cd product/
+    6  ls
+    7  ls -al
+    8  mkdir sybd
+    9  cd ..
+   10  chown sybd:sybd /product
+   11  sudo chown sybd:sybd /product
+   12  ls -al
+   13  cd product/
+   14  ls
+   15  mkdir sybd
+   16  ls
+   17  cd sybd
+   18  ls
+   19  cd /
+   20  sudo mkdir -p /opt/miniconda3
+   21  cd ~
+   22  wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+   23     sudo bash Miniconda3-latest-Linux-x86_64.sh -b -p /opt/miniconda3
+   24  rm -rf /opt/miniconda3
+   25  sudo rm -rf /opt/miniconda3
+   26  sudo bash Miniconda3-latest-Linux-x86_64.sh -b -p /opt/miniconda3
+   27  vi /etc/profile.d/conda.sh
+   28  sudo vi /etc/profile.d/conda.sh
+   29  sudo chmod +x /etc/profile.d/conda.sh
+   30  source /etc/profile.d/conda.sh
+   31  conda
+   32  conda create -n sybd python=3.11
+   33  conda activate sybd
+   34  cat /etc/os-release
+   35  rpm -E %{rhel}  # 应返回 8（确认系统被识别为 RHEL 8）
+   36  rpm -E %{rhel}
+   37  conda env list
+   38  history
+   39  conda activate sybd
+   40  ls -al /product/
+   41  sudo apt install postgresql postgresql-contrib -y
+   42  sudo apt-get install postgresql postgresql-contrib -y
+   43  hostname
+   44  host
+   45  uname
+   46  sudo yum search postgresql
+   47  sudo yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-$(rpm -E %{rhel})-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+   48  sudo yum makecache
+   49  sudo yum list postgresql*
+   50  sudo yum install -y postgresql16-server postgresql16-contrib
+   51  cat /etc/os-release
+   52  sudo yum remove -y pgdg-redhat-repo
+   53  sudo yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+   54  sudo yum makecache
+   55  psql
+   56  sudo dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+   57  sudo dnf -qy module disable postgresql
+   58  sudo dnf install -y postgresql17-server
+   59  sudo /usr/pgsql-17/bin/postgresql-17-setup initdb
+   60  sudo systemctl enable postgresql-17
+   61  sudo yum remove -y pgdg-redhat-repo
+   62  sudo yum install -y postgresql16-server postgresql16-contrib
+   63  cat /etc/yum.repos.d/AliYun.repo
+   64  sudo yum list postgresql*
+   65  sudo yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+   66  sudo yum list postgresql*
+   67  sudo vi /etc/yum.repos.d/pgdg-redhat-all.repo
+   68  sudo yum clean all
+   69  sudo yum makecache
+   70  sudo vi /etc/yum.repos.d/pgdg-redhat-all.repo
+   71  sudo yum list postgresql*
+   72  sudo yum clean all
+   73  sudo yum makecache
+   74  history
+   75  sudo yum remove -y pgdg-redhat-repo
+   76  kill -9 4485
+   77  sudo kill -9 4485
+   78  sudo yum clean all
+   79  sudo yum makecache
+   80  sudo kill -9 4485
+   81   ps -ef|grep 4485
+   82  sudo su -
+   83  history
+   84  sudo yum list postgresql*
+   85  sudo yum clean all
+   86  sudo yum makecache
+   87  sudo dnf -qy module disable postgresql
+   88  sudo dnf install -y postgresql15-server
+   89  sudo /usr/pgsql-15/bin/postgresql-15-setup initdb
+   90  sudo systemctl enable postgresql-15
+   91  sudo systemctl start postgresql-15
+   92  sudo systemctl status postgresql-15
+   93  sudo -u postgres psql
+   94  sudo -u postgres createuser --interactive
+   95  sudo -u postgres createdb shengyibaodian
+   96  ps aux|grep postgres
+   97  sudo netstat -tulnp |grep 5421
+   98  sudo netstat -tulnp |grep 5432
+   99  sudo nano /etc/postgresql/*/main/postgresql.conf
+  100  sudo vi /etc/postgresql/*/main/postgresql.conf
+  101  sudo -u postgres psql -c "\password postgres"
+  102  sudo -u postgres psql -c "SELECT usename, passwd FROM pg_shadow WHERE usename = 'postgres';"
+  103  psql -U postgres -h 127.0.0.1 -W
+  104  sudo yum install libsndfile1 ffmpeg
+  105  sudo dnf install libsndfile1 ffmpeg
+  106  sudo yum install -y     libsoxr-dev     libsndfile1-dev     libasound2-dev     portaudio19-dev     python3-pyaudio
+  107  sudo yum install -y epel-release
+  108  sudo yum install -y https://download1.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm
+  109  sudo yum install -y libsndfile ffmpeg ffmpeg-devel
+  110  sudo yum install -y     soxr-devel     libsndfile-devel     alsa-lib-devel     portaudio-devel     python3-pyaudio
+  111  sudo yum install libsndfile-devel
+  112  sudo yum install alsa-lib-devel
+  113  sudo yum install portaudio-devel
+  114  sudo yum install python3-pyaudio
+  115  sudo yum install soxr-devel
+  116  ffmpeg -version
+  117  ls /usr/include/sndfile
+  118  ls /usr/include/sndfile.h
+  119  conda env list
+  120  conda activate sybd
+  121  sudo yum install -y epel-release
+  122  # 使用 --allowerasing 选项强制替换
+  123  sudo yum install -y epel-release --allowerasing
+  124  sudo yum repolist enabled
+  125  # 现在可以尝试安装 python3-pyaudio
+  126  sudo yum install -y python3-pyaudio
+  127  sudo yum install -y python3-pip
+  128  sudo pip3 install pyaudio
+  129  sudo yum install zlib1g-dev
+  130  sudo yum install zlib1g-devel
+  131  sudo yum install -y zlib-devel
+  132  cd /product/sybd/shengyibaodian/
+  133  ls
+  134  pip install -r requirements-base.txt
+  135  pip3 install -r requirements-base.txt
+  136  pip3 install -r requirements-base.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+  137  pip3 install -r requirements-dep.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+  138  sudo yum groupinstall -y "Development Tools"
+  139  sudo yum install -y python3-devel
+  140  sudo yum install -y numpy fftw-devel libsndfile-devel
+  141  conda install -c conda-forge gxx_linux-64
+  142  pip install --use-pep517 vamp
+  143  pip3 install --use-pep517 vamp -i https://pypi.tuna.tsinghua.edu.cn/simple
+  144  pip install --no-build-isolation vamp
+  145  pip3 install -r requirements-dep.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+  146  pwd
+  147  python -m uvicorn main:app --host 0.0.0.0 --port 9443 --ssl-keyfile /product/sybd/shengyibaodian/etc/ssl/private/private.key --ssl-certfile /product/sybd/shengyibaodian/etc/ssl/certs/certificate.crt
+  148  ls -al /opt/miniconda3/envs/sybd/bin/python
+  149  ls -al /opt/miniconda3
+  150  cd envs
+  151  cd  /opt/miniconda3/envs/
+  152  ls
+  153  whereis python
+  154  ls -al /home/sybd/.conda/envs/sybd/bin/
+  155  cd ~
+  156  sudo vi /etc/systemd/system/sybd.service
+  157  sudo systemctl daemon-reload
+  158  sudo systemctl restart sybd
+  159  sudo systemctl status sybd
+  160  whoami
+  161  sudo vi /etc/systemd/system/sybd.service
+  162  sudo systemctl daemon-reload
+  163  sudo systemctl restart yikao
+  164  sudo systemctl restart sybd
+  165  sudo systemctl status sybd
+  166  /home/sybd/.conda/envs/sybd/bin/python -m uvicorn main:app --host 0.0.0.0 --port 9443 ---ssl-keyfile /product/sybd/shengyibaodian/etc/ssl/private/private.key --ssl-certfile /product/sybd/shengyibaodian/etc/ssl/certs/certificate.crt
+  167  sudo vi /etc/systemd/system/sybd.service
+  168  sudo systemctl daemon-reload
+  169  sudo systemctl restart sybd
+  170  sudo systemctl status sybd
+  171  ps aux|grep 9443
+  172  kill 24487
+  173  sudo systemctl restart sybd
+  174  sudo systemctl status sybd
+  175  sudo journalctl -u sybd -n 100 --no-pager
+  176  ps aux|grep 9443
+  177  sudo kill -9 24487
+  178  ps aux|grep 9443
+  179  sudo journalctl -u sybd -n 100 --no-pager
+  180  history
