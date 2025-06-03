@@ -179,3 +179,48 @@
   178  ps aux|grep 9443
   179  sudo journalctl -u sybd -n 100 --no-pager
   180  history
+
+
+
+  python -m uvicorn main:app --host 0.0.0.0 --port 9443 --ssl-keyfile /product/sybd/shengyibaodian/etc/ssl/private/private.key --ssl-certfile /product/sybd/shengyibaodian/etc/ssl/certs/certificate.crt
+
+
+curl -k --request POST \
+  --url https://localhost:9443/api/v1/auth/wechat-login \
+  --header 'Accept: */*' \
+  --header 'Accept-Encoding: gzip, deflate, br' \
+  --header 'Connection: keep-alive' \
+  --header 'Content-Type: application/json' \
+  --header 'User-Agent: PostmanRuntime-ApipostRuntime/1.1.0' \
+  --data '{"code":"0f1e1b100aRYhU1SKP000MARGF4e1b14"}'
+
+sudo vi /etc/systemd/system/sybd.service
+
+[Unit]
+Description=sybd app
+After=network.target
+
+[Service]
+User=sybd
+Group=sybd
+WorkingDirectory=/product/sybd/shengyibaodian
+
+# 使用conda环境中的Python和uvicorn
+#Environment="PATH=/opt/miniconda3/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ExecStart=/home/sybd/.conda/envs/sybd/bin/python -m uvicorn main:app --host 0.0.0.0 --port 9443 --ssl-keyfile /product/sybd/shengyibaodian/etc/ssl/private/private.key --ssl-certfile /product/sybd/shengyibaodian/etc/ssl/certs/certificate.crt
+
+Restart=always
+RestartSec=5
+KillSignal=SIGINT
+TimeoutStopSec=30
+
+# 日志配置
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=sybd
+
+[Install]
+WantedBy=multi-user.target
+
+
+sudo journalctl -u sybd -n 100 --no-pager
