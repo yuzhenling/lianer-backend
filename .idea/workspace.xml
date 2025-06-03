@@ -6,15 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="83c1f24d-9736-40eb-a780-45c9d33bfc91" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/v1/auth_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/auth_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/core/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/core/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/utils/ptest.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/utils/ptest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/wepay/apiclient_cert.p12" beforeDir="false" afterPath="$PROJECT_DIR$/app/wepay/apiclient_cert.p12" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/wepay/apiclient_cert.pem" beforeDir="false" afterPath="$PROJECT_DIR$/app/wepay/apiclient_cert.pem" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/wepay/apiclient_key.pem" beforeDir="false" afterPath="$PROJECT_DIR$/app/wepay/apiclient_key.pem" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/aliyun-deploy.txt" beforeDir="false" afterPath="$PROJECT_DIR$/doc/aliyun-deploy.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/deploy.txt" beforeDir="false" afterPath="$PROJECT_DIR$/doc/deploy.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/app.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/app.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/services/order_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/order_service.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -256,7 +248,7 @@
       <workItem from="1748223575157" duration="10361000" />
       <workItem from="1748484071792" duration="1527000" />
       <workItem from="1748567150382" duration="9175000" />
-      <workItem from="1748919889421" duration="1768000" />
+      <workItem from="1748919889421" duration="2710000" />
     </task>
     <servers />
   </component>

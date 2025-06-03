@@ -154,7 +154,7 @@ class OrderService:
                         # 计算到期时间
                         duration_days = vip_service.getDaysById(order.vip_id)
                         #TODO 2次购买计算时间从过期起算
-                        user.vip_expire_date = datetime.now() + timedelta(days=duration_days)
+                        user.vip_expire_date = user.vip_start_date + timedelta(days=duration_days)
                         db.add(user)
                         await db.commit()
                         await db.refresh(user)
