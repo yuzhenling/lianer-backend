@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "声之宝典"
     API_V1_STR: str = "/api/v1"
     # API_HOST: str = "https://api.shengyibaodian.com"  # API域名
-    API_HOST: str = "https://www.lianerdaren.cn:9443"  # API域名
+    API_HOST: str = "https://www.lianerdaren.cn"  # API域名
 
     APP_DIR: str = Path(__file__).resolve().parent.parent.as_posix()
 
@@ -56,7 +56,7 @@ class Settings(BaseSettings):
     WECHAT_PAY_KEY: str = ""  # API v3密钥
     WECHAT_PAY_CERT_PATH: str = APP_DIR + "/wepay/apiclient_cert.pem"  # 商户证书路径
     WECHAT_PAY_KEY_PATH: str = APP_DIR + "/wepay/apiclient_key.pem"  # 商户私钥路径
-    WECHAT_NOTIFY_URL: str = "https://www.lianerdaren.cn:9443/api/v1/order/wechat-notify"
+    WECHAT_NOTIFY_URL: str = "https://www.lianerdaren.cn/api/v1/order/wechat-notify"
     
     # 音频处理配置
     AUDIO_UPLOAD_DIR: str = "uploads/audio"
