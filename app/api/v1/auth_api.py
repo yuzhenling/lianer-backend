@@ -115,15 +115,14 @@ async def wechat_login(
     
     try:
         wechat_data = await auth_service.verify_wechat_code(login_data.code)
-        # reps = '{"openid": "ox75Z7NkQ58loRuhVu9OoNHTDtJY", "session_key": "qNnx7kln91EW/xBBbqP85A=="}'
-        # wechat_data = json.loads(reps)
-        logger.info("wechat login:" + wechat_data)
+        # wechat_data: dict = {"openid": "ox75Z7NkQ58loRuhVu9OoNHTDtJY", "session_key": "qNnx7kln91EW/xBBbqP85A=="}
+        # wechat_data = json.dumps(reps)
+        logger.info("wechat login:" + wechat_data.__str__())
         if not wechat_data:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail=i18n.get_text("INVALID_WECHAT_CODE", lang)
             )
-        
         # 查找或创建用户
         result = await db.execute(select(User).where(User.wechat_openid == wechat_data["openid"]))
         user: User = result.scalar_one_or_none()
