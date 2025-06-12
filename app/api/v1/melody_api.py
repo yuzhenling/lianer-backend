@@ -5,16 +5,18 @@ from fastapi import APIRouter, Depends, HTTPException,Request
 from sqlalchemy.orm import Session
 from starlette import status
 
-from app.api.v1.auth_api import get_current_user, get_db
+from app.api.v1.auth_api import get_current_user, get_db, get_current_user_vip
 from app.api.v1.schemas.request.pitch_request import MelodySettingRequest
 from app.api.v1.schemas.response.pitch_response import MelodySettingResponse, MelodyQuestionResponse
 from app.core.i18n import i18n, get_language
 from app.models.melody_settings import Tonality, TonalityChoice
-from app.models.user import User
+from app.models.user import User, CombineUser
 from app.services.ai_melody_service import ai_melody_service
 from app.services.melody_service import melody_service
 from app.models.rhythm import *
 from app.core.logger import logger
+from app.utils.UserChecker import check_normal_vip_level
+
 router = APIRouter(prefix="/melody", tags=["melody"])
 
 
@@ -22,7 +24,7 @@ router = APIRouter(prefix="/melody", tags=["melody"])
 async def generate_melody_question(
         request: Request,
         melody_question_request: MelodySettingRequest,
-        current_user: User = Depends(get_current_user),
+        current_user: CombineUser = Depends(get_current_user_vip),
 ):
     """
     生成旋律听写题目接口
@@ -52,6 +54,12 @@ async def generate_melody_question(
     """
     lang = get_language(request)
     try:
+        vv = check_normal_vip_level(current_user)
+        if not vv:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=i18n.get_text("USER_VIP_NOT_NORMAL", lang)
+            )
         response = melody_service.generate_question(melody_question_request)
         return response
     except Exception as e:
@@ -67,7 +75,7 @@ async def generate_melody_question(
 async def generate_ai_melody_question(
     request: Request,
     melody_question_request: MelodySettingRequest,
-    current_user: User = Depends(get_current_user)
+    current_user: CombineUser = Depends(get_current_user_vip),
 ):
     """
     使用AI生成旋律听写题目接口
@@ -97,6 +105,12 @@ async def generate_ai_melody_question(
     """
     lang = get_language(request)
     try:
+        vv = check_normal_vip_level(current_user)
+        if not vv:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=i18n.get_text("USER_VIP_NOT_NORMAL", lang)
+            )
         return await ai_melody_service.generate_melody_question(melody_question_request)
     except Exception as e:
         logger.error(

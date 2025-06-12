@@ -2,13 +2,16 @@
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from starlette import status
 
-from app.api.v1.auth_api import get_current_user, get_db
+from app.api.v1.auth_api import get_current_user, get_db, get_current_user_vip
 from app.api.v1.schemas.request.pitch_request import RhythmSettingRequest
 from app.api.v1.schemas.response.pitch_response import RhythmQuestionResponse, RhythmSettingResponse
-from app.models.user import User
+from app.core.i18n import get_language, i18n
+from app.models.user import User, CombineUser
 from app.services.rhythm_service import rhythm_service
 from app.models.rhythm import *
+from app.utils.UserChecker import check_normal_vip_level
 
 router = APIRouter(prefix="/rhythm", tags=["rhythm"])
 
@@ -16,7 +19,7 @@ router = APIRouter(prefix="/rhythm", tags=["rhythm"])
 @router.post("/generate", response_model=RhythmQuestionResponse)
 async def generate_rhythm_question(
         request: RhythmSettingRequest,
-        current_user: User = Depends(get_current_user),
+        current_user: CombineUser = Depends(get_current_user_vip),
         db: Session = Depends(get_db)
 ):
     """
@@ -53,7 +56,14 @@ async def generate_rhythm_question(
         }
         ```
     """
+    lang = get_language(request)
     try:
+        vv = check_normal_vip_level(current_user)
+        if not vv:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=i18n.get_text("USER_VIP_NOT_NORMAL", lang)
+            )
         response = rhythm_service.generate_question(request)
         return response
     except Exception as e:

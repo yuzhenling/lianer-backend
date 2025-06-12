@@ -21,7 +21,7 @@ class I18nService:
         
         for lang in Language:
             self.translations[lang] = {}
-            properties_file = base_path / lang / "messages.properties"
+            properties_file = base_path / lang.value / "messages.properties"
             
             if properties_file.exists():
                 with open(properties_file, "r", encoding="utf-8") as f:

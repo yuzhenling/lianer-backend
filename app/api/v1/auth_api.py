@@ -1,3 +1,4 @@
+import datetime
 import json
 from typing import Optional, Literal
 
@@ -7,11 +8,13 @@ from sqlalchemy.orm import Session
 from datetime import timedelta
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, outerjoin
+from sqlalchemy import select, outerjoin, desc
 
 from app.core import logger
 from app.core.config import settings
-from app.models.user import User, UserInfo
+from app.models.order import VipOrder
+from app.models.user import User, UserInfo, CombineUser
+from app.models.vip import Vip
 from app.services.auth_service import AuthService
 from app.db.database import get_db
 from app.core.i18n import i18n, get_language
@@ -80,6 +83,81 @@ async def get_current_user(
         raise credentials_exception
 
 
+async def get_current_user_vip(
+        request: Request,
+        token: str = Depends(oauth2_scheme),
+        db: AsyncSession = Depends(get_db)
+) -> CombineUser:
+    lang = get_language(request)
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail=i18n.get_text("COULD_NOT_VALIDATE_CREDENTIALS", lang),
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
+    try:
+        payload = auth_service.verify_token(token)
+        if not payload:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=i18n.get_text("INVALID_TOKEN", lang)
+            )
+
+        user_id: str = payload.get("sub")
+        if user_id is None:
+            raise credentials_exception
+
+        # 使用异步查询
+        # result = await db.execute(select(User,VipOrder).filter(User.id == int(user_id)))
+        result = await db.execute(
+            select(User, VipOrder, Vip)
+            .select_from(User)
+            .outerjoin(VipOrder, (User.id == VipOrder.user_id) &
+                       (VipOrder.is_paid == True) &
+                       (VipOrder.is_return == False))
+            .outerjoin(Vip, VipOrder.vip_id == Vip.id)
+            .where(
+                User.id == int(user_id),
+                User.vip_expire_date >= datetime.datetime.now()
+            )
+            .order_by(desc(Vip.id))
+        )
+        row = result.first()
+        if row:
+            user, order, vip = row
+            if order is None or vip is None:
+                order = None
+                vip = None
+        else:
+            # 用户不存在
+            user = None
+
+        if user is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=i18n.get_text("USER_NOT_FOUND", lang)
+            )
+
+        combine_user = CombineUser(
+            id=user.id,
+            wechat_openid=user.wechat_openid,
+            is_active=user.is_active,
+            is_vip=user.is_vip,
+            vip_start_date=user.vip_start_date,
+            vip_expire_date=user.vip_expire_date,
+            is_super_admin=user.is_super_admin,
+
+        )
+        if order is not None:
+            combine_user.order_id = order.id
+        if vip is not None:
+            combine_user.vip_id = vip.id
+            combine_user.vip_level = vip.level
+
+        return combine_user
+    except Exception as e:
+        raise credentials_exception
+
 @router.post("/auth/wechat-login", response_model=Token)
 async def wechat_login(
     request: Request,
@@ -115,7 +193,7 @@ async def wechat_login(
     
     try:
         wechat_data = await auth_service.verify_wechat_code(login_data.code)
-        # wechat_data: dict = {"openid": "ox75Z7NkQ58loRuhVu9OoNHTDtJY", "session_key": "qNnx7kln91EW/xBBbqP85A=="}
+        wechat_data: dict = {"openid": "ox75Z7NkQ58loRuhVu9OoNHTDtJY", "session_key": "qNnx7kln91EW/xBBbqP85A=="}
         # wechat_data = json.dumps(reps)
         logger.info("wechat login:" + wechat_data.__str__())
         if not wechat_data:

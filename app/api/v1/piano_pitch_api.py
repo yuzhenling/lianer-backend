@@ -8,7 +8,8 @@ from fastapi import APIRouter, Depends, HTTPException, status, Request, Response
 from fastapi.responses import FileResponse
 
 
-from app.api.v1.auth_api import get_current_user, get_db
+from app.api.v1.auth_api import get_current_user, get_db, get_current_user_vip
+from app.api.v1.order_api import order_service
 from app.api.v1.schemas.request.pitch_request import PitchSettingRequest, PitchGroupSettingRequest, \
     PitchIntervalSettingRequest, PitchChordSettingRequest
 from app.api.v1.schemas.response.pitch_response import PitchSingleSettingResponse, PitchResponse, \
@@ -18,8 +19,9 @@ from app.api.v1.schemas.response.pitch_response import PitchSingleSettingRespons
 from app.core.i18n import get_language, i18n
 from app.core.logger import logger
 from app.services.pitch_service import pitch_service
-from app.models.user import User
+from app.models.user import User, CombineUser
 from app.services.pitch_settings_service import pitch_settings_service
+from app.utils.UserChecker import check_year_vip_level
 
 router = APIRouter(prefix="/piano", tags=["piano"])
 
@@ -529,7 +531,7 @@ async def get_pitch_listen_single(
 async def get_pitch_listen_single_exam(
     request: Request,
     pitch_setting: PitchSettingRequest,
-    current_user: User = Depends(get_current_user)
+    current_user: CombineUser = Depends(get_current_user_vip)
 ) -> SinglePitchExamResponse:
     """
     生成单音听写题目接口
@@ -555,8 +557,17 @@ async def get_pitch_listen_single_exam(
     """
     lang = get_language(request)
     try:
+        vv = check_year_vip_level(current_user)
+        if not vv:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=i18n.get_text("USER_VIP_NOT_YEAR", lang)
+            )
         exam = pitch_service.generate_single_exam(pitch_setting.pitch_range.pitch_number_min, pitch_setting.pitch_range.pitch_number_max, pitch_setting.pitch_black_keys)
         return exam
+    except HTTPException as e:
+        logger.error(f"Error in get_pitch_listen_single_exam: {str(e)}\nTraceback: {traceback.format_exc()}")
+        raise e
     except Exception as e:
         logger.error(f"Error in get_pitch_listen_single_exam: {str(e)}\nTraceback: {traceback.format_exc()}")
         raise HTTPException(
@@ -568,7 +579,7 @@ async def get_pitch_listen_single_exam(
 async def get_pitch_listen_group_exam(
     request: Request,
     pitch_group_setting: PitchGroupSettingRequest,
-    current_user: User = Depends(get_current_user)
+    current_user: CombineUser = Depends(get_current_user_vip)
 ) -> GroupPitchExamResponse:
     """
     生成音组听写题目接口
@@ -595,6 +606,12 @@ async def get_pitch_listen_group_exam(
     """
     lang = get_language(request)
     try:
+        vv = check_year_vip_level(current_user)
+        if not vv:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=i18n.get_text("USER_VIP_NOT_YEAR", lang)
+            )
         exam = pitch_service.generate_group_exam(
             pitch_group_setting.pitch_range.pitch_number_min,
             pitch_group_setting.pitch_range.pitch_number_max,
@@ -649,7 +666,7 @@ async def get_pitch_interval_settings(
 async def get_pitch_listen_interval_exam(
     request: Request,
     pitch_interval_setting: PitchIntervalSettingRequest,
-    current_user: User = Depends(get_current_user)
+    current_user: CombineUser = Depends(get_current_user_vip)
 ) -> PitchIntervalExamResponse:
     """
     生成音程听写题目接口
@@ -671,6 +688,12 @@ async def get_pitch_listen_interval_exam(
     """
     lang = get_language(request)
     try:
+        vv = check_year_vip_level(current_user)
+        if not vv:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=i18n.get_text("USER_VIP_NOT_YEAR", lang)
+            )
         exam = pitch_service.generate_interval_exam(pitch_interval_setting)
         return exam
     except Exception as e:
@@ -719,7 +742,7 @@ async def get_pitch_chord_settings(
 async def get_pitch_listen_chord_exam(
     request: Request,
     pitch_chord_setting: PitchChordSettingRequest,
-    current_user: User = Depends(get_current_user)
+    current_user: CombineUser = Depends(get_current_user_vip)
 ) -> PitchChordExamResponse:
     """
     生成和弦听写题目接口
@@ -741,6 +764,12 @@ async def get_pitch_listen_chord_exam(
     """
     lang = get_language(request)
     try:
+        vv = check_year_vip_level(current_user)
+        if not vv:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=i18n.get_text("USER_VIP_NOT_YEAR", lang)
+            )
         exam = pitch_service.generate_chord_exam(pitch_chord_setting)
         return exam
     except Exception as e:

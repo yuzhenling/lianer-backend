@@ -1,8 +1,11 @@
+from dataclasses import dataclass
+from typing import Optional
 
 from sqlalchemy import Boolean, Column, Integer, String, DateTime
 from sqlalchemy.sql import func
 
 from app.db.database import Base
+from app.models.vip import VipLevel
 
 
 class User(Base):
@@ -29,6 +32,23 @@ class User(Base):
 
     is_super_admin = Column(Boolean, default=False)
 
+@dataclass
+class CombineUser:
+    id: int
+    wechat_openid: str
+    is_active: bool
+    is_super_admin: bool
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    unionid: Optional[str] = None
+
+    is_vip: Optional[bool] = None
+    vip_start_date: Optional[DateTime] = None
+    vip_expire_date: Optional[DateTime] = None
+
+    vip_id: Optional[int] = None
+    vip_level: Optional[VipLevel] = None
+    order_id: Optional[int] = None
 
 
 class UserInfo(Base):
