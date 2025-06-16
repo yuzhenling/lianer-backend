@@ -15,7 +15,7 @@ from app.services.ai_melody_service import ai_melody_service
 from app.services.melody_service import melody_service
 from app.models.rhythm import *
 from app.core.logger import logger
-from app.utils.UserChecker import check_normal_vip_level
+from app.utils.UserChecker import check_year_vip_level
 
 router = APIRouter(prefix="/melody", tags=["melody"])
 
@@ -54,7 +54,7 @@ async def generate_melody_question(
     """
     lang = get_language(request)
     try:
-        vv = check_normal_vip_level(current_user)
+        vv = check_year_vip_level(current_user)
         if not vv:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -105,7 +105,7 @@ async def generate_ai_melody_question(
     """
     lang = get_language(request)
     try:
-        vv = check_normal_vip_level(current_user)
+        vv = check_year_vip_level(current_user)
         if not vv:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

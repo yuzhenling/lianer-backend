@@ -208,6 +208,8 @@ async def wechat_login(
             user = User(
                 wechat_openid=wechat_data["openid"],
                 unionid=wechat_data.get("unionid"),
+                vip_start_date=datetime.datetime.now(),
+                vip_expire_date=datetime.datetime.now()+datetime.timedelta(days=1),
             )
             db.add(user)
             await db.commit()

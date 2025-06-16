@@ -11,7 +11,7 @@ from app.core.i18n import get_language, i18n
 from app.models.user import User, CombineUser
 from app.services.rhythm_service import rhythm_service
 from app.models.rhythm import *
-from app.utils.UserChecker import check_normal_vip_level
+from app.utils.UserChecker import check_year_vip_level
 
 router = APIRouter(prefix="/rhythm", tags=["rhythm"])
 
@@ -58,7 +58,7 @@ async def generate_rhythm_question(
     """
     lang = get_language(request)
     try:
-        vv = check_normal_vip_level(current_user)
+        vv = check_year_vip_level(current_user)
         if not vv:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
