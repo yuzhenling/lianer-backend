@@ -1,5 +1,6 @@
 import datetime
 import json
+import os
 from typing import Optional, Literal
 
 from fastapi import APIRouter, Depends, HTTPException, status, Request
@@ -193,7 +194,8 @@ async def wechat_login(
     
     try:
         wechat_data = await auth_service.verify_wechat_code(login_data.code)
-        wechat_data: dict = {"openid": "ox75Z7NkQ58loRuhVu9OoNHTDtJY", "session_key": "qNnx7kln91EW/xBBbqP85A=="}
+        if os.getenv("TEST_MODE") == "true":
+            wechat_data: dict = {"openid": "ox75Z7NkQ58loRuhVu9OoNHTDtJY", "session_key": "qNnx7kln91EW/xBBbqP85A=="}
         # wechat_data = json.dumps(reps)
         if not wechat_data:
             raise HTTPException(
