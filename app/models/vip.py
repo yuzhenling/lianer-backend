@@ -16,6 +16,7 @@ class Vip(Base):
     __tablename__ = "vip"
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     level = Column(Enum(VipLevel), default=VipLevel.FREE)
+    name = Column(String(20), nullable=False)
     describe = Column(String, nullable=True)
 
     price = Column(Double, index=True, default=0)

@@ -70,7 +70,7 @@ class VipService:
             return True
         return False
 
-    async def create_vip(self, db: Session, vip_level: VipLevel, vip_describe: str, vip_price: float, vip_discount: float) -> Optional[Vip]:
+    async def create_vip(self, db: Session, vip_level: VipLevel, vip_name: str, vip_describe: str, vip_price: float, vip_discount: float) -> Optional[Vip]:
         """创建新的VIP等级"""
         try:
             # 检查是否已存在
@@ -82,6 +82,7 @@ class VipService:
             # 创建新VIP
             vip = Vip(
                 level=vip_level,
+                name=vip_name,
                 describe=vip_describe,
                 price=vip_price,
                 discount=vip_discount

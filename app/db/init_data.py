@@ -22,19 +22,26 @@ async def init_vip_levels(db: Session):
             logger.info("VIP levels already initialized, skipping...")
             return
 
+        vip_name = {
+            VipLevel.FREE: "免费用户",
+            VipLevel.NORMAL: "普通会员",
+            VipLevel.HALF_YEAR: "半年VIP会员",
+            VipLevel.ONE_YEAR: "一年VIP会员"
+        }
+
         # VIP等级描述
         vip_descriptions = {
-            VipLevel.FREE: "普通用户: *****************",
-            VipLevel.NORMAL: "普通会员: 旋律听写, 节奏练习, 节奏听写",
-            VipLevel.HALF_YEAR: "半年VIP会员: ***********",
-            VipLevel.ONE_YEAR: "一年VIP会员: ************"
+            VipLevel.FREE: "免费用户: 用户注册后，自动享有一天试用期。",
+            VipLevel.NORMAL: "普通会员: 可使用调音功能",
+            VipLevel.HALF_YEAR: "半年VIP会员: 半年期小程序全部功能",
+            VipLevel.ONE_YEAR: "一年VIP会员: 一年期小程序全部功能"
         }
 
         vip_price = {
             VipLevel.FREE: 0,
-            VipLevel.NORMAL: 0,
-            VipLevel.HALF_YEAR: 9,
-            VipLevel.ONE_YEAR: 99
+            VipLevel.NORMAL: 900,
+            VipLevel.HALF_YEAR: 5900,
+            VipLevel.ONE_YEAR: 9900
         }
 
         vip_discount = {
@@ -49,6 +56,7 @@ async def init_vip_levels(db: Session):
             try:
                 vip = Vip(
                     level=level,
+                    name=vip_name[level],
                     describe=vip_descriptions[level],
                     price=vip_price[level],
                     discount=vip_discount[level],

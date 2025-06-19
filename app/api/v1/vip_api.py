@@ -19,6 +19,7 @@ router = APIRouter(prefix="/vip", tags=["vip"])
 
 class VipBase(BaseModel):
     level: VipLevel
+    name: str
     describe: str
     price: float = Field(..., gt=0)  # 价格必须大于0
     discount: float = Field(..., ge=0, le=1)  # 折扣必须在0到1之间
@@ -42,6 +43,7 @@ class VipUpdate(BaseModel):
 class VipResponse(VipBase):
     id: int
     level: VipLevel
+    name: str
     describe: str
     price: float
     discount: float
@@ -189,6 +191,7 @@ async def create_vip(
         vip = await vip_service.create_vip(
             db=db,
             vip_level=vip_data.level,
+            vip_name=vip_data.name,
             vip_describe=vip_data.describe,
             vip_price=vip_data.price,
             vip_discount=vip_data.discount
